@@ -151,6 +151,141 @@
     .stop__expand-content.is-open {
       display: block;
     }
+
+    /* Hikes section */
+    .hikes-section {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-2xl);
+    }
+    .hikes-section__header {
+      margin-bottom: var(--space-xl);
+    }
+    .hikes-section__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .hikes-section__sub {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      margin-top: var(--space-xs);
+    }
+
+    /* Hike card */
+    .hike-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .hike-card__name {
+      font-size: var(--text-md);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .hike-card__area {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
+    .hike-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .hike-card__desc {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+    .hike-card__tip {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      font-style: italic;
+      line-height: 1.6;
+    }
+    .hike-card__tip-label {
+      font-style: normal;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+    }
+
+    /* Hotels section */
+    .hotels-section {
+      padding-bottom: var(--space-2xl);
+    }
+    .hotels-section__header {
+      margin-bottom: var(--space-xl);
+    }
+    .hotels-section__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    /* Hotel card */
+    .hotel-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .hotel-card__name {
+      font-size: var(--text-md);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .hotel-card__meta {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
+    .hotel-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .hotel-card__rec {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      color: var(--color-text);
+      margin-top: var(--space-xs);
+    }
+
+    /* Before you go */
+    .notes-section {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-2xl);
+    }
+    .notes-section__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-xl);
+    }
+    .notes-block {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: var(--space-xl);
+      max-width: 680px;
+    }
+    .notes-block__note {
+      font-size: var(--text-sm);
+      line-height: 1.8;
+      color: var(--color-text);
+    }
+    .notes-block__rule {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin-block: var(--space-md);
+    }
   </style>
 </head>
 <body>
@@ -315,6 +450,119 @@
 
           </div><!-- /stops-col -->
         </div><!-- /two-col -->
+      </section>
+
+      <!-- Hikes -->
+      <section class="hikes-section">
+        <div class="hikes-section__header">
+          <h2 class="hikes-section__title">On foot</h2>
+          <p class="hikes-section__sub">Walks and hikes from this base</p>
+        </div>
+        <div class="card-grid">
+
+          <!-- Danube Riverside Path -->
+          <article class="hike-card">
+            <h3 class="hike-card__name">Danube Riverside Path</h3>
+            <p class="hike-card__area">Regensburg riverfront</p>
+            <div class="hike-card__tags">
+              <span class="tag">5 km</span>
+              <span class="tag">+10 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">A flat paved path running along the Danube west of the city. Good views back toward the cathedral and the stone bridge. Almost entirely level. Connects to the Stadtamhof quarter on the north bank.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Start from the stone bridge and walk west. The path passes the Dreieinigkeitskirche and continues to open countryside within 15 minutes.</p>
+          </article>
+
+          <!-- Weltenburg Gorge -->
+          <article class="hike-card">
+            <h3 class="hike-card__name">Weltenburg Gorge (Weltenburger Enge)</h3>
+            <p class="hike-card__area">Kelheim, 25 min from Regensburg</p>
+            <div class="hike-card__tags">
+              <span class="tag">4 km</span>
+              <span class="tag">+60 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag">Carrier</span>
+            </div>
+            <p class="hike-card__desc">Take the boat through the dramatic limestone gorge to Weltenburg Monastery — the oldest monastery brewery in the world, founded around 620 AD. The gorge is extraordinary: vertical limestone walls 70 meters high, the Danube threading through. The monastery serves dark beer brewed on site.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Take the boat from Kelheim (20 min) through the gorge to the monastery, have lunch and a beer, take the boat back. A carrier is needed for the path sections. The boat is stroller-accessible.</p>
+          </article>
+
+          <!-- Walhalla Steps -->
+          <article class="hike-card">
+            <h3 class="hike-card__name">Walhalla Approach from the River</h3>
+            <p class="hike-card__area">Donaustauf / Walhalla</p>
+            <div class="hike-card__tags">
+              <span class="tag">2 km</span>
+              <span class="tag">+100 m</span>
+              <span class="tag">Moderate</span>
+              <span class="tag">Carrier</span>
+            </div>
+            <p class="hike-card__desc">The climb up the 358 marble steps to the Walhalla, with resting terraces and expanding views at each level. The view from the top over the Danube bend is one of the finest in Bavaria.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Carrier required. Early morning before 9am the terrace is often completely empty.</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Hotels -->
+      <section class="hotels-section">
+        <div class="hotels-section__header">
+          <h2 class="hotels-section__title">Where to stay</h2>
+        </div>
+        <div class="card-grid">
+
+          <!-- Hotel Orphée -->
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Orphée</h3>
+            <p class="hotel-card__meta">Boutique Hotel — Regensburg old town</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€100–150/night</span>
+              <span class="tag">Crib available</span>
+            </div>
+            <p class="hotel-card__rec">Best boutique option in the city, excellent position for exploring on foot</p>
+          </article>
+
+          <!-- Hotel Goldenes Kreuz -->
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Goldenes Kreuz</h3>
+            <p class="hotel-card__meta">Historic Hotel — Regensburg old town</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€85–120/night</span>
+              <span class="tag">Crib available</span>
+            </div>
+            <p class="hotel-card__rec">Most historically significant building you'll sleep in</p>
+          </article>
+
+          <!-- Sorat Hotel -->
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Sorat Hotel Regensburg</h3>
+            <p class="hotel-card__meta">Modern Hotel — Regensburg, near old town</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€90–130/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Best option if parking and modern facilities matter more than character</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Before you go -->
+      <section class="notes-section">
+        <h2 class="notes-section__title">Before you go</h2>
+        <div class="notes-block">
+          <p class="notes-block__note">Parking: use Dachauplatz or Domplatz — the old town is largely pedestrianized.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Wurstküchl queue: arrive before 11:30am or after 2pm.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Reichssaal guided tours: book at the tourist office on Rathausplatz, run hourly.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Walhalla boat: seasonal (April–October), departs from the stone bridge area.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Roman museum: small but excellent, rarely crowded, allow 45 minutes.</p>
+        </div>
       </section>
 
     </div><!-- /page-shell -->
