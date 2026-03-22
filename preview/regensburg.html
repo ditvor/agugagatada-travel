@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regensburg — Agugagatada</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    /* Shell */
+    .site-nav {
+      border-bottom: 1px solid var(--color-border);
+      padding-block: var(--space-md);
+    }
+    .site-nav__inner {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+    .site-nav__home {
+      font-size: var(--text-md);
+      font-weight: 500;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .site-nav__home:hover { text-decoration: none; }
+    .site-nav__back {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
+    .site-nav__back:hover { color: var(--color-accent); text-decoration: none; }
+
+    .site-footer {
+      border-top: 1px solid var(--color-border);
+      padding-block: var(--space-xl);
+      text-align: center;
+    }
+    .site-footer__line {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
+
+    /* Hero */
+    .hero {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-xl);
+    }
+    .hero__title {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .hero__tagline {
+      font-size: var(--text-md);
+      color: var(--color-text-secondary);
+      max-width: 600px;
+      margin-top: var(--space-sm);
+      line-height: 1.5;
+    }
+    .hero__tags {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .hero__rule {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin-top: var(--space-xl);
+    }
+
+    /* Intro */
+    .intro {
+      padding-block: var(--space-xl);
+    }
+    .intro__text {
+      font-size: var(--text-md);
+      line-height: 1.7;
+      max-width: 680px;
+      color: var(--color-text);
+    }
+
+    /* Two-col section */
+    .route-section {
+      padding-bottom: var(--space-2xl);
+    }
+
+    /* Map */
+    #map {
+      height: 560px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    /* Stops column */
+    .stops-col {
+      padding-top: var(--space-xs);
+    }
+
+    /* Single stop */
+    .stop {
+      padding-bottom: var(--space-lg);
+    }
+    .stop__header {
+      margin-bottom: var(--space-sm);
+    }
+    .stop__name {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-top: var(--space-xs);
+    }
+    .stop__subtitle {
+      font-size: var(--text-base);
+      color: var(--color-text-secondary);
+      margin-top: 2px;
+    }
+    .stop__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-top: var(--space-sm);
+    }
+    .stop__highlight {
+      font-style: italic;
+      font-family: Georgia, serif;
+      font-size: var(--text-base);
+      color: var(--color-text);
+      border-left: 3px solid var(--color-accent);
+      padding-left: var(--space-md);
+      margin-block: var(--space-md);
+      line-height: 1.6;
+    }
+    .stop__expand-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      margin-top: var(--space-sm);
+    }
+    .stop__expand-content {
+      display: none;
+      font-size: var(--text-base);
+      line-height: 1.7;
+      color: var(--color-text);
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--color-border);
+    }
+    .stop__expand-content.is-open {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="page-shell">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__home">Agugagatada</a>
+        <a href="index.html" class="site-nav__back">All destinations</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content">
+    <div class="page-shell">
+
+      <!-- Hero -->
+      <header class="hero">
+        <h1 class="hero__title">Regensburg</h1>
+        <p class="hero__tagline">Two thousand years of continuous history, the oldest sausage kitchen in Germany, and a Greek temple on a cliff above the river</p>
+        <div class="hero__tags">
+          <span class="tag">1h 35 min from Munich</span>
+          <span class="tag">1 day</span>
+        </div>
+        <hr class="hero__rule">
+      </header>
+
+      <!-- Intro -->
+      <section class="intro">
+        <p class="intro__text">Regensburg is one of the great surprises of Germany. It was the northernmost legionary fortress of the Roman Empire, the capital of Bavaria for centuries, and one of the wealthiest trading cities in medieval Europe — and almost none of it was destroyed. While Munich, Nuremberg, and Würzburg were flattened in WWII, Regensburg came through largely intact. What you walk through today is a living medieval city, not a reconstruction. Underneath it, still, is Rome.</p>
+      </section>
+
+      <!-- Two-column: map + stops -->
+      <section class="route-section">
+        <div class="two-col">
+
+          <!-- Map -->
+          <div class="two-col__map">
+            <div id="map"></div>
+          </div>
+
+          <!-- Stops -->
+          <div class="stops-col">
+
+            <!-- Stop 01: Porta Praetoria -->
+            <article class="stop" data-stop-id="porta-praetoria">
+              <div class="stop__header">
+                <span class="stop-number">01</span>
+                <h2 class="stop__name">Porta Praetoria</h2>
+                <p class="stop__subtitle">The Roman north gate, still standing after 1,850 years</p>
+                <div class="stop__tags">
+                  <span class="tag">45 min</span>
+                  <span class="tag">Monument</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">A Roman gate built in 179 AD, still embedded in the city fabric — walk through an arch that Roman legionaries marched through</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="porta-about">About this place</button>
+                <button class="expand-btn" data-target="porta-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="porta-baby">Visiting with a baby</button>
+              </div>
+              <div id="porta-about" class="stop__expand-content">In 179 AD, Emperor Marcus Aurelius ordered a permanent legionary fortress built at the northern bend of the Danube — Castra Regina, the 'fort on the Regen river.' Six thousand Roman soldiers garrisoned here, and the fortress walls defined the city's shape for the next two millennia. The Porta Praetoria was the northern gate of that fortress. Most of the Roman wall was cannibalized for medieval buildings, but the gate survived because it was simply too useful to demolish — it kept being incorporated into whatever was built around it. Today it stands in an alley next to the Bishop's Court, its lower arch from 179 AD, its upper section medieval. You can press your hand against stones that Marcus Aurelius's engineers cut and placed. The inscription on the nearby wall marks where the Roman principia (headquarters building) stood.</div>
+              <div id="porta-gems" class="stop__expand-content">The best Roman remains are not at the Porta Praetoria but in the basement of the Hotel Orphée and the nearby Bishop's Court — both built directly on top of Roman foundations. The Bishop's Court occasionally offers tours of its Roman substructure. The small Roman Museum (Historisches Museum) just south of here has the finest collection of Roman Regensburg artifacts, including intact gravestones from legionary soldiers with their names and home provinces — soldiers from Gaul, Syria, North Africa, all garrisoned at this northern edge of the empire.</div>
+              <div id="porta-baby" class="stop__expand-content">The area around the Porta Praetoria is flat and cobblestoned — a stroller works but the old stones are uneven. The gate itself is open-air and free to approach. Parking at Dachauplatz (5 min walk) has a flat walkway into the old town.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 02: Steinerne Brücke + Wurstküchl -->
+            <article class="stop" data-stop-id="stone-bridge-wurstkuchl">
+              <div class="stop__header">
+                <span class="stop-number">02</span>
+                <h2 class="stop__name">Steinerne Brücke + Historische Wurstküchl</h2>
+                <p class="stop__subtitle">The oldest bridge in Germany and the oldest sausage kitchen in the world</p>
+                <div class="stop__tags">
+                  <span class="tag">75 min</span>
+                  <span class="tag">Monument</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">Lunch at a sausage kitchen that has been grilling over beechwood charcoal at the same spot since the 12th century</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="bridge-about">About this place</button>
+                <button class="expand-btn" data-target="bridge-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="bridge-baby">Visiting with a baby</button>
+              </div>
+              <div id="bridge-about" class="stop__expand-content">The Steinerne Brücke (Stone Bridge) was built between 1135 and 1146 and was the only permanent bridge across the Danube in the entire region for centuries. Every crusading army heading east crossed this bridge — Barbarossa's forces in 1189, the armies of the Second and Third Crusades. It was an engineering marvel: 16 arches, 310 meters long, built without mortar between the cut stones. Medieval engineers used a temporary ice dam to work in dry conditions. For 800 years it was the longest stone bridge north of the Alps. The Historische Wurstküchl directly at the bridge's foot has been serving sausages from this spot since the 12th century, feeding the bridge construction workers and then everyone after them. It is not a tourist gimmick — it is genuinely one of the oldest continuously operating restaurants in the world, serving the same six small Regensburg sausages on sauerkraut with sweet mustard that workers ate here in medieval times.</div>
+              <div id="bridge-gems" class="stop__expand-content">Look at the bridge from the Stadtamhof side (north bank) rather than the old town side — from here you can see the medieval towers and the cathedral rising behind, and the confluence of the Regen and Danube just to the east. Most visitors never cross to the north bank. The Wurstküchl has a small outdoor terrace directly over the river; arrive before 11:30am or after 2pm to avoid the worst of the queue.</div>
+              <div id="bridge-baby" class="stop__expand-content">The bridge itself has a low curb on each side but no railing at points — keep the stroller close to the center. The Wurstküchl terrace has outdoor seating and high chairs. The nearby riverside path is flat and stroller-friendly for a walk along the Danube after lunch.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 03: Rathaus Reichssaal -->
+            <article class="stop" data-stop-id="rathaus-reichssaal">
+              <div class="stop__header">
+                <span class="stop-number">03</span>
+                <h2 class="stop__name">Old Town Hall — Reichssaal</h2>
+                <p class="stop__subtitle">Where the Holy Roman Empire governed for 143 years</p>
+                <div class="stop__tags">
+                  <span class="tag">60 min</span>
+                  <span class="tag">Museum</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">The actual room where the Perpetual Imperial Diet of the Holy Roman Empire met from 1663 to 1806 — Europe's first permanent parliament</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="rathaus-about">About this place</button>
+                <button class="expand-btn" data-target="rathaus-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="rathaus-baby">Visiting with a baby</button>
+              </div>
+              <div id="rathaus-about" class="stop__expand-content">From 1663 to 1806, the Holy Roman Empire held its Reichstag (Imperial Diet) permanently in Regensburg — making it, arguably, Europe's first permanent parliamentary assembly. Representatives of the emperor, the princes, the free cities, and the church sat in this room and negotiated the governance of a territory stretching from the North Sea to Italy. The Reichssaal is the original room: the voting seating still arranged by rank, the emperor's throne elevated, the iconography of imperial power intact. This is not a reconstruction. The deliberations that happened here shaped the religious settlement after the Thirty Years' War, the legal frameworks that governed central Europe, and the slow constitutional constraints being placed on imperial authority that eventually led to 1806 when Napoleon dissolved the empire entirely and the last emperor abdicated in this same city. The basement of the building contains the original medieval torture chamber, preserved entirely intact.</div>
+              <div id="rathaus-gems" class="stop__expand-content">The torture chamber in the basement is included in the guided tour and is genuinely one of the most sobering medieval rooms you will encounter — not theatrical, just matter-of-fact instruments and the records of their use. Tours run in German and English; book at the tourist office around the corner. The patrician towers visible from the Rathausplatz are the medieval equivalent of skyscrapers — wealthy merchant families competed to build the tallest tower as a status symbol. Regensburg had over 60 of them; about 20 survive.</div>
+              <div id="rathaus-baby" class="stop__expand-content">The Reichssaal requires a guided tour (40 min) which involves standing. A baby carrier is better than a stroller inside the building. The Rathausplatz outside is partially cobblestoned but manageable. Public toilets with changing facilities are in the nearby Neupfarrplatz underground (signed).</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 04: Regensburg Cathedral -->
+            <article class="stop" data-stop-id="regensburg-dom">
+              <div class="stop__header">
+                <span class="stop-number">04</span>
+                <h2 class="stop__name">Regensburg Cathedral</h2>
+                <p class="stop__subtitle">Gothic cathedral, 300 years in construction</p>
+                <div class="stop__tags">
+                  <span class="tag">45 min</span>
+                  <span class="tag">Church</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">The finest Gothic stained glass in Bavaria, and the Domspatz — one of Europe's oldest boys' choirs, founded around 975 AD</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="dom-about">About this place</button>
+                <button class="expand-btn" data-target="dom-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="dom-baby">Visiting with a baby</button>
+              </div>
+              <div id="dom-about" class="stop__expand-content">Construction of the current cathedral began around 1250 and was not completed until 1520 — 270 years of building. The Gothic style was imported from France (the architect was likely trained at Strasbourg) and it sits incongruously among Regensburg's Romanesque and Roman fabric like a French visitor who never left. The interior is remarkable for its glass: the 13th and 14th century windows are among the best-preserved Gothic stained glass in Germany, casting colored light across the nave in a way that photographs cannot capture. The Regensburger Domspatzen ('Cathedral Sparrows') is the choir school attached to the cathedral, founded around 975 AD, making it one of the oldest continuously operating institutions in Europe. Pope Benedict XVI was a member of the Domspatzen as a child, and his brother Georg Ratzinger served as its director for 30 years.</div>
+              <div id="dom-gems" class="stop__expand-content">The small cloisters on the south side of the cathedral are almost always empty and are one of the most peaceful medieval spaces in the city. The Domschatz (Cathedral Treasury) next door has a collection of medieval goldsmithing that rivals anything in Munich. The carved 'Devil's' figure on the exterior north portal — a grotesque medieval demon — was placed there deliberately, supposedly to ward off evil from the building.</div>
+              <div id="dom-baby" class="stop__expand-content">The cathedral is fully accessible — flat stone floor, wide nave, no steps at the main entrance. Acoustics mean sounds carry strongly (including baby sounds) but it's a lived-in church and families are welcome. No dedicated changing room in the cathedral; nearest facilities are at the underground car park on Neupfarrplatz.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 05: Walhalla -->
+            <article class="stop" data-stop-id="walhalla">
+              <div class="stop__header">
+                <span class="stop-number">05</span>
+                <h2 class="stop__name">Walhalla</h2>
+                <p class="stop__subtitle">A Greek Parthenon on a cliff above the Danube</p>
+                <div class="stop__tags">
+                  <span class="tag">90 min</span>
+                  <span class="tag">Monument</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">A full-scale Greek temple containing marble busts of 131 famous Germans — built by Ludwig I on a cliff 85 meters above the Danube</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="walhalla-about">About this place</button>
+                <button class="expand-btn" data-target="walhalla-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="walhalla-baby">Visiting with a baby</button>
+              </div>
+              <div id="walhalla-about" class="stop__expand-content">In 1807, Crown Prince Ludwig of Bavaria (later Ludwig I) decided that the German-speaking world needed a monument to its greatest figures — a secular temple of fame modeled on the Athenian Parthenon. He chose a cliff above the Danube near Regensburg, and in 1842 the Walhalla opened: white Carrara marble, Doric columns, 52 marble busts and 64 plaques inside, ranging from Charlemagne to Copernicus to Mozart to Hildegard von Bingen. New honorees are still added — Sophie Scholl (the White Rose resistance member) was added in 2003, and Käthe Kollwitz (the artist) in 2019. The building is architecturally absurd and completely magnificent. The 358 steps up from the river, the columns against the Bavarian sky, the view of the Danube bending into the distance below — it is one of the great theatrical experiences of southern Germany.</div>
+              <div id="walhalla-gems" class="stop__expand-content">Almost no one takes the boat. A Danube ferry runs from Regensburg's stone bridge to Donaustauf at the foot of the Walhalla, giving you the approach from the water that Ludwig intended. The schedule is seasonal (April–October). From below, the Walhalla appears on its cliff exactly like something from ancient Greece transported to Bavaria — the water approach is far more dramatic than arriving by car. If driving, park at the bottom and walk up: the terraces at each landing have the best views.</div>
+              <div id="walhalla-baby" class="stop__expand-content">The 358 steps to the top are not suitable for a stroller — use a carrier. The terraces are flat and the views from each level are worth the climb. There is a small café at the base. The boat from Regensburg is calm and stroller-accessible for the journey.</div>
+            </article>
+
+          </div><!-- /stops-col -->
+        </div><!-- /two-col -->
+      </section>
+
+    </div><!-- /page-shell -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell">
+      <p class="site-footer__line">Munich-based, hand-curated.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ── Map setup ──────────────────────────────────────────────────────────
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Drive polyline Munich → Regensburg (dashed, muted)
+    const driveLine = [
+      [48.1351, 11.5820], [48.4012, 11.6548], [48.7265, 11.8743], [49.0134, 12.1016]
+    ];
+    L.polyline(driveLine, {
+      color: '#1B3A5C', opacity: 0.4, weight: 2, dashArray: '5 7'
+    }).addTo(map);
+
+    // Stop coordinates and ids
+    const stops = [
+      { id: 'porta-praetoria',       lat: 49.0189, lon: 12.0988 },
+      { id: 'stone-bridge-wurstkuchl', lat: 49.0168, lon: 12.0961 },
+      { id: 'rathaus-reichssaal',    lat: 49.0161, lon: 12.0977 },
+      { id: 'regensburg-dom',        lat: 49.0178, lon: 12.0998 },
+      { id: 'walhalla',              lat: 48.9992, lon: 12.2002 }
+    ];
+
+    // Local route polyline (solid)
+    L.polyline(stops.map(s => [s.lat, s.lon]), {
+      color: '#1B3A5C', opacity: 0.85, weight: 2
+    }).addTo(map);
+
+    // Markers — grey default, accent when active
+    const GREY   = '#AAAAAA';
+    const ACCENT = '#1B3A5C';
+    const markerMap = {};
+
+    stops.forEach((s, i) => {
+      const m = L.circleMarker([s.lat, s.lon], {
+        radius: 7, fillColor: GREY, color: '#FFFFFF',
+        weight: 2, fillOpacity: 1
+      }).addTo(map);
+
+      m.bindTooltip(String(i + 1).padStart(2, '0'), {
+        permanent: true, direction: 'right',
+        className: 'stop-label', offset: [8, 0]
+      });
+
+      markerMap[s.id] = m;
+    });
+
+    // Fit map to all stops + Munich
+    const allPoints = [...driveLine, ...stops.map(s => [s.lat, s.lon])];
+    map.fitBounds(L.latLngBounds(allPoints), { padding: [40, 40] });
+
+    // ── Expand / collapse ──────────────────────────────────────────────────
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(btn.dataset.target);
+        const open  = panel.classList.toggle('is-open');
+        btn.style.textDecoration = open ? 'underline' : 'none';
+      });
+    });
+
+    // ── Scroll-linked map highlighting ────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.dataset.stopId;
+        Object.entries(markerMap).forEach(([mid, m]) => {
+          const active = mid === id;
+          m.setStyle({ fillColor: active ? ACCENT : GREY, radius: active ? 10 : 7 });
+          if (active) map.panTo(m.getLatLng(), { animate: true, duration: 0.4 });
+        });
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stop[data-stop-id]').forEach(el => observer.observe(el));
+
+    // Activate first stop on load
+    const firstMarker = markerMap[stops[0].id];
+    if (firstMarker) firstMarker.setStyle({ fillColor: ACCENT, radius: 10 });
+  </script>
+
+  <style>
+    /* Leaflet tooltip label override */
+    .stop-label {
+      background: none;
+      border: none;
+      box-shadow: none;
+      font-size: 11px;
+      font-weight: 600;
+      color: #1B3A5C;
+      font-family: system-ui, -apple-system, sans-serif;
+      letter-spacing: 0.05em;
+      padding: 0;
+    }
+    .stop-label::before { display: none; }
+  </style>
+
+</body>
+</html>
