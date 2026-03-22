@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Passau — Agugagatada</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    /* Shell */
+    .site-nav { border-bottom: 1px solid var(--color-border); padding-block: var(--space-md); }
+    .site-nav__inner { display: flex; align-items: center; gap: var(--space-lg); }
+    .site-nav__home { font-size: var(--text-md); font-weight: 500; color: var(--color-text); letter-spacing: -0.01em; text-decoration: none; }
+    .site-nav__home:hover { text-decoration: none; }
+    .site-nav__back { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .site-nav__back:hover { color: var(--color-accent); text-decoration: none; }
+    .site-footer { border-top: 1px solid var(--color-border); padding-block: var(--space-xl); text-align: center; }
+    .site-footer__line { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+    /* Hero */
+    .hero { padding-top: var(--space-2xl); padding-bottom: var(--space-xl); }
+    .hero__title { font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    .hero__tagline { font-size: var(--text-md); color: var(--color-text-secondary); max-width: 600px; margin-top: var(--space-sm); line-height: 1.5; }
+    .hero__tags { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
+    .hero__rule { border: none; border-top: 1px solid var(--color-border); margin-top: var(--space-xl); }
+
+    /* Intro */
+    .intro { padding-block: var(--space-xl); }
+    .intro__text { font-size: var(--text-md); line-height: 1.7; max-width: 680px; color: var(--color-text); }
+
+    /* Day switcher */
+    .day-switcher { display: flex; gap: var(--space-sm); margin-bottom: var(--space-xl); flex-wrap: wrap; }
+    .day-btn {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+      border: 1px solid var(--color-border); padding: 2px 8px; border-radius: 2px;
+      color: var(--color-text-secondary); background: none; cursor: pointer;
+      font-family: inherit; font-weight: 500; line-height: 1.6; transition: border-color 150ms, color 150ms;
+    }
+    .day-btn.is-active { border-color: var(--color-accent); color: var(--color-accent); font-weight: 500; }
+
+    /* Route section */
+    .route-section { padding-bottom: var(--space-2xl); }
+    #map { height: 560px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+    .stops-col { padding-top: var(--space-xs); }
+
+    /* Stop */
+    .stop { padding-bottom: var(--space-lg); }
+    .stop__header { margin-bottom: var(--space-sm); }
+    .stop__name { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; margin-top: var(--space-xs); }
+    .stop__subtitle { font-size: var(--text-base); color: var(--color-text-secondary); margin-top: 2px; }
+    .stop__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm); }
+    .stop__highlight { font-style: italic; font-family: Georgia, serif; font-size: var(--text-base); color: var(--color-text); border-left: 3px solid var(--color-accent); padding-left: var(--space-md); margin-block: var(--space-md); line-height: 1.6; }
+    .stop__expand-row { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-sm); }
+    .stop__expand-content { display: none; font-size: var(--text-base); line-height: 1.7; color: var(--color-text); margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-border); }
+    .stop__expand-content.is-open { display: block; }
+
+    /* Hike card */
+    .hikes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .hikes-section__header { margin-bottom: var(--space-xl); }
+    .hikes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hikes-section__sub { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: var(--space-xs); }
+    .hike-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hike-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hike-card__area { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hike-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hike-card__desc { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); }
+    .hike-card__tip { font-size: var(--text-sm); color: var(--color-text-secondary); font-style: italic; line-height: 1.6; }
+    .hike-card__tip-label { font-style: normal; font-weight: 500; color: var(--color-text-secondary); }
+
+    /* Hotel card */
+    .hotels-section { padding-bottom: var(--space-2xl); }
+    .hotels-section__header { margin-bottom: var(--space-xl); }
+    .hotels-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hotel-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hotel-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hotel-card__meta { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hotel-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hotel-card__rec { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin-top: var(--space-xs); }
+
+    /* Before you go */
+    .notes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .notes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-xl); }
+    .notes-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-xl); max-width: 680px; }
+    .notes-block__note { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text); }
+    .notes-block__rule { border: none; border-top: 1px solid var(--color-border); margin-block: var(--space-md); }
+
+    /* Leaflet label */
+    .stop-label { background: none; border: none; box-shadow: none; font-size: 11px; font-weight: 600; color: #1B3A5C; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.05em; padding: 0; }
+    .stop-label::before { display: none; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="page-shell">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__home">Agugagatada</a>
+        <a href="index.html" class="site-nav__back">All destinations</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content">
+    <div class="page-shell">
+
+      <!-- Hero -->
+      <header class="hero">
+        <h1 class="hero__title">Passau</h1>
+        <p class="hero__tagline">Where the Danube, Inn, and Ilz converge in three different colors, under a fortress that was never taken by storm</p>
+        <div class="hero__tags">
+          <span class="tag">1h 50 min from Munich</span>
+          <span class="tag">1 day</span>
+        </div>
+        <hr class="hero__rule">
+      </header>
+
+      <!-- Intro -->
+      <section class="intro">
+        <p class="intro__text">Passau is built on an impossibly narrow peninsula where three rivers converge — the Danube from the west, the Inn from the south, and the small dark Ilz from the north. The confluence is dramatic and visible: the rivers run in distinct colors (grey-green Danube, blue-green Inn, black Ilz) for several hundred meters before mixing. The city has been here, in one form or another, since the Romans. The baroque city you see today was rebuilt almost entirely by Italian architects after a catastrophic fire in 1662, giving it an architectural character entirely unlike the rest of Bavaria — more Venice than Munich. Above it all, on a 100-meter cliff, sits the Veste Oberhaus, a prince-bishop's fortress that was never taken by storm in its entire medieval and early-modern history.</p>
+      </section>
+
+      <!-- Two-column: map + stops -->
+      <section class="route-section">
+        <div class="two-col">
+
+          <!-- Map -->
+          <div class="two-col__map">
+            <div id="map"></div>
+          </div>
+
+          <!-- Stops -->
+          <div class="stops-col">
+
+            <!-- Stop 01: Dreiflüsseeck -->
+            <article class="stop" data-stop-id="dreifluesseeck">
+              <div class="stop__header">
+                <span class="stop-number">01</span>
+                <h2 class="stop__name">Dreiflüsseeck — Three Rivers Confluence</h2>
+                <p class="stop__subtitle">Where three rivers meet in three different colors</p>
+                <div class="stop__tags">
+                  <span class="tag">30 min</span>
+                  <span class="tag">Nature</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">The exact point where the Danube (grey-green), the Inn (blue-green), and the Ilz (near-black) meet — three rivers running side by side in distinct colors before slowly merging</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="dreifluesseeck-about">About this place</button>
+                <button class="expand-btn" data-target="dreifluesseeck-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="dreifluesseeck-baby">Visiting with a baby</button>
+              </div>
+              <div id="dreifluesseeck-about" class="stop__expand-content">The confluence at the tip of Passau's peninsula is one of those geographical spectacles that photographs suggest and reality exceeds. The rivers carry different mineral loads from their different source regions — the Inn drains alpine glaciers and runs with glacial flour, the Danube runs from the limestone plateaus of southern Germany, the Ilz drains dark peat moorland north of the city — and they remain visually distinct for a surprising distance downstream before the turbulence of mixing finally homogenizes them. The Romans understood the strategic value of this point immediately: whoever controlled the confluence controlled river traffic through the entire region. The Roman fort of Batavis stood here from the 1st century AD. The current city is built on 2,000 years of continuous settlement on this same peninsula. The Dreiflüsseeck itself is accessible from a small park at the very tip of the peninsula — a good 20-minute walk along the Innkai from the cathedral.</div>
+              <div id="dreifluesseeck-gems" class="stop__expand-content">The best view of the confluence is not from the peninsula tip (you are too close to the water to see the color contrast clearly) but from the Veste Oberhaus on the cliff above, or from the eastern bank of the Inn across the river. A short ferry (the Ilzstadt ferry, seasonal) takes you to the eastern bank for a few euros and the view from there is far more revealing. The Innkai promenade running from the cathedral to the confluence is one of the most beautiful riverside walks in Bavaria — baroque façades to the left, the Inn to the right, the fortress cliff ahead.</div>
+              <div id="dreifluesseeck-baby" class="stop__expand-content">The Innkai promenade to the confluence is completely flat, wide, and paved — one of the best stroller walks in Bavaria. The tip of the peninsula has a small park with benches. No dedicated facilities at the confluence itself; the nearest café is 5 minutes back along the Innkai.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 02: St. Stephen's Cathedral -->
+            <article class="stop" data-stop-id="st-stephan-cathedral">
+              <div class="stop__header">
+                <span class="stop-number">02</span>
+                <h2 class="stop__name">St. Stephen's Cathedral</h2>
+                <p class="stop__subtitle">The largest church organ in the world</p>
+                <div class="stop__tags">
+                  <span class="tag">60 min</span>
+                  <span class="tag">Church</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">The organ has 17,774 pipes and 233 stops — the largest church organ in the world — filling a baroque interior that looks more like Rome than Bavaria</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="cathedral-about">About this place</button>
+                <button class="expand-btn" data-target="cathedral-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="cathedral-baby">Visiting with a baby</button>
+              </div>
+              <div id="cathedral-about" class="stop__expand-content">The current cathedral was built after the great fire of 1662 destroyed most of Passau. The Prince-Bishop brought in Italian architects — primarily Carlo Lurago and the stucco master Giovanni Battista Carlone — and what emerged is the most Italian-looking church north of the Alps: a white and gold interior, exuberant stucco decoration on every surface, a ceiling fresco of overwhelming exuberance, and a general atmosphere more of theatrical celebration than northern German austerity. The organ was installed in stages from the 17th century onward, growing continuously until the current instrument reached 17,774 pipes and 233 stops — the largest church organ in the world (excluding theatrical and concert hall organs). Organ recitals run daily at noon from May to October and on Thursdays at 7:30pm — 30 minutes of live performance on the instrument for a small entry fee. The sound in this baroque space is genuinely extraordinary.</div>
+              <div id="cathedral-gems" class="stop__expand-content">The cathedral exterior is less celebrated than the interior but the south portal has a Madonna relief of exceptional quality from the workshop of Hans Leinberger, one of the great late-Gothic sculptors. The Domschatz (Cathedral Treasury) next to the cathedral has medieval goldwork and vestments including pieces from the Ottonian period. The Residenzplatz in front of the cathedral is the largest baroque square in Bavaria — sit at the café on the square's east side and look back at the cathedral facade for the proper sense of scale.</div>
+              <div id="cathedral-baby" class="stop__expand-content">The cathedral interior is flat throughout and stroller-accessible via the main entrance. The organ recitals run 30 minutes — manageable for a baby with the loud and varied sound. The Residenzplatz outside is completely flat and spacious.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 03: Veste Oberhaus -->
+            <article class="stop" data-stop-id="veste-oberhaus">
+              <div class="stop__header">
+                <span class="stop-number">03</span>
+                <h2 class="stop__name">Veste Oberhaus</h2>
+                <p class="stop__subtitle">The fortress that was never taken by storm</p>
+                <div class="stop__tags">
+                  <span class="tag">90 min</span>
+                  <span class="tag">Castle</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">100 meters above the Danube, with the finest view over the three-rivers confluence — and a fortress museum that spans 1,400 years of European military history</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="oberhaus-about">About this place</button>
+                <button class="expand-btn" data-target="oberhaus-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="oberhaus-baby">Visiting with a baby</button>
+              </div>
+              <div id="oberhaus-about" class="stop__expand-content">The Veste Oberhaus was built in 1219 by Bishop Ulrich II as a demonstration of episcopal power over the city's burghers, who had been growing increasingly rebellious. It sits on a 100-meter cliff spur between the Danube and the Ilz, connected to the old town only by a narrow ridge. In every conflict from the 13th to the 18th century — the Citizens' Wars, the Thirty Years' War, the French Revolutionary Wars — the Veste Oberhaus was besieged but never successfully stormed. The fortifications were continuously improved: what you see now is a complex of walls, towers, and residential buildings spanning 800 years of military architecture. The Oberhausmuseum inside covers the city's history from its Roman origins, the medieval episcopal power struggles, the Reformation, and the 19th-century rebuilding. The view from the fortress walls over the confluence — the narrow peninsula of the old town with its baroque towers, the three rivers meeting below, the forest hills of Austria to the east — is one of the great views of southern Germany.</div>
+              <div id="oberhaus-gems" class="stop__expand-content">The walk up from the old town (the Georgsberg path) takes about 20 minutes and gives changing views over the city as you climb. The shuttle bus (seasonal) goes to the top if you prefer. Most visitors look east from the fortress toward the confluence; look also west toward the Danube valley for the view that river traffic has had approaching Passau for two thousand years. The medieval kitchen in the fortress complex is occasionally used for historical cooking demonstrations.</div>
+              <div id="oberhaus-baby" class="stop__expand-content">The shuttle bus (Burgbus) runs from the old town to the fortress entrance and is the practical option with a stroller or carrier. The fortress grounds are uneven and include steps — a carrier is needed for the upper walls and towers. The museum building interior is accessible. The main terrace with the best view is reachable from the shuttle bus drop-off.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 04: Passau Old Town + Innkai -->
+            <article class="stop" data-stop-id="old-town-inn">
+              <div class="stop__header">
+                <span class="stop-number">04</span>
+                <h2 class="stop__name">Passau Old Town + Innkai</h2>
+                <p class="stop__subtitle">Italy transplanted to Bavaria — the most un-German city in Germany</p>
+                <div class="stop__tags">
+                  <span class="tag">60 min</span>
+                  <span class="tag">Town center</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">Baroque palaces, arcaded streets, and an Italian atmosphere produced by the architects who rebuilt Rome — in a Bavarian river city</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="oldtown-about">About this place</button>
+                <button class="expand-btn" data-target="oldtown-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="oldtown-baby">Visiting with a baby</button>
+              </div>
+              <div id="oldtown-about" class="stop__expand-content">The 1662 fire destroyed most of medieval Passau and the Prince-Bishop decided to rebuild entirely in the contemporary Italian baroque style. He recruited Italian architects, stucco workers, and fresco painters, and the result — completed over 60 years — is a city with no German equivalent. The narrow streets have arcaded ground floors and baroque facades with the pastel colors and proportions of northern Italy. The Innkai (Inn riverside promenade) is the social heart of the city — cafés with terraces over the water, the baroque facades reflected in the Inn, the fortress cliff looming above. The Nibelungengasse connecting to the old town is supposedly the inspiration for scenes in the Nibelungenlied (though this is literary folklore rather than established fact). The overall atmosphere is lighter and more Mediterranean than any comparable Bavarian city.</div>
+              <div id="oldtown-gems" class="stop__expand-content">The Schaiblingsturm (a 14th-century round tower on the Inn embankment, surviving from the pre-fire medieval city) is usually ignored by visitors focused on the baroque architecture — it is the most substantial remaining piece of medieval Passau. The Rathaus has an interesting Gothic great hall interior (open for tours). The cemetery of St. Severin, slightly outside the old town, has Roman gravestones incorporated into its walls.</div>
+              <div id="oldtown-baby" class="stop__expand-content">The Innkai promenade is entirely flat and one of the best stroller walks in the city. The old town streets have some cobblestone sections but are mostly manageable. The area around the Residenzplatz is flat and spacious.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 05: Museum of Glass -->
+            <article class="stop" data-stop-id="glass-museum">
+              <div class="stop__header">
+                <span class="stop-number">05</span>
+                <h2 class="stop__name">Museum of Glass (Glasmuseum Passau)</h2>
+                <p class="stop__subtitle">The largest collection of Bohemian and Bavarian glass in the world</p>
+                <div class="stop__tags">
+                  <span class="tag">60 min</span>
+                  <span class="tag">Museum</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">30,000 pieces of glass spanning 300 years — and the museum is inside the Hotel Wilder Mann, where Empress Elisabeth (Sisi) stayed in 1854</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="glass-about">About this place</button>
+                <button class="expand-btn" data-target="glass-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="glass-baby">Visiting with a baby</button>
+              </div>
+              <div id="glass-about" class="stop__expand-content">Passau sits at the edge of the Bohemian Forest, which was for centuries the center of European glassmaking — the Bohemian glass tradition produced the finest decorative and utility glass in the world from the 17th century onward. The Glasmuseum Passau, housed in the Hotel Wilder Mann (the oldest hotel in the city), has assembled 30,000 pieces spanning Baroque, Biedermeier, Historicism, Jugendstil, and 20th-century glass from Bohemian, Austrian, and Bavarian workshops. The quality is extraordinary: engraved hunting scenes, ruby overlay glasses, Biedermeier portrait tumblers, Jugendstil vases with iridescent surfaces. The museum is spread through the hotel's historic rooms on multiple floors. The Hotel Wilder Mann itself is the oldest inn in Passau — Empress Elisabeth (Sisi) stayed here in 1854 on her way to meet Emperor Franz Joseph for the first time.</div>
+              <div id="glass-gems" class="stop__expand-content">The Jugendstil section on the upper floor is the most beautiful part of the collection — the iridescent Loetz glass and the Bohemian Jugendstil pieces are equal to anything in the Vienna applied arts museums. The hotel restaurant downstairs serves Bavarian-Bohemian cuisine at decent prices and is where locals from the city eat when they want a proper meal.</div>
+              <div id="glass-baby" class="stop__expand-content">The museum occupies multiple floors of the hotel — some stairs, but an elevator covers the main sections. The historic rooms are intimate and require some care with a stroller; a carrier is more practical. The hotel ground floor café and restaurant are fully accessible.</div>
+            </article>
+
+          </div><!-- /stops-col -->
+        </div><!-- /two-col -->
+      </section>
+
+      <!-- Hikes -->
+      <section class="hikes-section">
+        <div class="hikes-section__header">
+          <h2 class="hikes-section__title">On foot</h2>
+          <p class="hikes-section__sub">Walks and hikes from this base</p>
+        </div>
+        <div class="card-grid">
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Innkai Promenade to Dreiflüsseeck</h3>
+            <p class="hike-card__area">Passau old town</p>
+            <div class="hike-card__tags">
+              <span class="tag">3 km</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">The flat promenade along the Inn river from the cathedral to the three-rivers confluence and back. The finest urban riverside walk in eastern Bavaria — baroque facades, the fortress cliff, the Inn reflecting the sky.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Walk at dusk when the light is low and the baroque facades glow against the darkening water. The confluence is best seen at this time.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Georgsberg Path to Veste Oberhaus</h3>
+            <p class="hike-card__area">Passau</p>
+            <div class="hike-card__tags">
+              <span class="tag">2 km</span>
+              <span class="tag">+100 m</span>
+              <span class="tag">Moderate</span>
+              <span class="tag">Carrier</span>
+            </div>
+            <p class="hike-card__desc">The historic footpath up through the forest to the Veste Oberhaus, passing through the Ilz gorge below. The path gives changing views over the confluence as you climb. Used by residents for centuries as the walking route to the fortress.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Carrier needed. Take the Burgbus down if legs are tired — or the reverse. The path takes 25–30 minutes up at a relaxed pace.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Danube Cycle Path West of Passau</h3>
+            <p class="hike-card__area">Passau toward Vilshofen</p>
+            <div class="hike-card__tags">
+              <span class="tag">10 km</span>
+              <span class="tag">+15 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">The international Danube Cycle Route (EuroVelo 6) runs through Passau. The section west toward Vilshofen is flat, paved, and runs directly beside the river. Good for a half-day ride with a trailer bike or a long stroller walk in the first few kilometers.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Bike rental available at the main station. With a stroller, the flat first 2–3km section along the southern Danube bank is excellent.</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Hotels -->
+      <section class="hotels-section">
+        <div class="hotels-section__header">
+          <h2 class="hotels-section__title">Where to stay</h2>
+        </div>
+        <div class="card-grid">
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Wilder Mann</h3>
+            <p class="hotel-card__meta">Historic Hotel — Passau old town</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€90–140/night</span>
+              <span class="tag">Crib available</span>
+            </div>
+            <p class="hotel-card__rec">The building itself is extraordinary. The glass museum is included — you live inside the collection.</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel König</h3>
+            <p class="hotel-card__meta">Historic Hotel — Passau, Danube embankment</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€85–125/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Best river views of any hotel in Passau. The view of the fortress cliff from a river-view room is dramatic.</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Pension Rössner</h3>
+            <p class="hotel-card__meta">Guesthouse — Passau, Innstadt quarter</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€60–80/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Best value, parking included, local character, very practical for families.</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Before you go -->
+      <section class="notes-section">
+        <h2 class="notes-section__title">Before you go</h2>
+        <div class="notes-block">
+          <p class="notes-block__note">Cathedral organ recitals: daily noon May–October, Thursday evenings year-round — worth planning around.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Veste Oberhaus shuttle bus (Burgbus): runs from Rathausplatz, seasonal — check schedule before visiting.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Parking: the old town is largely traffic-restricted. Use Parkplatz Römerplatz on the eastern bank and cross the bridge.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Flooding: Passau floods regularly. Check water levels if visiting after heavy rain — the Innkai can be underwater.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Austria is 5km east — bring passports if you want to cross and explore Oberösterreich.</p>
+        </div>
+      </section>
+
+    </div><!-- /page-shell -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell">
+      <p class="site-footer__line">Munich-based, hand-curated.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ── Map setup ──────────────────────────────────────────────────────────
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Drive polyline Munich → Passau (dashed, muted)
+    const driveLine = [
+      [48.1351, 11.5820], [48.2012, 12.2548], [48.3765, 12.9743], [48.5748, 13.4314]
+    ];
+    L.polyline(driveLine, {
+      color: '#1B3A5C', opacity: 0.4, weight: 2, dashArray: '5 7'
+    }).addTo(map);
+
+    // Stop coordinates and ids
+    const stops = [
+      { id: 'dreifluesseeck',      lat: 48.5726, lon: 13.4652 },
+      { id: 'st-stephan-cathedral', lat: 48.5745, lon: 13.4635 },
+      { id: 'veste-oberhaus',      lat: 48.5783, lon: 13.4648 },
+      { id: 'old-town-inn',        lat: 48.5748, lon: 13.4314 },
+      { id: 'glass-museum',        lat: 48.5741, lon: 13.4628 }
+    ];
+
+    // Local route polyline (solid)
+    L.polyline(stops.map(s => [s.lat, s.lon]), {
+      color: '#1B3A5C', opacity: 0.85, weight: 2
+    }).addTo(map);
+
+    // Three rivers polylines
+    L.polyline([[48.5726, 13.43], [48.5726, 13.4652]], {
+      color: '#8FA8C0', weight: 3, opacity: 0.8
+    }).addTo(map); // Danube from west
+
+    L.polyline([[48.555, 13.472], [48.5726, 13.4652]], {
+      color: '#7A9E87', weight: 3, opacity: 0.8
+    }).addTo(map); // Inn from south
+
+    L.polyline([[48.595, 13.462], [48.5726, 13.4652]], {
+      color: '#555555', weight: 3, opacity: 0.8
+    }).addTo(map); // Ilz from north
+
+    // Markers — grey default, accent when active
+    const GREY   = '#AAAAAA';
+    const ACCENT = '#1B3A5C';
+    const markerMap = {};
+
+    stops.forEach((s, i) => {
+      const m = L.circleMarker([s.lat, s.lon], {
+        radius: 7, fillColor: GREY, color: '#FFFFFF',
+        weight: 2, fillOpacity: 1
+      }).addTo(map);
+
+      m.bindTooltip(String(i + 1).padStart(2, '0'), {
+        permanent: true, direction: 'right',
+        className: 'stop-label', offset: [8, 0]
+      });
+
+      markerMap[s.id] = m;
+    });
+
+    // Fit map to all stops + drive line
+    const allPoints = [...driveLine, ...stops.map(s => [s.lat, s.lon])];
+    map.fitBounds(L.latLngBounds(allPoints), { padding: [40, 40] });
+
+    // Activate first stop on load
+    const firstMarker = markerMap[stops[0].id];
+    if (firstMarker) firstMarker.setStyle({ fillColor: ACCENT, radius: 10 });
+
+    // ── Expand / collapse ──────────────────────────────────────────────────
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(btn.dataset.target);
+        const open  = panel.classList.toggle('is-open');
+        btn.style.textDecoration = open ? 'underline' : 'none';
+      });
+    });
+
+    // ── Scroll-linked map highlighting ────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.dataset.stopId;
+        Object.entries(markerMap).forEach(([mid, m]) => {
+          const active = mid === id;
+          m.setStyle({ fillColor: active ? ACCENT : GREY, radius: active ? 10 : 7 });
+          if (active) map.panTo(m.getLatLng(), { animate: true, duration: 0.4 });
+        });
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stop[data-stop-id]').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

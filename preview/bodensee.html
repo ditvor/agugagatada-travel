@@ -1,797 +1,512 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bodensee — Where Three Countries Meet · Agugagatada Travel</title>
-
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bodensee — Agugagatada</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Shell */
+    .site-nav { border-bottom: 1px solid var(--color-border); padding-block: var(--space-md); }
+    .site-nav__inner { display: flex; align-items: center; gap: var(--space-lg); }
+    .site-nav__home { font-size: var(--text-md); font-weight: 500; color: var(--color-text); letter-spacing: -0.01em; text-decoration: none; }
+    .site-nav__home:hover { text-decoration: none; }
+    .site-nav__back { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .site-nav__back:hover { color: var(--color-accent); text-decoration: none; }
+    .site-footer { border-top: 1px solid var(--color-border); padding-block: var(--space-xl); text-align: center; }
+    .site-footer__line { font-size: var(--text-sm); color: var(--color-text-secondary); }
 
-    :root {
-      --orange:        #F05A28;
-      --orange-light:  #FEF0EB;
-      --green:         #2D8653;
-      --green-light:   #EAF4EE;
-      --blue:          #2B6CB0;
-      --blue-light:    #EBF4FF;
-      --purple:        #6B46C1;
-      --purple-light:  #F3EFFE;
-      --teal:          #0D7377;
-      --teal-light:    #E6F4F4;
-      --bg:            #F7F7F5;
-      --card:          #FFFFFF;
-      --border:        #E5E7EB;
-      --text:          #1A1A1A;
-      --muted:         #6B7280;
-      --radius:        12px;
+    /* Hero */
+    .hero { padding-top: var(--space-2xl); padding-bottom: var(--space-xl); }
+    .hero__title { font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    .hero__tagline { font-size: var(--text-md); color: var(--color-text-secondary); max-width: 600px; margin-top: var(--space-sm); line-height: 1.5; }
+    .hero__tags { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
+    .hero__rule { border: none; border-top: 1px solid var(--color-border); margin-top: var(--space-xl); }
+
+    /* Intro */
+    .intro { padding-block: var(--space-xl); }
+    .intro__text { font-size: var(--text-md); line-height: 1.7; max-width: 680px; color: var(--color-text); }
+
+    /* Day switcher */
+    .day-switcher { display: flex; gap: var(--space-sm); margin-bottom: var(--space-xl); flex-wrap: wrap; }
+    .day-btn {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+      border: 1px solid var(--color-border); padding: 2px 8px; border-radius: 2px;
+      color: var(--color-text-secondary); background: none; cursor: pointer;
+      font-family: inherit; font-weight: 500; line-height: 1.6; transition: border-color 150ms, color 150ms;
     }
+    .day-btn.is-active { border-color: var(--color-accent); color: var(--color-accent); font-weight: 500; }
 
-    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; font-size: 15px; }
+    /* Route section */
+    .route-section { padding-bottom: var(--space-2xl); }
+    #map { height: 560px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+    .stops-col { padding-top: var(--space-xs); }
 
-    /* NAVBAR */
-    .navbar { position: sticky; top: 0; z-index: 1000; background: #fff; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 56px; }
-    .logo { font-weight: 800; font-size: 18px; color: var(--orange); letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
-    .logo svg { width: 26px; height: 26px; }
-    .nav-center { font-size: 14px; font-weight: 600; color: var(--text); opacity: 0.75; }
-    .btn-share { background: var(--orange); color: #fff; border: none; border-radius: 8px; padding: 7px 16px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; }
-    .btn-share:hover { background: #d94e1f; }
+    /* Stop */
+    .stop { padding-bottom: var(--space-lg); }
+    .stop__header { margin-bottom: var(--space-sm); }
+    .stop__name { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; margin-top: var(--space-xs); }
+    .stop__subtitle { font-size: var(--text-base); color: var(--color-text-secondary); margin-top: 2px; }
+    .stop__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm); }
+    .stop__highlight { font-style: italic; font-family: Georgia, serif; font-size: var(--text-base); color: var(--color-text); border-left: 3px solid var(--color-accent); padding-left: var(--space-md); margin-block: var(--space-md); line-height: 1.6; }
+    .stop__expand-row { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-sm); }
+    .stop__expand-content { display: none; font-size: var(--text-base); line-height: 1.7; color: var(--color-text); margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-border); }
+    .stop__expand-content.is-open { display: block; }
 
-    /* HERO */
-    .hero { background: linear-gradient(160deg, #0d3b5c 0%, #1a5c7a 35%, #1e7a6e 65%, #2d5c3a 100%); padding: 52px 24px 44px; position: relative; overflow: hidden; }
-    .mountain-bg { position: absolute; bottom: 0; left: 0; right: 0; height: 100px; opacity: 0.12; }
-    .hero-content { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; }
-    .hero-breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 16px; }
-    .hero-breadcrumb span { color: rgba(255,255,255,0.35); }
-    .hero h1 { font-size: clamp(26px, 5vw, 42px); font-weight: 800; color: #fff; letter-spacing: -1px; line-height: 1.15; margin-bottom: 10px; }
-    .hero-tagline { font-size: 15px; color: rgba(255,255,255,0.72); margin-bottom: 28px; font-style: italic; max-width: 600px; }
-    .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; }
-    .meta-pill { background: rgba(255,255,255,0.12); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); border-radius: 100px; padding: 6px 14px; font-size: 13px; font-weight: 500; color: #fff; display: flex; align-items: center; gap: 6px; }
-    .meta-pill .icon { font-size: 15px; }
+    /* Hike card */
+    .hikes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .hikes-section__header { margin-bottom: var(--space-xl); }
+    .hikes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hikes-section__sub { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: var(--space-xs); }
+    .hike-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hike-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hike-card__area { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hike-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hike-card__desc { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); }
+    .hike-card__tip { font-size: var(--text-sm); color: var(--color-text-secondary); font-style: italic; line-height: 1.6; }
+    .hike-card__tip-label { font-style: normal; font-weight: 500; color: var(--color-text-secondary); }
 
-    /* STAT BAR */
-    .stat-bar { background: #fff; border-bottom: 1px solid var(--border); display: flex; overflow-x: auto; scrollbar-width: none; }
-    .stat-bar::-webkit-scrollbar { display: none; }
-    .stat-item { flex: 1; min-width: 110px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 16px 12px; border-right: 1px solid var(--border); }
-    .stat-item:last-child { border-right: none; }
-    .stat-value { font-size: 20px; font-weight: 800; color: var(--text); line-height: 1; }
-    .stat-label { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .stat-icon { font-size: 18px; margin-bottom: 2px; }
+    /* Hotel card */
+    .hotels-section { padding-bottom: var(--space-2xl); }
+    .hotels-section__header { margin-bottom: var(--space-xl); }
+    .hotels-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hotel-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hotel-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hotel-card__meta { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hotel-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hotel-card__rec { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin-top: var(--space-xs); }
 
-    /* MAP */
-    .map-section { position: relative; }
-    #map { height: 500px; width: 100%; z-index: 0; }
-    .map-legend { position: absolute; bottom: 16px; right: 16px; background: rgba(255,255,255,0.95); border-radius: 10px; padding: 12px 14px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 500; font-size: 12px; }
-    .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; color: var(--text); font-weight: 500; }
-    .legend-item:last-child { margin-bottom: 0; }
-    .legend-dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
-    .legend-line { width: 20px; height: 3px; border-radius: 2px; }
+    /* Before you go */
+    .notes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .notes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-xl); }
+    .notes-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-xl); max-width: 680px; }
+    .notes-block__note { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text); }
+    .notes-block__rule { border: none; border-top: 1px solid var(--color-border); margin-block: var(--space-md); }
 
-    /* MAIN */
-    .main { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-
-    /* INTRO */
-    .intro-card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 28px 32px; margin-bottom: 40px; font-size: 15.5px; line-height: 1.75; color: #374151; }
-
-    /* DAY HEADER */
-    .day-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 24px; margin-top: 48px; }
-    .day-header-text { flex: 1; }
-    .day-badge { background: var(--orange); color: #fff; font-size: 12px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; border-radius: 100px; padding: 5px 14px; white-space: nowrap; display: inline-block; margin-bottom: 6px; }
-    .day-title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
-    .day-summary { font-size: 13px; color: var(--muted); margin-top: 4px; }
-    .day-divider { flex: 1; height: 1px; background: var(--border); margin-top: 18px; }
-
-    /* STOP CARD */
-    .stop-card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; transition: box-shadow 0.2s; }
-    .stop-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
-    .stop-header { padding: 20px 24px 16px; display: flex; align-items: flex-start; gap: 14px; }
-    .stop-number { width: 36px; height: 36px; border-radius: 50%; background: var(--orange); color: #fff; font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-    .stop-number.nature   { background: var(--green); }
-    .stop-number.museum   { background: var(--blue); }
-    .stop-number.castle   { background: #92400E; }
-    .stop-number.town     { background: var(--teal); }
-    .stop-number.monument { background: var(--purple); }
-    .stop-name { font-size: 19px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2; }
-    .stop-subtitle { font-size: 13px; color: var(--muted); margin-top: 2px; }
-    .stop-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 24px 16px 74px; }
-    .chip { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 100px; border: 1px solid var(--border); color: var(--muted); background: var(--bg); }
-    .chip.cat-nature   { background: var(--green-light);  border-color: #A7D7B9; color: var(--green); }
-    .chip.cat-museum   { background: var(--blue-light);   border-color: #BED9F5; color: var(--blue); }
-    .chip.cat-castle   { background: #FEF3C7;             border-color: #FDE68A; color: #92400E; }
-    .chip.cat-town     { background: var(--teal-light);   border-color: #9ED8D8; color: var(--teal); }
-    .chip.cat-monument { background: var(--purple-light); border-color: #C4B5FD; color: var(--purple); }
-    .chip.baby-high    { background: var(--green-light);  border-color: #A7D7B9; color: var(--green); }
-    .chip.baby-mid     { background: #FEF3C7;             border-color: #FDE68A; color: #92400E; }
-    .chip.baby-low     { background: #FEE2E2;             border-color: #FCA5A5; color: #991B1B; }
-
-    .stop-highlight { padding: 14px 24px 14px 74px; font-size: 14px; font-weight: 500; color: #374151; border-top: 1px solid var(--bg); border-bottom: 1px solid var(--border); background: #FAFAFA; font-style: italic; }
-    .stop-highlight::before { content: '✦  '; color: var(--orange); }
-
-    /* ACCORDION */
-    .accordion { border-top: 1px solid var(--border); }
-    .accordion-item { border-bottom: 1px solid var(--border); }
-    .accordion-item:last-child { border-bottom: none; }
-    .accordion-trigger { width: 100%; background: none; border: none; text-align: left; cursor: pointer; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; font-family: inherit; }
-    .accordion-trigger:hover { background: var(--bg); }
-    .accordion-label { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: var(--text); }
-    .section-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; padding: 2px 8px; border-radius: 100px; }
-    .tag-history { background: var(--blue-light);   color: var(--blue); }
-    .tag-gem     { background: var(--purple-light); color: var(--purple); }
-    .tag-baby    { background: var(--green-light);  color: var(--green); }
-    .accordion-chevron { font-size: 11px; color: var(--muted); transition: transform 0.2s; user-select: none; }
-    .accordion-chevron.open { transform: rotate(180deg); }
-    .accordion-body { display: none; padding: 4px 24px 20px; font-size: 14.5px; line-height: 1.75; color: #374151; }
-    .accordion-body.open { display: block; }
-
-    /* DRIVE CONNECTOR */
-    .drive-connector { display: flex; align-items: center; gap: 12px; padding: 0 28px; margin: -4px 0 16px; color: var(--muted); font-size: 12px; font-weight: 500; }
-    .connector-line { width: 2px; height: 28px; background: repeating-linear-gradient(to bottom, var(--border) 0, var(--border) 4px, transparent 4px, transparent 8px); margin-left: 17px; }
-    .connector-text { display: flex; align-items: center; gap: 6px; background: var(--bg); border: 1px solid var(--border); border-radius: 100px; padding: 4px 12px; }
-
-    /* SECTION HEADER */
-    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; margin-top: 52px; }
-    .section-title { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; }
-    .section-divider { flex: 1; height: 1px; background: var(--border); }
-
-    /* HOTELS */
-    .hotels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .hotel-card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; transition: box-shadow 0.2s; }
-    .hotel-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
-    .hotel-type { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--orange); margin-bottom: 6px; }
-    .hotel-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
-    .hotel-area { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-    .hotel-desc { font-size: 13px; line-height: 1.6; color: #4B5563; margin-bottom: 14px; }
-    .hotel-footer { display: flex; align-items: center; justify-content: space-between; }
-    .hotel-price { font-size: 15px; font-weight: 700; }
-    .hotel-amenities { display: flex; gap: 6px; flex-wrap: wrap; }
-    .amenity-badge { font-size: 11px; padding: 2px 8px; border-radius: 100px; background: var(--green-light); color: var(--green); font-weight: 500; }
-    .local-stars { display: flex; gap: 2px; margin-bottom: 10px; align-items: center; }
-    .star { font-size: 13px; }
-    .star-label { font-size: 11px; color: var(--muted); margin-left: 4px; }
-
-    /* HIKES */
-    .hikes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
-    .hike-card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 20px; transition: box-shadow 0.2s; }
-    .hike-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
-    .hike-difficulty { display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; padding: 3px 10px; border-radius: 100px; margin-bottom: 10px; }
-    .diff-easy     { background: var(--green-light); color: var(--green); }
-    .diff-moderate { background: #FEF3C7; color: #92400E; }
-    .hike-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; line-height: 1.3; }
-    .hike-area { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-    .hike-stats { display: flex; gap: 16px; margin-bottom: 12px; }
-    .hike-stat { display: flex; flex-direction: column; gap: 1px; }
-    .hike-stat-val { font-size: 15px; font-weight: 700; }
-    .hike-stat-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 500; }
-    .hike-desc { font-size: 13px; line-height: 1.6; color: #4B5563; margin-bottom: 12px; }
-    .hike-tip { font-size: 12px; color: var(--muted); font-style: italic; padding-top: 10px; border-top: 1px solid var(--border); }
-    .hike-tip::before { content: '💡  '; }
-    .hike-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-    .hike-badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 100px; }
-    .badge-stroller { background: var(--green-light); color: var(--green); }
-    .badge-carrier  { background: var(--blue-light);  color: var(--blue); }
-
-    /* NOTES */
-    .notes-card { background: var(--card); border-radius: var(--radius); border: 1px solid var(--border); padding: 24px 28px; margin-top: 40px; margin-bottom: 60px; }
-    .notes-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-    .notes-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .notes-list li { display: flex; gap: 10px; font-size: 13.5px; color: #374151; }
-    .notes-list li::before { content: '→'; color: var(--orange); font-weight: 700; flex-shrink: 0; }
-
-    /* FOOTER */
-    .footer { background: var(--text); color: rgba(255,255,255,0.5); text-align: center; padding: 24px; font-size: 12px; }
-    .footer strong { color: rgba(255,255,255,0.8); }
-
-    /* RESPONSIVE */
-    @media (max-width: 600px) {
-      .hero { padding: 36px 16px 32px; }
-      .main { padding: 28px 14px; }
-      .stop-header { padding: 16px; }
-      .stop-chips { padding-left: 16px; }
-      .stop-highlight { padding-left: 16px; }
-      .accordion-trigger { padding: 12px 16px; }
-      .accordion-body { padding: 4px 16px 16px; }
-      .stat-item { min-width: 90px; padding: 12px 8px; }
-      .stat-value { font-size: 17px; }
-      .navbar { padding: 0 14px; }
-      .nav-center { display: none; }
-      .intro-card { padding: 20px; }
-    }
+    /* Leaflet label */
+    .stop-label { background: none; border: none; box-shadow: none; font-size: 11px; font-weight: 600; color: #1B3A5C; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.05em; padding: 0; }
+    .stop-label::before { display: none; }
   </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <div class="logo">
-    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="16" r="16" fill="#F05A28"/>
-      <path d="M8 22 L14 10 L16 14 L19 8 L24 22Z" fill="white" opacity="0.9"/>
-      <circle cx="11" cy="20" r="2" fill="white" opacity="0.6"/>
-    </svg>
-    Agugagatada Travel
-  </div>
-  <div class="nav-center">Bodensee — Where Three Countries Meet</div>
-  <button class="btn-share">↗ Share</button>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <svg class="mountain-bg" viewBox="0 0 1440 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,100 L0,60 L200,15 L340,55 L460,5 L600,45 L720,25 L860,60 L980,10 L1100,50 L1220,20 L1360,48 L1440,30 L1440,100Z" fill="white"/>
-  </svg>
-  <div class="hero-content">
-    <div class="hero-breadcrumb">
-      <span>Germany</span><span>›</span><span>Baden-Württemberg / Bavaria</span><span>›</span>Bodensee
+  <nav class="site-nav">
+    <div class="page-shell">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__home">Agugagatada</a>
+        <a href="index.html" class="site-nav__back">All destinations</a>
+      </div>
     </div>
-    <h1>Bodensee — Where Three Countries Meet</h1>
-    <div class="hero-tagline">Bronze Age villages under water, the world's last airships, and a castle older than Charlemagne</div>
-    <div class="hero-meta">
-      <div class="meta-pill"><span class="icon">📍</span> 110 min from Munich</div>
-      <div class="meta-pill"><span class="icon">📅</span> 2 days</div>
-      <div class="meta-pill"><span class="icon">🗺️</span> 6 stops</div>
-      <div class="meta-pill"><span class="icon">👶</span> Baby friendly</div>
-      <div class="meta-pill"><span class="icon">🏛️</span> Deep history</div>
-      <div class="meta-pill"><span class="icon">🌍</span> 3 countries</div>
-    </div>
-  </div>
-</section>
+  </nav>
 
-<!-- STAT BAR -->
-<div class="stat-bar">
-  <div class="stat-item"><div class="stat-icon">🚗</div><div class="stat-value">110</div><div class="stat-label">min from Munich</div></div>
-  <div class="stat-item"><div class="stat-icon">📍</div><div class="stat-value">6</div><div class="stat-label">stops</div></div>
-  <div class="stat-item"><div class="stat-icon">📅</div><div class="stat-value">2</div><div class="stat-label">days</div></div>
-  <div class="stat-item"><div class="stat-icon">👶</div><div class="stat-value">4/5</div><div class="stat-label">baby friendly</div></div>
-  <div class="stat-item"><div class="stat-icon">🏛️</div><div class="stat-value">5/5</div><div class="stat-label">history depth</div></div>
-  <div class="stat-item"><div class="stat-icon">🌿</div><div class="stat-value">Low</div><div class="stat-label">touristy feel</div></div>
-</div>
+  <main id="content">
+    <div class="page-shell">
 
-<!-- MAP -->
-<div class="map-section">
-  <div id="map"></div>
-  <div class="map-legend">
-    <div class="legend-item"><div class="legend-dot" style="background:#0D7377"></div>Town / Island</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#2B6CB0"></div>Museum</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#92400E"></div>Castle</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#6B46C1"></div>Monument</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#9CA3AF"></div>Munich (start)</div>
-    <div class="legend-item"><div class="legend-line" style="background:#F05A28"></div>Drive route</div>
-  </div>
-</div>
-
-<!-- MAIN -->
-<main class="main">
-
-  <div class="intro-card">
-    The Bodensee sits at the junction of Germany, Austria, and Switzerland, and its shores carry 4,000 years of history in an unusually dense stretch of land: Neolithic and Bronze Age villages preserved under the water, the cradle of the modern airship, a monastery island that once produced the finest illuminated manuscripts in Europe, and a city that ended the worst crisis in medieval Christianity and burned a reformer at the stake for good measure. Most visitors come for the views and the wine. You'll come for everything underneath.
-  </div>
-
-  <!-- DAY 1 -->
-  <div class="day-header">
-    <div class="day-header-text">
-      <div class="day-badge">Day 1</div>
-      <div class="day-title">Lindau → Friedrichshafen → Unteruhldingen → Meersburg</div>
-      <div class="day-summary">From a Roman harbor island to Bronze Age pile dwellings to the oldest inhabited castle in Germany</div>
-    </div>
-    <div class="day-divider"></div>
-  </div>
-
-  <!-- Stop 1: Lindau -->
-  <div class="stop-card" id="stop-lindau">
-    <div class="stop-header">
-      <div class="stop-number town">1</div>
-      <div><div class="stop-name">Lindau</div><div class="stop-subtitle">The island city on the lake</div></div>
-    </div>
-    <div class="stop-chips">
-      <div class="chip cat-town">🏘️ Island Town</div>
-      <div class="chip">⏱ 1.5 hours</div>
-      <div class="chip baby-high">👶 5/5 baby friendly</div>
-    </div>
-    <div class="stop-highlight">A medieval free imperial city on an island in the lake, with a Roman harbor entrance guarded by a stone lion</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-history">History</span>About this place</div>
-          <span class="accordion-chevron open">▼</span>
-        </button>
-        <div class="accordion-body open">
-          Lindau is built on a small island connected to the mainland by a bridge, and it has been an important crossing point since the Romans established a garrison here in the 3rd century AD. The harbor entrance — flanked by a 33-meter lighthouse and a stone Bavarian lion — marks what was once one of the most important trading ports on the Bodensee. Lindau was a Free Imperial City from 1275, answerable directly to the Holy Roman Emperor and no one else, a status it held for nearly 600 years.
-          <br><br>
-          The old town is extraordinarily intact: the Peterskirche dates to the 10th century, the Diebsturm (Thieves' Tower) to the 13th, and the stepped-gable Rathaus to 1422. In 1530, Lindau's delegation to the Diet of Augsburg signed the Augsburg Confession alongside the Protestant princes — one of the founding documents of the Lutheran Reformation.
+      <!-- Hero -->
+      <header class="hero">
+        <h1 class="hero__title">Bodensee</h1>
+        <p class="hero__tagline">Bronze Age villages under water, the world's last airships, and a castle older than Charlemagne</p>
+        <div class="hero__tags">
+          <span class="tag">1h 50 min from Munich</span>
+          <span class="tag">2 days</span>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-gem">Hidden Gem</span>Local tips</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Walk to the northern tip of the island to the <strong>Heidenmauer</strong> — a stretch of Roman wall that most visitors walk past without realizing it predates the medieval town by a thousand years. For coffee with a view, skip the harbor cafés entirely and drive up to <strong>Café Hoyerberg</strong> on the mainland hill: the panorama over the island, the Austrian Alps across the water, and the Swiss peaks beyond is better than anything on the island itself, and almost entirely local.
+        <hr class="hero__rule">
+      </header>
+
+      <!-- Intro -->
+      <section class="intro">
+        <p class="intro__text">The Bodensee sits at the junction of Germany, Austria, and Switzerland, and its shores carry 4,000 years of history in an unusually dense stretch of land: Neolithic and Bronze Age villages preserved under the water, the cradle of the modern airship, a monastery island that once produced the finest illuminated manuscripts in Europe, and a city that ended the worst crisis in medieval Christianity and burned a reformer at the stake for good measure. Most visitors come for the views and the wine. You'll come for everything underneath.</p>
+      </section>
+
+      <!-- Two-column: map + stops -->
+      <section class="route-section">
+        <div class="two-col">
+
+          <!-- Map -->
+          <div class="two-col__map">
+            <div id="map"></div>
+          </div>
+
+          <!-- Stops with day switcher -->
+          <div class="stops-col">
+
+            <div class="day-switcher">
+              <button class="day-btn is-active" data-day="1">Day 1 — Lindau · Friedrichshafen · Meersburg</button>
+              <button class="day-btn" data-day="2">Day 2 — Reichenau Island · Konstanz</button>
+            </div>
+
+            <!-- Day 1 stops -->
+            <div id="day-1-stops">
+
+              <article class="stop" data-stop-id="lindau" data-day="1">
+                <div class="stop__header">
+                  <span class="stop-number">01</span>
+                  <h2 class="stop__name">Lindau</h2>
+                  <p class="stop__subtitle">The island city on the lake</p>
+                  <div class="stop__tags">
+                    <span class="tag">90 min</span>
+                    <span class="tag">Town center</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">A medieval free imperial city on an island in the lake, with a Roman harbor entrance guarded by a stone lion</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="lindau-about">About this place</button>
+                  <button class="expand-btn" data-target="lindau-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="lindau-baby">Visiting with a baby</button>
+                </div>
+                <div id="lindau-about" class="stop__expand-content">Lindau is built on a small island connected to the mainland by a bridge and causeway, and it has been an important crossing point since the Romans established a garrison here in the 3rd century AD. The harbor entrance — flanked by a 33-meter lighthouse and a stone Bavarian lion — is one of the most photographed views on the Bodensee, though what most visitors miss is what the lion represents: Lindau was a Free Imperial City from 1275, answerable directly to the Holy Roman Emperor and no one else, a status it held for almost 600 years. The old town is extraordinarily intact: the Peterskirche dates to the 10th century, the Diebsturm (Thieves' Tower) to the 13th, and the stepped-gable Rathaus to 1422. In 1530, the Lindau delegation to the Diet of Augsburg signed the Augsburg Confession alongside the Protestant princes — one of the founding documents of the Reformation.</div>
+                <div id="lindau-gems" class="stop__expand-content">Almost everyone stays on the main promenade. Walk instead to the northern tip of the island to the Heidenmauer — a stretch of Roman wall that most visitors walk past without realizing it predates the medieval town by a thousand years. For coffee, skip the harbor cafes and go to Cafe Hoyerberg on the mainland hill above Lindau: the view over the island and the Austrian Alps across the water is better than anything on the island itself, and it is almost entirely local. On a clear day you can see the Pfander mountain above Bregenz and, beyond it, the Swiss Alps.</div>
+                <div id="lindau-baby" class="stop__expand-content">Lindau is one of the most stroller-friendly stops on this entire trip — the island is flat, the main streets are paved, and there are benches everywhere. The harbor promenade has a ramp down to the waterfront. Changing facilities in the public toilets near the harbor. Parking is on the mainland; use the Parkhaus Inselbahnhof and walk across.</div>
+              </article>
+
+              <div class="drive-connector"></div>
+
+              <article class="stop" data-stop-id="zeppelin-museum" data-day="1">
+                <div class="stop__header">
+                  <span class="stop-number">02</span>
+                  <h2 class="stop__name">Zeppelin Museum Friedrichshafen</h2>
+                  <p class="stop__subtitle">The world's greatest airship museum</p>
+                  <div class="stop__tags">
+                    <span class="tag">120 min</span>
+                    <span class="tag">Museum</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">A full-scale recreation of the passenger gondola of the Hindenburg, with original furniture still intact, in the hangar where it was built</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="zeppelin-about">About this place</button>
+                  <button class="expand-btn" data-target="zeppelin-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="zeppelin-baby">Visiting with a baby</button>
+                </div>
+                <div id="zeppelin-about" class="stop__expand-content">Ferdinand von Zeppelin was born near Konstanz in 1838 and spent thirty years as a cavalry general before retiring at 52 and devoting the rest of his life to building rigid airships. The LZ 1 made its first flight over the Bodensee in 1900, barely achieving 6km/h against the wind. By the 1930s, the LZ 127 Graf Zeppelin had made 590 flights including 144 transatlantic crossings, carried over 13,000 passengers, and circumnavigated the globe. The LZ 129 Hindenburg — 245 meters long, the largest flying object ever built — made 36 crossings of the Atlantic before bursting into flames at Lakehurst, New Jersey in 1937 in front of a live radio broadcast. The disaster ended the airship era within a year. The museum holds the most important collection of Zeppelin artifacts in the world, including a full-scale recreation of the Hindenburg's passenger section: the dining room, the lounge, the observation windows overlooking the ocean. The engineering of these objects is almost incomprehensible — a rigid aluminum skeleton 245 meters long, covered in cotton fabric, filled with hydrogen, carrying 50 passengers in pressurized luxury across the Atlantic in 60 hours.</div>
+                <div id="zeppelin-gems" class="stop__expand-content">Most visitors spend all their time in the Zeppelin hall and skip the fine art collection upstairs — a serious mistake. The museum's upper floor has one of the strongest collections of Expressionist and Neue Sachlichkeit art in southern Germany, including major works by Otto Dix and Max Beckmann. The Dornier Museum is a 10-minute walk away and covers the flying boat and military aircraft manufacturer that was also based in Friedrichshafen — together the two museums make Friedrichshafen one of the most important aviation history sites in Europe. Most people know neither exists.</div>
+                <div id="zeppelin-baby" class="stop__expand-content">Fully accessible throughout — elevator between floors, flat exhibition spaces, wide corridors for strollers. There is a good cafe on the ground floor with high chairs. The lakefront promenade directly outside is flat and perfect for a post-museum walk. Baby changing room in the main toilets block.</div>
+              </article>
+
+              <div class="drive-connector"></div>
+
+              <article class="stop" data-stop-id="pfahlbaumuseum" data-day="1">
+                <div class="stop__header">
+                  <span class="stop-number">03</span>
+                  <h2 class="stop__name">Pfahlbaumuseum Unteruhldingen</h2>
+                  <p class="stop__subtitle">Bronze Age villages, rebuilt over the water</p>
+                  <div class="stop__tags">
+                    <span class="tag">90 min</span>
+                    <span class="tag">Museum</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">Walk through reconstructed Neolithic and Bronze Age pile-dwelling houses built directly over the lake — the same spot where the originals stood 4,000 years ago</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="pfahlbau-about">About this place</button>
+                  <button class="expand-btn" data-target="pfahlbau-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="pfahlbau-baby">Visiting with a baby</button>
+                </div>
+                <div id="pfahlbau-about" class="stop__expand-content">When Lake Constance water levels dropped dramatically in the 1850s, local fishermen began finding extraordinarily well-preserved wooden objects in the lake sediment near Unteruhldingen — tools, textiles, leather, food remains, entire structural timbers from houses — dating back 4,000 to 6,000 years. The anaerobic conditions under the lake had preserved organic material that would have rotted anywhere else on Earth within decades. What emerged was evidence of Neolithic and Bronze Age communities who built their villages on wooden platforms directly over the shallow water: the pile dwellings. The open-air museum at Unteruhldingen reconstructs these settlements with extraordinary accuracy — you walk through Bronze Age homes, see the hearths, the storage vessels, the tools. The lake sediment around the museum contains the actual original site, which was designated a UNESCO World Heritage Site in 2011 jointly with 110 other Alpine pile dwelling sites across Germany, Austria, Switzerland, France, Italy, and Slovenia. This is one of the most important prehistoric archaeological sites in Central Europe, and almost no one outside Germany has heard of it.</div>
+                <div id="pfahlbau-gems" class="stop__expand-content">The museum boat trip gives you a view of the reconstruction from the water and a proper sense of how these villages related to the lake. It runs on the hour and takes 20 minutes. The underwater archaeology exhibition inside the main building shows the actual objects retrieved from the sediment — the preserved leather shoes, wooden ladles, and fabrics are more affecting than the reconstructed houses because they are real and 4,000 years old. Pick up the small illustrated guide in the shop; the scholarship behind the reconstructions is serious and the guide explains the choices made.</div>
+                <div id="pfahlbau-baby" class="stop__expand-content">The walkway over the water between the pile dwelling reconstructions is wooden and has railings but is narrow in places — a stroller works but requires care on the turns. A carrier is more comfortable. The indoor exhibition hall is fully accessible. There is a lakeside terrace cafe with simple food and high chairs. One small changing room near the entrance.</div>
+              </article>
+
+              <div class="drive-connector"></div>
+
+              <article class="stop" data-stop-id="meersburg" data-day="1">
+                <div class="stop__header">
+                  <span class="stop-number">04</span>
+                  <h2 class="stop__name">Meersburg Altes Schloss</h2>
+                  <p class="stop__subtitle">The oldest inhabited castle in Germany</p>
+                  <div class="stop__tags">
+                    <span class="tag">90 min</span>
+                    <span class="tag">Castle</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">A castle with parts dating to the 7th century, where Germany's greatest female poet spent her final years and died in 1848</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="meersburg-about">About this place</button>
+                  <button class="expand-btn" data-target="meersburg-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="meersburg-baby">Visiting with a baby</button>
+                </div>
+                <div id="meersburg-about" class="stop__expand-content">The Altes Schloss in Meersburg is one of the oldest continuously inhabited castles in Germany — parts of the Dagobertsturm (Dagobert's Tower) may date to the Merovingian period in the early 7th century, though the core of what you see today is 11th and 12th century. For nearly 700 years, from 1526 to 1803, it served as the residence of the Prince-Bishops of Konstanz. When Napoleon's reorganization of Germany dissolved the bishopric, the castle passed into private hands. In 1838 it was purchased by Baron Joseph von Lassberg, who invited his sister-in-law to convalesce here. She was Annette von Droste-Hulshoff — considered Germany's greatest female poet and the face that appeared on the 20-Deutschmark note until the euro replaced it. She lived the final decade of her life in the castle's tower rooms overlooking the lake, writing some of her most important work here, including the crime novella Die Judenbuche. She died in the castle in 1848. Her rooms are preserved exactly as she left them. The Neues Schloss directly next door was built in the 18th century as a more comfortable bishop's palace — its baroque interior is a sharp contrast to the austere medieval fortress.</div>
+                <div id="meersburg-gems" class="stop__expand-content">The Meersburg town vineyard (Staatsweingut Meersburg) is the oldest state-owned winery in Germany, running directly down the steep hillside below the castle to the lake. You can buy bottles at the winery shop for well below restaurant prices; the Grauburgunder is particularly good. The view from the Schlossplatz terrace looking west over the lake and vineyard toward the Swiss Alps is one of the finest in the region and is not on any postcard. For dinner, Winzerstube zum Becher in the old town is where locals eat — dark wood, lake fish, and a wine list entirely from the local vineyard.</div>
+                <div id="meersburg-baby" class="stop__expand-content">Meersburg is the most challenging stop on this trip for a stroller. The old town is built on a steep hillside with stone steps between levels. The Altes Schloss itself involves stairs throughout the interior — a baby carrier is necessary here, stroller not practical. The lakefront promenade at the bottom of the hill is completely flat and a good place to settle the baby while one parent visits the castle. Park at the lower Parkplatz and access the lakefront directly.</div>
+              </article>
+
+            </div><!-- /day-1-stops -->
+
+            <!-- Day 2 stops -->
+            <div id="day-2-stops" style="display:none">
+
+              <article class="stop" data-stop-id="reichenau" data-day="2">
+                <div class="stop__header">
+                  <span class="stop-number">01</span>
+                  <h2 class="stop__name">Reichenau Island</h2>
+                  <p class="stop__subtitle">The manuscript island</p>
+                  <div class="stop__tags">
+                    <span class="tag">90 min</span>
+                    <span class="tag">Monument</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">Three Romanesque churches on a small island — the oldest contains 1,000-year-old frescoes that are still the finest Ottonian paintings in existence</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="reichenau-about">About this place</button>
+                  <button class="expand-btn" data-target="reichenau-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="reichenau-baby">Visiting with a baby</button>
+                </div>
+                <div id="reichenau-about" class="stop__expand-content">Reichenau Island was founded as a Benedictine monastery in 724 AD by Saint Pirmin, an Irish-influenced wandering bishop. Within two centuries it had become one of the most important intellectual centers in Europe. The scriptorium at Reichenau produced illuminated manuscripts of extraordinary quality — the so-called Reichenau School of manuscript painting, working in the late 10th and early 11th centuries, created works that influenced religious art across the continent. Several of these manuscripts, including the Codex Aureus of Echternach, are now in museums and national libraries across Europe. The island has three surviving Romanesque churches. The most important is St. Georg in Oberzell, built in the 890s and containing the most complete cycle of Ottonian frescoes in Germany, painted around 1000 AD and depicting the miracles of Christ with a directness and formal intensity that feels entirely different from later Gothic or Baroque religious art. Standing in St. Georg in front of those 1,000-year-old paintings in an almost empty church is one of the genuinely quiet experiences of medieval history in southern Germany. The island was designated a UNESCO World Heritage Site in 2000.</div>
+                <div id="reichenau-gems" class="stop__expand-content">Almost every visitor goes to Munster St. Maria und Markus (the main church near the causeway entrance) and skips the smaller churches. St. Georg in Oberzell has the frescoes — it is at the far western end of the island, a 15-minute cycle or drive from the causeway. The key is kept in the house opposite and access is free. The island also has the oldest continuously cultivated vegetable gardens in Germany; the local farmers have been supplying markets around the Bodensee since the medieval period. The farm stands along the road sell directly and the produce is exceptional. Buy the Reichenau tomatoes and cucumbers.</div>
+                <div id="reichenau-baby" class="stop__expand-content">The island is completely flat — a cycling island by design, with well-maintained paths running its entire length. A stroller works perfectly everywhere. The churches have stone floors and cool interiors. The Munster has a cafe nearby with outdoor seating. No dedicated baby facilities in the churches but the island is quiet and there is always space to sit and feed.</div>
+              </article>
+
+              <div class="drive-connector"></div>
+
+              <article class="stop" data-stop-id="konstanz" data-day="2">
+                <div class="stop__header">
+                  <span class="stop-number">02</span>
+                  <h2 class="stop__name">Konstanz</h2>
+                  <p class="stop__subtitle">The city that ended the Great Schism and survived the bombs</p>
+                  <div class="stop__tags">
+                    <span class="tag">150 min</span>
+                    <span class="tag">Town center</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">The city that left its lights on during WWII to be mistaken for Switzerland — and emerged as one of the most intact medieval cities in Germany</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="konstanz-about">About this place</button>
+                  <button class="expand-btn" data-target="konstanz-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="konstanz-baby">Visiting with a baby</button>
+                </div>
+                <div id="konstanz-about" class="stop__expand-content">Konstanz is the largest city on the Bodensee and sits with its old town literally on the Swiss border — the city's southern edge is Switzerland. This geography saved it in WWII: the city left its lights on at night to be visually indistinguishable from neutral Switzerland, and Allied bombers — under orders not to bomb neutral territory — passed over it. The result is one of the most intact medieval old towns in Germany, essentially untouched while cities like Freiburg and Stuttgart were destroyed. The historical weight is considerable. The Council of Constance (1414–1418) was convened here to resolve the Western Schism — the crisis in which three men simultaneously claimed to be the true Pope, threatening to split the Church irreparably. Over four years, cardinals and princes from across Europe met in Konstanz to negotiate. They ended the schism, elected a single new pope (Martin V), and in 1415 condemned the Czech reformer Jan Hus — who had been promised safe conduct — and burned him at the stake for heresy. The Konzilgebaude on the harbor, where the cardinals deliberated, still stands. The harbor also has the Imperia, a 9-meter rotating bronze statue by Peter Lenk (1993) depicting a courtesan holding miniature figures of the Pope and Emperor as puppets — a deliberately provocative comment on the power games that surrounded the Council.</div>
+                <div id="konstanz-gems" class="stop__expand-content">The spot where Jan Hus was burned — a small plaque on a quiet street in the Paradies neighborhood northwest of the old town — is almost never visited and worth finding. The Munster (Cathedral) is impressive but the view from its tower, looking north over the Rhine and south into Switzerland, rewards the climb. The old town's Niederburg district between the Munster and the Rhine is the most intact medieval residential quarter and where locals actually live — far less commercial than the main tourist center around the harbor.</div>
+                <div id="konstanz-baby" class="stop__expand-content">Most of Konstanz's old town is stroller-friendly — the main streets are paved and reasonably flat. The Niederburg has some cobblestones but is manageable. The harbor area is completely flat with the wide promenade. Baby changing facilities in the Lago shopping center near the train station. Plenty of cafes with outdoor seating along the harbor.</div>
+              </article>
+
+            </div><!-- /day-2-stops -->
+
+          </div><!-- /stops-col -->
+        </div><!-- /two-col -->
+      </section>
+
+      <!-- Hikes -->
+      <section class="hikes-section">
+        <div class="hikes-section__header">
+          <h2 class="hikes-section__title">On foot</h2>
+          <p class="hikes-section__sub">Walks and hikes from this base</p>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-baby">Baby</span>Visiting with a baby</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Lindau is one of the most stroller-friendly stops on this trip — the island is flat, main streets are paved, and there are benches everywhere. Changing facilities in the public toilets near the harbor. <strong>Park on the mainland</strong> at Parkhaus Inselbahnhof and walk across — the island parking fills by 10am.
+        <div class="card-grid">
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Reichenau Island Complete Loop</h3>
+            <p class="hike-card__area">Reichenau</p>
+            <div class="hike-card__tags">
+              <span class="tag">8 km</span>
+              <span class="tag">+20 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">A completely flat loop around the entire island on well-maintained paths. Passes all three Romanesque churches, the vegetable gardens, and gives lake views in every direction. The island is designed for non-motorized traffic — even on weekends it feels peaceful.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Rent a bike at the causeway entrance if you want to do the loop faster. With a stroller, the western half (toward St. Georg) takes about 45 minutes each way.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Uberlingen Lake Promenade</h3>
+            <p class="hike-card__area">Uberlingen</p>
+            <div class="hike-card__tags">
+              <span class="tag">5 km</span>
+              <span class="tag">+15 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">Uberlingen is one of the most underrated towns on the Bodensee — a compact medieval walled town with a magnificent Gothic minster that most visitors bypass on the way to Meersburg. The lakeside promenade runs for 3km with the lake on one side and the medieval town walls on the other. Best at dusk when the light comes off the water.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Park in the Parkhaus Therme (free with thermal bath ticket). The Munster St. Nikolaus has one of the finest Gothic altarpieces in Germany — worth 20 minutes inside.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Hohentwiel Castle Ruins</h3>
+            <p class="hike-card__area">Singen (20 min north of Konstanz)</p>
+            <div class="hike-card__tags">
+              <span class="tag">3.5 km</span>
+              <span class="tag">+170 m</span>
+              <span class="tag">Moderate</span>
+              <span class="tag">Carrier recommended</span>
+            </div>
+            <p class="hike-card__desc">Hohentwiel is a dormant volcano rising 254 meters above the flat Hegau plain, topped by the largest castle ruins in Germany by area. The fortress was never taken by storm in its history. On a clear day the view takes in the entire Bodensee, the Swiss Alps, and the Black Forest. The volcanic landscape of the Hegau — seven cone-shaped volcanic plugs rising from flat farmland — is unlike anything else in southern Germany.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Use a carrier — the path has steps in the upper section. The wine cellar at the base of the hill sells the local Hohentwiel volcanic soil wine, which is a genuine geological curiosity.</p>
+          </article>
+
         </div>
-      </div>
-    </div>
-  </div>
+      </section>
 
-  <div class="drive-connector">
-    <div class="connector-line"></div>
-    <div class="connector-text">🚗 40 min drive west along the lake</div>
-  </div>
-
-  <!-- Stop 2: Zeppelin Museum -->
-  <div class="stop-card" id="stop-zeppelin">
-    <div class="stop-header">
-      <div class="stop-number museum">2</div>
-      <div><div class="stop-name">Zeppelin Museum Friedrichshafen</div><div class="stop-subtitle">The world's greatest airship museum</div></div>
-    </div>
-    <div class="stop-chips">
-      <div class="chip cat-museum">🏛️ Technical Museum</div>
-      <div class="chip">⏱ 2 hours</div>
-      <div class="chip baby-high">👶 5/5 baby friendly</div>
-    </div>
-    <div class="stop-highlight">A full-scale recreation of the passenger gondola of the Hindenburg — with original furniture intact — in the city where it was built</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-history">History</span>About this place</div>
-          <span class="accordion-chevron open">▼</span>
-        </button>
-        <div class="accordion-body open">
-          Ferdinand von Zeppelin was born near Konstanz in 1838 and spent thirty years as a cavalry general before retiring at 52 and devoting the rest of his life to building rigid airships. The LZ 1 made its first flight over the Bodensee in 1900. By the 1930s, the LZ 127 <em>Graf Zeppelin</em> had made 590 flights including 144 transatlantic crossings. The LZ 129 <em>Hindenburg</em> — 245 meters long, the largest flying object ever built — made 36 Atlantic crossings before the fire at Lakehurst, New Jersey in 1937. The disaster ended the airship era within a year.
-          <br><br>
-          The museum holds the most important Zeppelin collection in the world, including a full-scale recreation of the Hindenburg's passenger section: the dining room, the observation lounge, the windows over the ocean. The engineering of these objects is almost incomprehensible — a rigid aluminum skeleton 245 meters long, covered in cotton fabric, filled with hydrogen, carrying 50 passengers across the Atlantic in 60 hours.
+      <!-- Hotels -->
+      <section class="hotels-section">
+        <div class="hotels-section__header">
+          <h2 class="hotels-section__title">Where to stay</h2>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-gem">Hidden Gem</span>Local tips</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Most visitors spend all their time in the Zeppelin hall and skip the <strong>fine art collection upstairs</strong> — a serious mistake. The upper floor has one of the strongest collections of Expressionist and Neue Sachlichkeit art in southern Germany, including major works by Otto Dix and Max Beckmann. The <strong>Dornier Museum</strong> is a 10-minute walk away and covers the flying boat manufacturer also based here. Together they make Friedrichshafen one of the most important aviation history sites in Europe — and almost no one knows either exists.
+        <div class="card-grid">
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Wilder Mann</h3>
+            <p class="hotel-card__meta">Gasthof — Meersburg</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€95–130/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Maximum local character, ideal position between Day 1 and Day 2 stops.</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Sonne Meersburg</h3>
+            <p class="hotel-card__meta">Boutique Hotel — Meersburg</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€140–190/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Best lake view at night, good family rooms, still family-managed.</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Gasthaus zum Mohren</h3>
+            <p class="hotel-card__meta">Gasthof — Radolfzell (near Reichenau)</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€75–105/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Best positioned for Day 2, very authentic, virtually no tourists.</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Steigenberger Inselhotel</h3>
+            <p class="hotel-card__meta">Luxury Hotel — Konstanz</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€220–320/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">The building itself is extraordinary — a 13th-century monastery. Worth it for the architecture even if the management is corporate.</p>
+          </article>
+
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-baby">Baby</span>Visiting with a baby</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Fully accessible throughout — elevator between floors, flat exhibition spaces, wide corridors. There is a good café on the ground floor with high chairs. The lakefront promenade directly outside is flat and perfect for a post-museum walk. Baby changing room in the main toilets.
+      </section>
+
+      <!-- Before you go -->
+      <section class="notes-section">
+        <h2 class="notes-section__title">Before you go</h2>
+        <div class="notes-block">
+          <p class="notes-block__note">Lindau parking: use mainland Parkhaus Inselbahnhof — the island parking fills by 10am.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Zeppelin Museum: book tickets online, especially on weekends. Allow 2 full hours minimum.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Pfahlbaumuseum: the boat trip runs on the hour — time your visit to catch it.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Meersburg Altes Schloss: stroller not practical inside — use a carrier. Lakefront below is fully flat.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Reichenau St. Georg frescoes: church is at the western end of the island, key in the house opposite, free entry.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Konstanz: cross into Switzerland with your passport — the Swiss border is literally the end of some streets.</p>
         </div>
-      </div>
+      </section>
+
+    </div><!-- /page-shell -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell">
+      <p class="site-footer__line">Munich-based, hand-curated.</p>
     </div>
-  </div>
+  </footer>
 
-  <div class="drive-connector">
-    <div class="connector-line"></div>
-    <div class="connector-text">🚗 25 min drive</div>
-  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ── Stop data by day ───────────────────────────────────────────────────
+    const stopsByDay = {
+      1: [
+        { id: 'lindau',          lat: 47.5462, lon: 9.6817 },
+        { id: 'zeppelin-museum', lat: 47.6554, lon: 9.4802 },
+        { id: 'pfahlbaumuseum',  lat: 47.7674, lon: 9.2637 },
+        { id: 'meersburg',       lat: 47.6941, lon: 9.2712 }
+      ],
+      2: [
+        { id: 'reichenau', lat: 47.6924, lon: 9.0622 },
+        { id: 'konstanz',  lat: 47.6603, lon: 9.1750 }
+      ]
+    };
 
-  <!-- Stop 3: Pfahlbaumuseum -->
-  <div class="stop-card" id="stop-pfahlbau">
-    <div class="stop-header">
-      <div class="stop-number museum">3</div>
-      <div><div class="stop-name">Pfahlbaumuseum Unteruhldingen</div><div class="stop-subtitle">Bronze Age villages, rebuilt over the water</div></div>
-    </div>
-    <div class="stop-chips">
-      <div class="chip cat-museum">🏛️ Open-Air Museum · UNESCO</div>
-      <div class="chip">⏱ 1.5 hours</div>
-      <div class="chip baby-mid">👶 4/5 — carrier easier on walkway</div>
-    </div>
-    <div class="stop-highlight">Walk through reconstructed Neolithic and Bronze Age homes built over the lake — where the 4,000-year-old originals still lie under the sediment</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-history">History</span>About this place</div>
-          <span class="accordion-chevron open">▼</span>
-        </button>
-        <div class="accordion-body open">
-          When Lake Constance water levels dropped in the 1850s, fishermen began finding extraordinarily well-preserved objects in the lake sediment near Unteruhldingen — tools, textiles, leather, food remains, entire structural timbers — dating back 4,000 to 6,000 years. The anaerobic conditions under the lake had preserved organic material that would have rotted anywhere else on Earth within decades. What emerged was evidence of Neolithic and Bronze Age communities who built their villages on wooden platforms over the shallow water.
-          <br><br>
-          The open-air museum reconstructs these settlements with extraordinary accuracy — you walk through Bronze Age homes, see the hearths, storage vessels, tools. The lake sediment around the museum contains the actual original site, designated a UNESCO World Heritage Site in 2011 jointly with 110 other Alpine pile dwelling sites across six countries. This is one of the most important prehistoric archaeological sites in Central Europe, and almost no one outside Germany has heard of it.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-gem">Hidden Gem</span>Local tips</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The <strong>museum boat trip</strong> gives you the view from the water and a proper sense of how these villages related to the lake — it runs on the hour, takes 20 minutes, and is worth catching. The <strong>underwater archaeology exhibition</strong> inside the main building shows actual objects retrieved from the sediment: preserved leather shoes, wooden ladles, fabrics that are real and 4,000 years old. More affecting than any reconstruction.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-baby">Baby</span>Visiting with a baby</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The wooden walkway over the water is narrow in places — a stroller works but requires care on the turns; a carrier is more comfortable. The indoor exhibition hall is fully accessible. There is a lakeside terrace café with high chairs. One changing room near the entrance.
-        </div>
-      </div>
-    </div>
-  </div>
+    const driveLine = [
+      [48.1351, 11.5820], [48.0012, 11.0234], [47.8701, 10.6245], [47.7265, 10.3145], [47.5462, 9.6817]
+    ];
 
-  <div class="drive-connector">
-    <div class="connector-line"></div>
-    <div class="connector-text">🚗 10 min drive</div>
-  </div>
+    // ── Map setup ──────────────────────────────────────────────────────────
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
 
-  <!-- Stop 4: Meersburg -->
-  <div class="stop-card" id="stop-meersburg">
-    <div class="stop-header">
-      <div class="stop-number castle">4</div>
-      <div><div class="stop-name">Meersburg Altes Schloss</div><div class="stop-subtitle">The oldest inhabited castle in Germany</div></div>
-    </div>
-    <div class="stop-chips">
-      <div class="chip cat-castle">🏰 7th-Century Castle</div>
-      <div class="chip">⏱ 1.5 hours</div>
-      <div class="chip baby-low">👶 2/5 — steep town, carrier required</div>
-    </div>
-    <div class="stop-highlight">A castle with parts dating to the 7th century, where Germany's greatest female poet spent her final years and died in 1848</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-history">History</span>About this place</div>
-          <span class="accordion-chevron open">▼</span>
-        </button>
-        <div class="accordion-body open">
-          The Altes Schloss in Meersburg is one of the oldest continuously inhabited castles in Germany — parts of the Dagobertsturm may date to the Merovingian period in the early 7th century. For nearly 700 years, from 1526 to 1803, it served as the residence of the Prince-Bishops of Konstanz. When Napoleon's reorganization of Germany dissolved the bishopric, the castle passed into private hands.
-          <br><br>
-          In 1838 it was purchased by Baron von Laßberg, who invited his sister-in-law to convalesce here: Annette von Droste-Hülshoff, considered Germany's greatest female poet and the face of the old 20-Deutschmark note. She lived the final decade of her life in the castle's tower rooms, writing some of her most important work overlooking the lake, including the crime novella <em>Die Judenbuche</em>. She died in the castle in 1848. Her rooms are preserved exactly as she left them.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-gem">Hidden Gem</span>Local tips</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The <strong>Staatsweingut Meersburg</strong> — the oldest state-owned winery in Germany — runs directly down the hillside below the castle to the lake. You can buy bottles at the winery shop for well below restaurant prices; the Grauburgunder is particularly good. The view from the Schlossplatz terrace looking west over the lake and vineyard toward the Swiss Alps is one of the finest in the region. For dinner, <strong>Winzerstube zum Becher</strong> in the old town is where locals eat — dark wood, lake fish, and a wine list entirely from the local vineyard.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-baby">Baby</span>Visiting with a baby</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Meersburg is the most challenging stop on this trip for a stroller. The old town is built on a steep hillside with stone steps between levels. The Altes Schloss involves stairs throughout — a <strong>baby carrier is necessary</strong>. The lakefront promenade at the bottom of the hill is completely flat and a good place to settle the baby while one parent visits the castle. Park at the lower Parkplatz and access the lakefront directly.
-        </div>
-      </div>
-    </div>
-  </div>
+    L.polyline(driveLine, { color: '#1B3A5C', opacity: 0.4, weight: 2, dashArray: '5 7' }).addTo(map);
 
-  <!-- DAY 2 -->
-  <div class="day-header">
-    <div class="day-header-text">
-      <div class="day-badge">Day 2</div>
-      <div class="day-title">Reichenau Island → Konstanz</div>
-      <div class="day-summary">1,000-year-old frescoes and the medieval council that changed European history</div>
-    </div>
-    <div class="day-divider"></div>
-  </div>
+    const GREY = '#AAAAAA', ACCENT = '#1B3A5C';
+    let localLine = null;
+    const markerMap = {};
 
-  <!-- Stop 5: Reichenau -->
-  <div class="stop-card" id="stop-reichenau">
-    <div class="stop-header">
-      <div class="stop-number monument">5</div>
-      <div><div class="stop-name">Reichenau Island</div><div class="stop-subtitle">The manuscript island</div></div>
-    </div>
-    <div class="stop-chips">
-      <div class="chip cat-monument">🏛️ UNESCO World Heritage</div>
-      <div class="chip">⏱ 1.5 hours</div>
-      <div class="chip baby-high">👶 5/5 — completely flat</div>
-    </div>
-    <div class="stop-highlight">Three Romanesque churches on a small island — the oldest contains 1,000-year-old Ottonian frescoes, still the finest in existence</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-history">History</span>About this place</div>
-          <span class="accordion-chevron open">▼</span>
-        </button>
-        <div class="accordion-body open">
-          Reichenau Island was founded as a Benedictine monastery in 724 AD by Saint Pirmin. Within two centuries it had become one of the most important intellectual centers in Europe. The scriptorium at Reichenau produced illuminated manuscripts of extraordinary quality — the so-called Reichenau School of manuscript painting, working in the late 10th and early 11th centuries, created works that influenced religious art across the continent.
-          <br><br>
-          The island has three surviving Romanesque churches. The most important is <strong>St. Georg in Oberzell</strong>, built in the 890s and containing the most complete cycle of Ottonian frescoes in Germany, painted around 1000 AD. Standing in St. Georg in front of those paintings in an almost empty church is one of the genuinely quiet experiences of medieval history in southern Germany. The island was designated a UNESCO World Heritage Site in 2000.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-gem">Hidden Gem</span>Local tips</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Almost every visitor goes to the main Münster near the causeway and skips St. Georg. <strong>St. Georg with the frescoes is at the far western end of the island</strong> — 15 minutes by bike or car from the causeway. The key is kept in the house opposite and access is free. The island also has the oldest continuously cultivated vegetable gardens in Germany; the farm stands along the road sell directly. Buy the Reichenau tomatoes and cucumbers.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-baby">Baby</span>Visiting with a baby</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The island is completely flat — designed as a cycling island, with well-maintained paths running its entire length. A stroller works perfectly everywhere. The churches have cool stone interiors. The Münster has a café nearby with outdoor seating. Very quiet and unhurried — one of the most relaxed stops on the route.
-        </div>
-      </div>
-    </div>
-  </div>
+    function buildDay(day) {
+      const stops = stopsByDay[day];
+      // Remove old local line and markers
+      if (localLine) { map.removeLayer(localLine); localLine = null; }
+      Object.values(markerMap).forEach(m => map.removeLayer(m));
+      Object.keys(markerMap).forEach(k => delete markerMap[k]);
 
-  <div class="drive-connector">
-    <div class="connector-line"></div>
-    <div class="connector-text">🚗 15 min drive</div>
-  </div>
+      localLine = L.polyline(stops.map(s => [s.lat, s.lon]), { color: ACCENT, opacity: 0.85, weight: 2 }).addTo(map);
 
-  <!-- Stop 6: Konstanz -->
-  <div class="stop-card" id="stop-konstanz">
-    <div class="stop-header">
-      <div class="stop-number town">6</div>
-      <div><div class="stop-name">Konstanz</div><div class="stop-subtitle">The city that ended the Great Schism and survived the bombs</div></div>
-    </div>
-    <div class="stop-chips">
-      <div class="chip cat-town">🏘️ Medieval City</div>
-      <div class="chip">⏱ 2.5 hours</div>
-      <div class="chip baby-high">👶 4/5 baby friendly</div>
-    </div>
-    <div class="stop-highlight">The city that kept its lights on during WWII to be mistaken for Switzerland — and emerged with one of the most intact medieval old towns in Germany</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-history">History</span>About this place</div>
-          <span class="accordion-chevron open">▼</span>
-        </button>
-        <div class="accordion-body open">
-          Konstanz sits with its old town literally on the Swiss border. This geography saved it in WWII: the city kept its lights on at night to be visually indistinguishable from neutral Switzerland, and Allied bombers — under orders not to bomb neutral territory — passed over it. The result is one of the most intact medieval old towns in Germany, while cities like Freiburg were destroyed.
-          <br><br>
-          The historical weight is considerable. The <strong>Council of Constance (1414–1418)</strong> was convened here to resolve the Western Schism — a crisis in which three men simultaneously claimed to be the true Pope. Over four years, cardinals and princes from across Europe negotiated in Konstanz. They ended the schism, elected a single new pope (Martin V), and in 1415 condemned the Czech reformer <strong>Jan Hus</strong> — who had been promised safe conduct — and burned him at the stake for heresy. The Konzilgebäude on the harbor, where the cardinals deliberated, still stands. The harbor also features the <strong>Imperia</strong>, a 9-meter rotating bronze statue of a courtesan holding miniature figures of the Pope and Emperor as puppets — a deliberate provocation installed in 1993.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-gem">Hidden Gem</span>Local tips</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The spot where Jan Hus was burned — a small plaque on a quiet street in the <strong>Paradies neighborhood</strong> northwest of the old town — is almost never visited and worth finding. The <strong>Niederburg district</strong> between the Münster and the Rhine is the most intact medieval residential quarter and where locals actually live. Cross the border into Switzerland on foot from the old town — you can literally walk across, passport in pocket.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label"><span class="section-tag tag-baby">Baby</span>Visiting with a baby</div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Most of the old town is stroller-friendly — main streets are paved and reasonably flat. The harbor area is completely flat with a wide promenade. Baby changing facilities in the Lago shopping center near the train station. Plenty of cafés with outdoor seating along the harbor.
-        </div>
-      </div>
-    </div>
-  </div>
+      stops.forEach((s, i) => {
+        const m = L.circleMarker([s.lat, s.lon], { radius: 7, fillColor: GREY, color: '#FFF', weight: 2, fillOpacity: 1 }).addTo(map);
+        m.bindTooltip(String(i + 1).padStart(2, '0'), { permanent: true, direction: 'right', className: 'stop-label', offset: [8, 0] });
+        markerMap[s.id] = m;
+      });
 
-  <!-- HOTELS -->
-  <div class="section-header">
-    <div class="section-title">🏡 Where to stay</div>
-    <div class="section-divider"></div>
-  </div>
-  <div class="hotels-grid">
+      const allPts = [...driveLine, ...stops.map(s => [s.lat, s.lon])];
+      map.fitBounds(L.latLngBounds(allPts), { padding: [40, 40] });
+      // Activate first stop
+      Object.values(markerMap)[0]?.setStyle({ fillColor: ACCENT, radius: 10 });
+    }
 
-    <div class="hotel-card">
-      <div class="hotel-type">⭐ Best local character</div>
-      <div class="hotel-name">Hotel Wilder Mann</div>
-      <div class="hotel-area">📍 Meersburg</div>
-      <div class="local-stars">
-        <span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span>
-        <span class="star-label">Local character 5/5</span>
-      </div>
-      <div class="hotel-desc">Historic inn in the Meersburg old town, family-run, regional Swabian kitchen. Has been an inn since the 16th century. Perfect position between Day 1 and Day 2.</div>
-      <div class="hotel-footer">
-        <div class="hotel-price">€95–130 / night</div>
-        <div class="hotel-amenities"><span class="amenity-badge">🛏 Crib</span><span class="amenity-badge">🚗 Parking</span></div>
-      </div>
-    </div>
+    buildDay(1);
 
-    <div class="hotel-card">
-      <div class="hotel-type">Best lake views</div>
-      <div class="hotel-name">Hotel Sonne Meersburg</div>
-      <div class="hotel-area">📍 Meersburg lakefront</div>
-      <div class="local-stars">
-        <span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star" style="opacity:.3">🟠</span>
-        <span class="star-label">Local character 4/5</span>
-      </div>
-      <div class="hotel-desc">Small boutique hotel on the lakefront with lake-view rooms. Genuinely good breakfast with regional products. Still family-managed.</div>
-      <div class="hotel-footer">
-        <div class="hotel-price">€140–190 / night</div>
-        <div class="hotel-amenities"><span class="amenity-badge">🛏 Crib</span><span class="amenity-badge">🚗 Parking</span></div>
-      </div>
-    </div>
-
-    <div class="hotel-card">
-      <div class="hotel-type">Best for Day 2</div>
-      <div class="hotel-name">Gasthaus zum Mohren</div>
-      <div class="hotel-area">📍 Radolfzell (near Reichenau)</div>
-      <div class="local-stars">
-        <span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span>
-        <span class="star-label">Local character 5/5</span>
-      </div>
-      <div class="hotel-desc">Traditional Gasthof 15 min from Reichenau and Konstanz. Completely off the tourist trail. Excellent regional food. Virtually no tourists.</div>
-      <div class="hotel-footer">
-        <div class="hotel-price">€75–105 / night</div>
-        <div class="hotel-amenities"><span class="amenity-badge">🛏 Crib</span><span class="amenity-badge">🚗 Parking</span></div>
-      </div>
-    </div>
-
-    <div class="hotel-card">
-      <div class="hotel-type">Splurge — extraordinary building</div>
-      <div class="hotel-name">Steigenberger Inselhotel</div>
-      <div class="hotel-area">📍 Konstanz harbor island</div>
-      <div class="local-stars">
-        <span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star" style="opacity:.3">🟠</span><span class="star" style="opacity:.3">🟠</span>
-        <span class="star-label">Local character 3/5</span>
-      </div>
-      <div class="hotel-desc">Built in a former Dominican monastery on a small island in the harbor. The 13th-century cloister courtyard is remarkable. Chain management, extraordinary building.</div>
-      <div class="hotel-footer">
-        <div class="hotel-price">€220–320 / night</div>
-        <div class="hotel-amenities"><span class="amenity-badge">🛏 Crib</span><span class="amenity-badge">🚗 Parking</span></div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- HIKES -->
-  <div class="section-header">
-    <div class="section-title">🥾 Hikes in the area</div>
-    <div class="section-divider"></div>
-  </div>
-  <div class="hikes-grid">
-
-    <div class="hike-card">
-      <div class="hike-difficulty diff-easy">Easy</div>
-      <div class="hike-name">Reichenau Island Complete Loop</div>
-      <div class="hike-area">📍 Reichenau Island</div>
-      <div class="hike-stats">
-        <div class="hike-stat"><div class="hike-stat-val">8 km</div><div class="hike-stat-lbl">Distance</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">20 m</div><div class="hike-stat-lbl">Elevation</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">~2.5 h</div><div class="hike-stat-lbl">Duration</div></div>
-      </div>
-      <div class="hike-desc">A completely flat loop around the entire island on well-maintained paved paths. Passes all three Romanesque churches, the medieval vegetable gardens, and gives lake views in every direction. The island is designed for non-motorized traffic.</div>
-      <div class="hike-badges">
-        <span class="hike-badge badge-stroller">🚼 Fully stroller-friendly</span>
-        <span class="hike-badge badge-carrier">🎒 Baby carrier</span>
-      </div>
-      <div class="hike-tip">Rent a bike at the causeway entrance for the full loop. With a stroller, the western half toward St. Georg takes about 45 min each way.</div>
-    </div>
-
-    <div class="hike-card">
-      <div class="hike-difficulty diff-easy">Easy</div>
-      <div class="hike-name">Überlingen Lake Promenade</div>
-      <div class="hike-area">📍 Überlingen (10 min from Meersburg)</div>
-      <div class="hike-stats">
-        <div class="hike-stat"><div class="hike-stat-val">5 km</div><div class="hike-stat-lbl">Distance</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">15 m</div><div class="hike-stat-lbl">Elevation</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">~1.5 h</div><div class="hike-stat-lbl">Duration</div></div>
-      </div>
-      <div class="hike-desc">Überlingen is one of the most underrated towns on the Bodensee — a compact medieval walled town that most visitors bypass. The lakeside promenade runs 3km with the lake on one side and medieval town walls on the other. Best at dusk.</div>
-      <div class="hike-badges">
-        <span class="hike-badge badge-stroller">🚼 Fully stroller-friendly</span>
-      </div>
-      <div class="hike-tip">The Münster St. Nikolaus has one of the finest Gothic altarpieces in Germany — worth 20 minutes inside before the walk.</div>
-    </div>
-
-    <div class="hike-card">
-      <div class="hike-difficulty diff-moderate">Moderate</div>
-      <div class="hike-name">Hohentwiel Volcano Castle Ruins</div>
-      <div class="hike-area">📍 Singen, Hegau (20 min north of Konstanz)</div>
-      <div class="hike-stats">
-        <div class="hike-stat"><div class="hike-stat-val">3.5 km</div><div class="hike-stat-lbl">Distance</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">170 m</div><div class="hike-stat-lbl">Elevation</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">~1.5 h</div><div class="hike-stat-lbl">Duration</div></div>
-      </div>
-      <div class="hike-desc">A dormant volcano rising 254m above the flat Hegau plain, topped by the largest castle ruins in Germany by area — never taken by storm in its history. On a clear day the view takes in the entire Bodensee, the Swiss Alps, and the Black Forest.</div>
-      <div class="hike-badges">
-        <span class="hike-badge badge-carrier">🎒 Baby carrier recommended</span>
-      </div>
-      <div class="hike-tip">The wine cellar at the base sells Hohentwiel volcanic soil wine — a genuine geological curiosity and excellent souvenir.</div>
-    </div>
-
-  </div>
-
-  <!-- PRACTICAL NOTES -->
-  <div class="notes-card">
-    <div class="notes-title">📋 Practical notes</div>
-    <ul class="notes-list">
-      <li>Lindau: park on the mainland at Parkhaus Inselbahnhof — island parking fills by 10am.</li>
-      <li>Zeppelin Museum: book tickets online, especially on weekends. Allow 2 full hours minimum.</li>
-      <li>Pfahlbaumuseum: the boat trip runs on the hour — time your visit to catch it.</li>
-      <li>Meersburg Altes Schloss: stroller not practical inside the castle — use a carrier. Lakefront below is fully flat.</li>
-      <li>Reichenau St. Georg frescoes: at the western end of the island, key in the house opposite, entry is free.</li>
-      <li>Konstanz: you can cross into Switzerland on foot from the old town — bring your passport.</li>
-    </ul>
-  </div>
-
-</main>
-
-<footer class="footer">
-  <strong>Agugagatada Travel</strong> — AI-powered family trip planning from Munich &nbsp;·&nbsp; Generated 22 March 2026
-</footer>
-
-<script>
-  function toggle(btn) {
-    const body = btn.nextElementSibling;
-    const chevron = btn.querySelector('.accordion-chevron');
-    const isOpen = body.classList.contains('open');
-    body.classList.toggle('open', !isOpen);
-    chevron.classList.toggle('open', !isOpen);
-  }
-
-  // MAP
-  const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap © CARTO', maxZoom: 18
-  }).addTo(map);
-
-  // Drive: Munich → Lindau
-  L.polyline([
-    [48.1351, 11.5820],
-    [48.0012, 11.0234],
-    [47.8701, 10.6245],
-    [47.7265, 10.3145],
-    [47.5462,  9.6817]
-  ], { color: '#F05A28', weight: 3, opacity: 0.65, dashArray: '8 6' }).addTo(map);
-
-  // Local route along the lake
-  L.polyline([
-    [47.5462,  9.6817], // Lindau
-    [47.6554,  9.4802], // Friedrichshafen
-    [47.7674,  9.2637], // Unteruhldingen
-    [47.6941,  9.2712], // Meersburg
-    [47.6924,  9.0622], // Reichenau
-    [47.6603,  9.1750]  // Konstanz
-  ], { color: '#F05A28', weight: 3, opacity: 0.9 }).addTo(map);
-
-  function makeIcon(color, label) {
-    return L.divIcon({
-      className: '',
-      html: `<div style="width:34px;height:34px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:${color};border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center"><span style="transform:rotate(45deg);color:#fff;font-weight:800;font-size:13px;font-family:Inter,sans-serif;line-height:1">${label}</span></div>`,
-      iconSize: [34, 34], iconAnchor: [17, 34], popupAnchor: [0, -36]
+    // ── Day switcher ───────────────────────────────────────────────────────
+    document.querySelectorAll('.day-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const day = Number(btn.dataset.day);
+        document.querySelectorAll('.day-btn').forEach(b => b.classList.toggle('is-active', b === btn));
+        document.getElementById('day-1-stops').style.display = day === 1 ? '' : 'none';
+        document.getElementById('day-2-stops').style.display = day === 2 ? '' : 'none';
+        buildDay(day);
+      });
     });
-  }
 
-  // Munich
-  L.marker([48.1351, 11.5820], {
-    icon: L.divIcon({ className: '', html: `<div style="width:14px;height:14px;border-radius:50%;background:#9CA3AF;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.2)"></div>`, iconSize: [14,14], iconAnchor: [7,7] })
-  }).addTo(map).bindPopup('<strong>Munich</strong><br>Starting point · 110 min drive');
+    // ── Expand / collapse ──────────────────────────────────────────────────
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(btn.dataset.target);
+        const open = panel.classList.toggle('is-open');
+        btn.style.textDecoration = open ? 'underline' : 'none';
+      });
+    });
 
-  const stops = [
-    { lat: 47.5462, lon:  9.6817, label: '1', color: '#0D7377', name: 'Lindau',                       desc: 'Day 1 · 1.5h · Island Town',        id: 'stop-lindau'    },
-    { lat: 47.6554, lon:  9.4802, label: '2', color: '#2B6CB0', name: 'Zeppelin Museum',               desc: 'Day 1 · 2h · Technical Museum',     id: 'stop-zeppelin'  },
-    { lat: 47.7674, lon:  9.2637, label: '3', color: '#2B6CB0', name: 'Pfahlbaumuseum Unteruhldingen', desc: 'Day 1 · 1.5h · UNESCO Bronze Age',   id: 'stop-pfahlbau'  },
-    { lat: 47.6941, lon:  9.2712, label: '4', color: '#92400E', name: 'Meersburg Altes Schloss',       desc: 'Day 1 · 1.5h · 7th-Century Castle', id: 'stop-meersburg' },
-    { lat: 47.6924, lon:  9.0622, label: '5', color: '#6B46C1', name: 'Reichenau Island',              desc: 'Day 2 · 1.5h · UNESCO Monasteries', id: 'stop-reichenau' },
-    { lat: 47.6603, lon:  9.1750, label: '6', color: '#0D7377', name: 'Konstanz',                      desc: 'Day 2 · 2.5h · Medieval City',      id: 'stop-konstanz'  }
-  ];
+    // ── Scroll-linked map highlighting ────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.dataset.stopId;
+        if (!markerMap[id]) return;
+        Object.entries(markerMap).forEach(([mid, m]) => {
+          const active = mid === id;
+          m.setStyle({ fillColor: active ? ACCENT : GREY, radius: active ? 10 : 7 });
+          if (active) map.panTo(m.getLatLng(), { animate: true, duration: 0.4 });
+        });
+      });
+    }, { threshold: 0.5 });
 
-  stops.forEach(s => {
-    L.marker([s.lat, s.lon], { icon: makeIcon(s.color, s.label) })
-      .addTo(map)
-      .bindPopup(`<strong>${s.name}</strong><br><span style="color:#6B7280;font-size:12px">${s.desc}</span>`)
-      .on('click', () => { document.getElementById(s.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
-  });
+    document.querySelectorAll('.stop[data-stop-id]').forEach(el => observer.observe(el));
+  </script>
 
-  const allPts = [[48.1351, 11.5820], ...stops.map(s => [s.lat, s.lon])];
-  map.fitBounds(allPts, { padding: [50, 50] });
-</script>
 </body>
 </html>
