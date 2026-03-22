@@ -1,0 +1,199 @@
+{
+  "id": "nuremberg-daytrip",
+  "title": "Nuremberg — Empire, Darkness, and Dürer",
+  "tagline": "The symbolic heart of the Holy Roman Empire, the city of the Nazis' greatest spectacles, and the birthplace of the world's first printed globe",
+  "destination": {
+    "name": "Nuremberg (Nürnberg)",
+    "region": "Bavaria, Germany",
+    "lat": 49.4521,
+    "lon": 11.0767
+  },
+  "origin": { "name": "Munich", "lat": 48.1351, "lon": 11.5820 },
+  "drive_time_from_origin_minutes": 100,
+  "duration_days": 2,
+  "generated_at": "2026-03-22",
+  "stats": {
+    "total_stops": 5,
+    "baby_friendly_score": 4,
+    "history_depth_score": 5,
+    "touristic_score": 3,
+    "drive_total_km": 165
+  },
+  "intro": "Nuremberg carries more weight of history per square meter than almost anywhere in Germany. For 500 years it was the unofficial capital of the Holy Roman Empire — the place where emperors were crowned, where imperial regalia was kept, where the first diets were held. Then, in the 1930s, it became the stage for the Nazi party's most theatrical displays of power. And then, in 1945, the courtroom where the architects of those crimes were tried. Albrecht Dürer was born here. The first printed globe was made here. The world's first railway in the German-speaking world ran from here. The history arrives in layers of radically different kinds.",
+  "route_polyline": [
+    [48.1351, 11.5820], [48.5012, 11.3548], [48.9265, 11.1743], [49.4521, 11.0767]
+  ],
+  "days": [
+    {
+      "day_number": 1,
+      "title": "Kaiserburg + Old Town + Dürer",
+      "theme": "Imperial history, medieval craft, Renaissance art",
+      "summary": "The castle that symbolized the Holy Roman Empire, and the house of its greatest artist",
+      "stops": [
+        {
+          "id": "kaiserburg",
+          "sequence": 1,
+          "name": "Kaiserburg",
+          "subtitle": "The symbolic center of the Holy Roman Empire",
+          "lat": 49.4591,
+          "lon": 11.0742,
+          "category": "castle",
+          "visit_duration_minutes": 90,
+          "drive_time_from_prev_minutes": 0,
+          "baby_friendly_score": 3,
+          "highlight": "The castle from which every Holy Roman Emperor governed — no emperor was considered legitimate without spending time here",
+          "about": "The Kaiserburg was not merely a residence but a constitutional symbol: the Golden Bull of 1356 specified that every new emperor had to hold his first diet here, making Nuremberg the de facto capital of the Holy Roman Empire for centuries. The castle complex began in the 11th century and grew continuously until the 16th. Inside the Palas (palace building), the Kaisersaal (Imperial Hall) and the Double Chapel — with its extraordinary two-level construction separating the emperor from his court during services — are the most significant spaces. The deep well (52 meters, hand-dug through solid rock) is one of the engineering wonders of medieval Germany. The views from the castle walls over the red-roofed city — the medieval street grid intact within the old walls — are extraordinary and the best introduction to the city's layout.",
+          "hidden_gems": "The castle gardens on the north side of the hill are almost always quiet and give the best exterior views of the fortifications. Below the castle, the Burgviertel (castle quarter) has the densest concentration of medieval half-timbered houses in Nuremberg — almost none of the tourists from the castle come down into these streets. The Dürerplatz just below is where Dürer's house stands; doing the castle first and Dürer's house second is the logical sequence.",
+          "baby_logistics": "The castle involves significant uneven terrain and stone steps throughout. A carrier is needed for most of the interior. The castle gardens and outer walls are more accessible. The view from the outer ramparts can be reached via a gentler path. Allow time and don't rush — the views reward patience."
+        },
+        {
+          "id": "duerer-house",
+          "sequence": 2,
+          "name": "Albrecht Dürer's House",
+          "subtitle": "The workshop where the Northern Renaissance was invented",
+          "lat": 49.4582,
+          "lon": 11.0779,
+          "category": "museum",
+          "visit_duration_minutes": 60,
+          "drive_time_from_prev_minutes": 5,
+          "baby_friendly_score": 3,
+          "highlight": "The actual workshop where Dürer produced the Apocalypse woodcuts, the first great prints in European art history",
+          "about": "Albrecht Dürer (1471–1528) was born in Nuremberg and lived in this house from 1509 until his death. He is the pivotal figure in Northern European Renaissance art — the man who brought Italian Renaissance ideas north of the Alps and synthesized them with the German tradition into something entirely new. The Apocalypse series (1498), his self-portraits, his studies of proportion, his watercolors of the natural world — all produced in this workshop. The house is well-preserved: four floors of a 15th-century merchant's house with period rooms, printing press demonstrations, and the Agnes room (his wife's workspace). Dürer was also a theorist — he wrote treatises on proportion and perspective that remained standard references for a century. He made the first scientific map of the northern sky. He corresponded with Erasmus, met Luther, and was the most famous living artist in Europe at the time of his death.",
+          "hidden_gems": "The printing press demonstrations run at fixed times and show how the woodcut and engraving processes actually worked — not just what the prints look like but how technically demanding their production was. The tiny garden behind the house is quiet and gives a sense of the domestic scale of the place. Dürer's grave is in the Johannisfriedhof cemetery a 15-minute walk away — a simple flat slab next to the grave of his friend Willibald Pirckheimer.",
+          "baby_logistics": "Multiple floors with narrow stairs — a carrier is necessary inside the house. The demonstration areas on the ground floor are accessible. The street outside and the Tiergärtnertor square in front are flat and a good spot for a break."
+        },
+        {
+          "id": "germanisches-nationalmuseum",
+          "sequence": 3,
+          "name": "Germanisches Nationalmuseum",
+          "subtitle": "Germany's largest cultural history museum",
+          "lat": 49.4516,
+          "lon": 11.0793,
+          "category": "museum",
+          "visit_duration_minutes": 120,
+          "drive_time_from_prev_minutes": 10,
+          "baby_friendly_score": 5,
+          "highlight": "The world's first printed globe (1492), made the same year Columbus reached America — and it shows no Americas",
+          "about": "The Germanisches Nationalmuseum holds Germany's largest collection of cultural artifacts spanning prehistoric times to the 20th century. Founded in 1852 in a former Carthusian monastery, it now occupies a vast complex of connected buildings. The medieval and early modern collections are extraordinary: the Behaim Globe (1492) is the oldest surviving terrestrial globe in the world, made by Martin Behaim of Nuremberg in the same year Columbus sailed — it shows a world without the Americas because the commission was completed before word of Columbus returned. The instruments, clocks, scientific tools, playing cards, weapons, furniture, and paintings together form the most comprehensive picture of German material culture anywhere.",
+          "hidden_gems": "Most visitors rush through to the famous objects and miss the craft and trade collections on the upper floors — the goldsmiths' tools, the pewter casters' workshops, the early printing equipment. Nuremberg was the Silicon Valley of the 15th and 16th centuries: the first pocket watches (Nuremberg eggs), the first mass-produced scientific instruments, the first printed maps with consistent projection. The museum documents this in extraordinary depth. The courtyard café inside the old monastery cloister is excellent for lunch.",
+          "baby_logistics": "Fully accessible throughout — elevators, flat floors, wide corridors. Excellent baby changing room near the main entrance. The cloister courtyard has outdoor seating. Strollers work well through most of the collections."
+        }
+      ]
+    },
+    {
+      "day_number": 2,
+      "title": "Documentation Center + Trials Courtroom",
+      "theme": "20th-century history — the rise and the reckoning",
+      "summary": "The rally grounds where the Nazi regime staged its spectacles, and the courtroom where it was judged",
+      "stops": [
+        {
+          "id": "documentation-center",
+          "sequence": 1,
+          "name": "Documentation Center Reichsparteitagsgelände",
+          "subtitle": "Inside the unfinished Congress Hall of the Nazi party rallies",
+          "lat": 49.4287,
+          "lon": 11.1118,
+          "category": "museum",
+          "visit_duration_minutes": 120,
+          "drive_time_from_prev_minutes": 15,
+          "baby_friendly_score": 5,
+          "highlight": "The museum is housed inside the unfinished Nazi Congress Hall — a building larger than the Colosseum, abandoned mid-construction in 1939",
+          "about": "From 1933 to 1938, Nuremberg hosted the annual Nazi party rallies — mass choreographed spectacles of power involving up to 700,000 people, designed by Albert Speer and filmed by Leni Riefenstahl. The rally grounds southeast of the city center were to be a permanent monumental complex: a Congress Hall larger than the Roman Colosseum, a Zeppelin Field, a Great Road 2km long, a March Field for military exercises. Construction stopped in 1939 when the war began. The Congress Hall stands unfinished, its red brick facade like a horseshoe open to the sky. The Documentation Center occupies a glass and steel insertion into one wing of the building — the contrast between the Nazi megalomaniac architecture and the light-filled contemporary museum inside is deliberate. The permanent exhibition 'Fascination and Terror' is one of the most rigorous examinations of how the Nazi movement rose, how it used spectacle and aesthetics, and what it did. The Zeppelin Field is a 10-minute walk away — the tribune from which Hitler addressed the rallies still partially stands, crumbling.",
+          "hidden_gems": "The audio guide to the open-air rally grounds (available at the Documentation Center) takes you to the Zeppelin Field, the Great Road, and the remnants of the other structures. Walking the actual scale of what was planned is more affecting than any photograph. The Silbersee lake to the north of the complex occupies a former quarry where forced laborers extracted granite for the buildings — the documentation center mentions this but the lake itself, now a quiet swimming spot for locals, is a strange place to sit with that knowledge.",
+          "baby_logistics": "The Documentation Center is fully accessible — elevator, flat floors, stroller-friendly throughout. The outdoor rally grounds involve long flat walking on stone and gravel — entirely manageable with a stroller. Allow time; the open-air section alone is 2–3km of walking."
+        },
+        {
+          "id": "courtroom-600",
+          "sequence": 2,
+          "name": "Courtroom 600 — Nuremberg Trials",
+          "subtitle": "The room where the architects of the Holocaust were tried",
+          "lat": 49.4487,
+          "lon": 11.0679,
+          "category": "museum",
+          "visit_duration_minutes": 75,
+          "drive_time_from_prev_minutes": 20,
+          "baby_friendly_score": 4,
+          "highlight": "The actual courtroom where Göring, Hess, Ribbentrop and 21 other defendants sat for 218 days of trial — still an active courthouse today",
+          "about": "The choice of Nuremberg for the war crimes trials was deliberate: the city most associated with Nazi ceremonial power would be the place where that power was judged. Courtroom 600 in the Palace of Justice was chosen because it was large enough and because the adjacent prison could hold the defendants. The trials ran from November 1945 to October 1946. Göring was convicted and sentenced to death, cheated the hangman with a cyanide capsule, and was found dead in his cell the night before the execution. Of the 24 defendants, 12 were sentenced to death, 7 imprisoned, 3 acquitted. The trials established the legal precedents for crimes against humanity and genocide that underpin international law today. Courtroom 600 is still an active German court — trials run here regularly. When it is not in session, visitors can enter and sit where the defendants, judges, prosecutors, and press sat. A permanent exhibition in the adjacent rooms explains the trials in detail.",
+          "hidden_gems": "The exhibition in the adjoining rooms documents the pre-trial negotiations between the Allied powers — the debates about whether to hold trials at all (Churchill initially wanted summary execution) and how to define the charges. The creation of the concept of 'crimes against humanity' as a legal category happened in these negotiations. Advance booking is required for entry and it sells out — book online at least a week before.",
+          "baby_logistics": "The courthouse building is accessible with an elevator. The courtroom itself has fixed wooden benches — a carrier or lap-held baby is fine. The exhibition rooms have wide corridors. Advance booking essential. The visit is emotionally heavy; the quiet focus it requires may be difficult with a baby who needs attention."
+        }
+      ]
+    }
+  ],
+  "hotels": [
+    {
+      "id": "hotel-drei-raben",
+      "name": "Hotel Drei Raben",
+      "area": "Nuremberg old town",
+      "type": "Boutique Hotel",
+      "local_character_score": 5,
+      "price_range": "€110–160/night",
+      "has_crib": true,
+      "has_parking": false,
+      "description": "Each room tells a different Nuremberg legend or story — from the Meistersinger to the imperial traditions. Genuinely creative boutique hotel in a historic building.",
+      "why_recommended": "Most characterful hotel in the city. The storytelling concept is fun and matches the historically-minded traveler."
+    },
+    {
+      "id": "burghotel",
+      "name": "Burghotel Nürnberg",
+      "area": "Below the Kaiserburg",
+      "type": "Historic Hotel",
+      "local_character_score": 4,
+      "price_range": "€130–180/night",
+      "has_crib": true,
+      "has_parking": false,
+      "description": "Built into the rock directly below the Kaiserburg walls. Some rooms have castle walls as actual room walls. Exceptional position.",
+      "why_recommended": "Unique position — you wake up under the imperial castle"
+    },
+    {
+      "id": "agneshof",
+      "name": "Agneshof Nürnberg",
+      "area": "Nuremberg old town",
+      "type": "Boutique Hotel",
+      "local_character_score": 4,
+      "price_range": "€95–130/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Small hotel in a former monastery building with a quiet courtyard garden. Comfortable, well-run, family-friendly.",
+      "why_recommended": "Best combination of location, character, and practical family amenities"
+    }
+  ],
+  "hikes": [
+    {
+      "id": "city-walls-loop",
+      "name": "Nuremberg City Walls Loop",
+      "area": "Nuremberg old town",
+      "distance_km": 5.0,
+      "elevation_gain_m": 30,
+      "estimated_time_minutes": 90,
+      "difficulty": "easy",
+      "pushchair_friendly": true,
+      "baby_carrier_feasible": true,
+      "surface": "paved path along walls",
+      "description": "A nearly complete circuit of the medieval city walls with their towers and gates. The path runs between the inner and outer walls through a green belt. All gates are original medieval construction.",
+      "practical_tip": "Start at Königstor (King's Gate) near the train station. The Handwerkerhof inside the walls near the station is a reconstructed medieval craftsmen's courtyard worth a 20-minute stop."
+    },
+    {
+      "id": "pegnitz-meadows",
+      "name": "Pegnitz River Meadows",
+      "area": "Through the old town",
+      "distance_km": 4.0,
+      "elevation_gain_m": 5,
+      "estimated_time_minutes": 60,
+      "difficulty": "easy",
+      "pushchair_friendly": true,
+      "baby_carrier_feasible": true,
+      "surface": "paved riverside path",
+      "description": "The Pegnitz river runs through the middle of the old town. The riverside path passes the Henkersteg (Hangman's Bridge), the Weinstadel (medieval wine warehouse), and several medieval towers reflected in the water.",
+      "practical_tip": "Walk from the Maxbrücke to the Kettensteg iron footbridge. The Heilig-Geist-Spital (Holy Spirit Hospital) spans the river on arches and has a good café."
+    }
+  ],
+  "practical_notes": [
+    "Courtroom 600: advance booking essential, sells out weeks ahead — book online.",
+    "Kaiserburg: allow 90 minutes minimum, carrier needed inside.",
+    "Documentation Center: the outdoor rally grounds are 2–3km of walking — wear comfortable shoes.",
+    "Germanisches Nationalmuseum: close Monday (like most German museums).",
+    "Nuremberg Lebkuchen (gingerbread): buy from Lebkuchen-Schmidt on the main market, not from stalls."
+  ]
+}

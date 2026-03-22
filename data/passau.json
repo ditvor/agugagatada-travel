@@ -1,0 +1,205 @@
+{
+  "id": "passau-daytrip",
+  "title": "Passau — The City of Three Rivers",
+  "tagline": "Where the Danube, Inn, and Ilz converge in three different colors, under a fortress that was never taken by storm",
+  "destination": {
+    "name": "Passau",
+    "region": "Bavaria, Germany",
+    "lat": 48.5748,
+    "lon": 13.4314
+  },
+  "origin": { "name": "Munich", "lat": 48.1351, "lon": 11.5820 },
+  "drive_time_from_origin_minutes": 110,
+  "duration_days": 1,
+  "generated_at": "2026-03-22",
+  "stats": {
+    "total_stops": 5,
+    "baby_friendly_score": 4,
+    "history_depth_score": 5,
+    "touristic_score": 2,
+    "drive_total_km": 185
+  },
+  "intro": "Passau is built on an impossibly narrow peninsula where three rivers converge — the Danube from the west, the Inn from the south, and the small dark Ilz from the north. The confluence is dramatic and visible: the rivers run in distinct colors (grey-green Danube, blue-green Inn, black Ilz) for several hundred meters before mixing. The city has been here, in one form or another, since the Romans. The baroque city you see today was rebuilt almost entirely by Italian architects after a catastrophic fire in 1662, giving it an architectural character entirely unlike the rest of Bavaria — more Venice than Munich. Above it all, on a 100-meter cliff, sits the Veste Oberhaus, a prince-bishop's fortress that was never taken by storm in its entire medieval and early-modern history.",
+  "route_polyline": [
+    [48.1351, 11.5820], [48.2012, 12.2548], [48.3765, 12.9743], [48.5748, 13.4314]
+  ],
+  "days": [
+    {
+      "day_number": 1,
+      "title": "Three Rivers + Cathedral + Fortress + Glass Museum",
+      "theme": "River confluence, baroque architecture, medieval fortress, extraordinary glass",
+      "summary": "Follow three rivers to their confluence, then climb above the city to the fortress that watched over them all",
+      "stops": [
+        {
+          "id": "dreifluesseeck",
+          "sequence": 1,
+          "name": "Dreiflüsseeck — Three Rivers Confluence",
+          "subtitle": "Where three rivers meet in three different colors",
+          "lat": 48.5726,
+          "lon": 13.4652,
+          "category": "nature",
+          "visit_duration_minutes": 30,
+          "drive_time_from_prev_minutes": 0,
+          "baby_friendly_score": 5,
+          "highlight": "The exact point where the Danube (grey-green), the Inn (blue-green), and the Ilz (near-black) meet — three rivers running side by side in distinct colors before slowly merging",
+          "about": "The confluence at the tip of Passau's peninsula is one of those geographical spectacles that photographs suggest and reality exceeds. The rivers carry different mineral loads from their different source regions — the Inn drains alpine glaciers and runs with glacial flour, the Danube runs from the limestone plateaus of southern Germany, the Ilz drains dark peat moorland north of the city — and they remain visually distinct for a surprising distance downstream before the turbulence of mixing finally homogenizes them. The Romans understood the strategic value of this point immediately: whoever controlled the confluence controlled river traffic through the entire region. The Roman fort of Batavis stood here from the 1st century AD. The current city is built on 2,000 years of continuous settlement on this same peninsula. The Dreiflüsseeck itself is accessible from a small park at the very tip of the peninsula — a good 20-minute walk along the Innkai from the cathedral.",
+          "hidden_gems": "The best view of the confluence is not from the peninsula tip (you are too close to the water to see the color contrast clearly) but from the Veste Oberhaus on the cliff above, or from the eastern bank of the Inn across the river. A short ferry (the Ilzstadt ferry, seasonal) takes you to the eastern bank for a few euros and the view from there is far more revealing. The Innkai promenade running from the cathedral to the confluence is one of the most beautiful riverside walks in Bavaria — baroque façades to the left, the Inn to the right, the fortress cliff ahead.",
+          "baby_logistics": "The Innkai promenade to the confluence is completely flat, wide, and paved — one of the best stroller walks in Bavaria. The tip of the peninsula has a small park with benches. No dedicated facilities at the confluence itself; the nearest café is 5 minutes back along the Innkai."
+        },
+        {
+          "id": "st-stephan-cathedral",
+          "sequence": 2,
+          "name": "St. Stephen's Cathedral",
+          "subtitle": "The largest church organ in the world",
+          "lat": 48.5745,
+          "lon": 13.4635,
+          "category": "church",
+          "visit_duration_minutes": 60,
+          "drive_time_from_prev_minutes": 10,
+          "baby_friendly_score": 5,
+          "highlight": "The organ has 17,774 pipes and 233 stops — the largest church organ in the world — filling a baroque interior that looks more like Rome than Bavaria",
+          "about": "The current cathedral was built after the great fire of 1662 destroyed most of Passau. The Prince-Bishop brought in Italian architects — primarily Carlo Lurago and the stucco master Giovanni Battista Carlone — and what emerged is the most Italian-looking church north of the Alps: a white and gold interior, exuberant stucco decoration on every surface, a ceiling fresco of overwhelming exuberance, and a general atmosphere more of theatrical celebration than northern German austerity. The organ was installed in stages from the 17th century onward, growing continuously until the current instrument reached 17,774 pipes and 233 stops — the largest church organ in the world (excluding theatrical and concert hall organs). Organ recitals run daily at noon from May to October and on Thursdays at 7:30pm — 30 minutes of live performance on the instrument for a small entry fee. The sound in this baroque space is genuinely extraordinary.",
+          "hidden_gems": "The cathedral exterior is less celebrated than the interior but the south portal has a Madonna relief of exceptional quality from the workshop of Hans Leinberger, one of the great late-Gothic sculptors. The Domschatz (Cathedral Treasury) next to the cathedral has medieval goldwork and vestments including pieces from the Ottonian period. The Residenzplatz in front of the cathedral is the largest baroque square in Bavaria — sit at the café on the square's east side and look back at the cathedral facade for the proper sense of scale.",
+          "baby_logistics": "The cathedral interior is flat throughout and stroller-accessible via the main entrance. The organ recitals run 30 minutes — manageable for a baby with the loud and varied sound. The Residenzplatz outside is completely flat and spacious."
+        },
+        {
+          "id": "veste-oberhaus",
+          "sequence": 3,
+          "name": "Veste Oberhaus",
+          "subtitle": "The fortress that was never taken by storm",
+          "lat": 48.5783,
+          "lon": 13.4648,
+          "category": "castle",
+          "visit_duration_minutes": 90,
+          "drive_time_from_prev_minutes": 10,
+          "baby_friendly_score": 3,
+          "highlight": "100 meters above the Danube, with the finest view over the three-rivers confluence — and a fortress museum that spans 1,400 years of European military history",
+          "about": "The Veste Oberhaus was built in 1219 by Bishop Ulrich II as a demonstration of episcopal power over the city's burghers, who had been growing increasingly rebellious. It sits on a 100-meter cliff spur between the Danube and the Ilz, connected to the old town only by a narrow ridge. In every conflict from the 13th to the 18th century — the Citizens' Wars, the Thirty Years' War, the French Revolutionary Wars — the Veste Oberhaus was besieged but never successfully stormed. The fortifications were continuously improved: what you see now is a complex of walls, towers, and residential buildings spanning 800 years of military architecture. The Oberhausmuseum inside covers the city's history from its Roman origins, the medieval episcopal power struggles, the Reformation, and the 19th-century rebuilding. The view from the fortress walls over the confluence — the narrow peninsula of the old town with its baroque towers, the three rivers meeting below, the forest hills of Austria to the east — is one of the great views of southern Germany.",
+          "hidden_gems": "The walk up from the old town (the Georgsberg path) takes about 20 minutes and gives changing views over the city as you climb. The shuttle bus (seasonal) goes to the top if you prefer. Most visitors look east from the fortress toward the confluence; look also west toward the Danube valley for the view that river traffic has had approaching Passau for two thousand years. The medieval kitchen in the fortress complex is occasionally used for historical cooking demonstrations.",
+          "baby_logistics": "The shuttle bus (Burgbus) runs from the old town to the fortress entrance and is the practical option with a stroller or carrier. The fortress grounds are uneven and include steps — a carrier is needed for the upper walls and towers. The museum building interior is accessible. The main terrace with the best view is reachable from the shuttle bus drop-off."
+        },
+        {
+          "id": "old-town-inn",
+          "sequence": 4,
+          "name": "Passau Old Town + Innkai",
+          "subtitle": "Italy transplanted to Bavaria — the most un-German city in Germany",
+          "lat": 48.5748,
+          "lon": 13.4314,
+          "category": "town_center",
+          "visit_duration_minutes": 60,
+          "drive_time_from_prev_minutes": 10,
+          "baby_friendly_score": 5,
+          "highlight": "Baroque palaces, arcaded streets, and an Italian atmosphere produced by the architects who rebuilt Rome — in a Bavarian river city",
+          "about": "The 1662 fire destroyed most of medieval Passau and the Prince-Bishop decided to rebuild entirely in the contemporary Italian baroque style. He recruited Italian architects, stucco workers, and fresco painters, and the result — completed over 60 years — is a city with no German equivalent. The narrow streets have arcaded ground floors and baroque facades with the pastel colors and proportions of northern Italy. The Innkai (Inn riverside promenade) is the social heart of the city — cafés with terraces over the water, the baroque facades reflected in the Inn, the fortress cliff looming above. The Nibelungengasse connecting to the old town is supposedly the inspiration for scenes in the Nibelungenlied (though this is literary folklore rather than established fact). The overall atmosphere is lighter and more Mediterranean than any comparable Bavarian city.",
+          "hidden_gems": "The Schaiblingsturm (a 14th-century round tower on the Inn embankment, surviving from the pre-fire medieval city) is usually ignored by visitors focused on the baroque architecture — it is the most substantial remaining piece of medieval Passau. The Rathaus has an interesting Gothic great hall interior (open for tours). The cemetery of St. Severin, slightly outside the old town, has Roman gravestones incorporated into its walls.",
+          "baby_logistics": "The Innkai promenade is entirely flat and one of the best stroller walks in the city. The old town streets have some cobblestone sections but are mostly manageable. The area around the Residenzplatz is flat and spacious."
+        },
+        {
+          "id": "glass-museum",
+          "sequence": 5,
+          "name": "Museum of Glass (Glasmuseum Passau)",
+          "subtitle": "The largest collection of Bohemian and Bavarian glass in the world",
+          "lat": 48.5741,
+          "lon": 13.4628,
+          "category": "museum",
+          "visit_duration_minutes": 60,
+          "drive_time_from_prev_minutes": 5,
+          "baby_friendly_score": 4,
+          "highlight": "30,000 pieces of glass spanning 300 years — and the museum is inside the Hotel Wilder Mann, where Empress Elisabeth (Sisi) stayed in 1854",
+          "about": "Passau sits at the edge of the Bohemian Forest, which was for centuries the center of European glassmaking — the Bohemian glass tradition produced the finest decorative and utility glass in the world from the 17th century onward. The Glasmuseum Passau, housed in the Hotel Wilder Mann (the oldest hotel in the city), has assembled 30,000 pieces spanning Baroque, Biedermeier, Historicism, Jugendstil, and 20th-century glass from Bohemian, Austrian, and Bavarian workshops. The quality is extraordinary: engraved hunting scenes, ruby overlay glasses, Biedermeier portrait tumblers, Jugendstil vases with iridescent surfaces. The museum is spread through the hotel's historic rooms on multiple floors. The Hotel Wilder Mann itself is the oldest inn in Passau — Empress Elisabeth (Sisi) stayed here in 1854 on her way to meet Emperor Franz Joseph for the first time.",
+          "hidden_gems": "The Jugendstil section on the upper floor is the most beautiful part of the collection — the iridescent Loetz glass and the Bohemian Jugendstil pieces are equal to anything in the Vienna applied arts museums. The hotel restaurant downstairs serves Bavarian-Bohemian cuisine at decent prices and is where locals from the city eat when they want a proper meal.",
+          "baby_logistics": "The museum occupies multiple floors of the hotel — some stairs, but an elevator covers the main sections. The historic rooms are intimate and require some care with a stroller; a carrier is more practical. The hotel ground floor café and restaurant are fully accessible."
+        }
+      ]
+    }
+  ],
+  "hotels": [
+    {
+      "id": "hotel-wilder-mann-passau",
+      "name": "Hotel Wilder Mann",
+      "area": "Passau old town",
+      "type": "Historic Hotel",
+      "local_character_score": 5,
+      "price_range": "€90–140/night",
+      "has_crib": true,
+      "has_parking": false,
+      "description": "The oldest hotel in Passau, operating since the 11th century. Sisi stayed here in 1854. The Glasmuseum is in the building. Historic rooms, good restaurant, exceptional location on the Rathausplatz.",
+      "why_recommended": "The building itself is extraordinary. The glass museum is included — you live inside the collection."
+    },
+    {
+      "id": "hotel-koenig",
+      "name": "Hotel König",
+      "area": "Passau, Danube embankment",
+      "type": "Historic Hotel",
+      "local_character_score": 4,
+      "price_range": "€85–125/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "A hotel directly on the Danube embankment with river-view rooms. Some rooms face the Danube and the fortress cliff. Family rooms available.",
+      "why_recommended": "Best river views of any hotel in Passau. The view of the fortress cliff from a river-view room is dramatic."
+    },
+    {
+      "id": "pension-roessner",
+      "name": "Pension Rössner",
+      "area": "Passau, Innstadt quarter",
+      "type": "Guesthouse",
+      "local_character_score": 5,
+      "price_range": "€60–80/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Small family-run pension on the eastern bank of the Inn, with parking. Quiet quarter, 10-minute walk to the old town. Very local, very unpretentious.",
+      "why_recommended": "Best value, parking included, local character, very practical for families"
+    }
+  ],
+  "hikes": [
+    {
+      "id": "innkai-confluence-walk",
+      "name": "Innkai Promenade to Dreiflüsseeck",
+      "area": "Passau old town",
+      "distance_km": 3.0,
+      "elevation_gain_m": 5,
+      "estimated_time_minutes": 60,
+      "difficulty": "easy",
+      "pushchair_friendly": true,
+      "baby_carrier_feasible": true,
+      "surface": "paved riverside promenade",
+      "description": "The flat promenade along the Inn river from the cathedral to the three-rivers confluence and back. The finest urban riverside walk in eastern Bavaria — baroque facades, the fortress cliff, the Inn reflecting the sky.",
+      "practical_tip": "Walk at dusk when the light is low and the baroque facades glow against the darkening water. The confluence is best seen at this time."
+    },
+    {
+      "id": "veste-path",
+      "name": "Georgsberg Path to Veste Oberhaus",
+      "area": "Passau",
+      "distance_km": 2.0,
+      "elevation_gain_m": 100,
+      "estimated_time_minutes": 45,
+      "difficulty": "moderate",
+      "pushchair_friendly": false,
+      "baby_carrier_feasible": true,
+      "surface": "forest path and stone steps",
+      "description": "The historic footpath up through the forest to the Veste Oberhaus, passing through the Ilz gorge below. The path gives changing views over the confluence as you climb. Used by residents for centuries as the walking route to the fortress.",
+      "practical_tip": "Carrier needed. Take the Burgbus down if legs are tired — or the reverse. The path takes 25–30 minutes up at a relaxed pace."
+    },
+    {
+      "id": "danube-cycle-passau",
+      "name": "Danube Cycle Path West of Passau",
+      "area": "Passau toward Vilshofen",
+      "distance_km": 10.0,
+      "elevation_gain_m": 15,
+      "estimated_time_minutes": 120,
+      "difficulty": "easy",
+      "pushchair_friendly": true,
+      "baby_carrier_feasible": true,
+      "surface": "paved Danube cycle path",
+      "description": "The international Danube Cycle Route (EuroVelo 6) runs through Passau. The section west toward Vilshofen is flat, paved, and runs directly beside the river. Good for a half-day ride with a trailer bike or a long stroller walk in the first few kilometers.",
+      "practical_tip": "Bike rental available at the main station. With a stroller, the flat first 2–3km section along the southern Danube bank is excellent."
+    }
+  ],
+  "practical_notes": [
+    "Cathedral organ recitals: daily noon May–October, Thursday evenings year-round — worth planning around.",
+    "Veste Oberhaus shuttle bus (Burgbus): runs from Rathausplatz, seasonal — check schedule before visiting.",
+    "Parking: the old town is largely traffic-restricted. Use Parkplatz Römerplatz on the eastern bank and cross the bridge.",
+    "Flooding: Passau floods regularly. Check water levels if visiting after heavy rain — the Innkai can be underwater.",
+    "Austria is 5km east — bring passports if you want to cross and explore Oberösterreich."
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "id": "eichstaett-solnhofen-daytrip",
+  "title": "Eichstätt & Solnhofen — The Jurassic Coast of Bavaria",
+  "tagline": "A baroque episcopal city in a Jurassic limestone valley where you can dig up 150-million-year-old fossils yourself",
+  "destination": {
+    "name": "Eichstätt + Solnhofen",
+    "region": "Bavaria, Germany (Altmühl Valley)",
+    "lat": 48.8922,
+    "lon": 11.1890
+  },
+  "origin": { "name": "Munich", "lat": 48.1351, "lon": 11.5820 },
+  "drive_time_from_origin_minutes": 75,
+  "duration_days": 1,
+  "generated_at": "2026-03-22",
+  "stats": {
+    "total_stops": 4,
+    "baby_friendly_score": 5,
+    "history_depth_score": 5,
+    "touristic_score": 1,
+    "drive_total_km": 100
+  },
+  "intro": "Most people have never heard of Eichstätt. This is a mistake. The Altmühl Valley where it sits is Jurassic limestone country — the same reef system that formed the Alps, now eroded into a plateau of white rock and pine forest. 150 million years ago this was a shallow tropical lagoon, and the exceptionally fine limestone sediment preserved the creatures that fell into it with extraordinary fidelity. Archaeopteryx — the first feathered creature, the link between dinosaurs and birds — was found in these quarries. You can visit the actual quarries, split the rock yourself, and keep what you find. And Eichstätt itself, the small baroque city that almost no tourist ever visits, is one of the most beautiful episcopal towns in Germany.",
+  "route_polyline": [
+    [48.1351, 11.5820], [48.4012, 11.4548], [48.7265, 11.2743], [48.8922, 11.1890]
+  ],
+  "days": [
+    {
+      "day_number": 1,
+      "title": "Eichstätt + Solnhofen + Pappenheim",
+      "theme": "Jurassic fossils, baroque architecture, castle ruins",
+      "summary": "Split Jurassic limestone in a working quarry, then explore a city that time forgot",
+      "stops": [
+        {
+          "id": "jura-museum",
+          "sequence": 1,
+          "name": "Jura Museum Eichstätt",
+          "subtitle": "Home of the Eichstätt Archaeopteryx",
+          "lat": 48.8920,
+          "lon": 11.1886,
+          "category": "museum",
+          "visit_duration_minutes": 90,
+          "drive_time_from_prev_minutes": 0,
+          "baby_friendly_score": 5,
+          "highlight": "One of only 12 known Archaeopteryx specimens in the world — the 150-million-year-old first bird, found 20km from where you're standing",
+          "about": "The Jura Museum is housed in the Willibaldsburg castle above Eichstätt and contains one of the finest collections of Jurassic marine fossils in Europe, including the Eichstätt specimen of Archaeopteryx — one of only 12 known examples of this creature in the world. Archaeopteryx is perhaps the most scientifically important fossil ever found: discovered in 1861, just two years after Darwin published On the Origin of Species, it was immediately recognized as transitional evidence between dinosaurs and birds — it has feathers, but also teeth, clawed wings, and a long bony tail. It was the first direct fossil evidence for evolution. The museum also holds extraordinary specimens of Pterodactyls (also first scientifically described from Solnhofen fossils), ichthyosaurs, fish, ammonites, and other Jurassic lagoon creatures preserved in the fine lithographic limestone. The quality of preservation is unmatched — soft tissue impressions, individual feather barbs, stomach contents. The castle building itself offers views over the Altmühl Valley.",
+          "hidden_gems": "The basement of the museum has the actual working tools used in fossil preparation — the air scribes, brushes, and magnifiers — and periodic demonstrations of how matrix is removed from specimens. The castle's bastions can be walked and give the best view of the river valley and the white limestone cliff faces that characterize the Jurassic terrain. The museum shop sells quality fossil replicas that are actually educational rather than tourist kitsch.",
+          "baby_logistics": "Fully accessible — elevator, flat exhibition floors, stroller-friendly throughout. The castle terrace is accessible via ramp. Good café on site with outdoor seating. Changing facilities in the main toilets block."
+        },
+        {
+          "id": "eichstaett-oldtown",
+          "sequence": 2,
+          "name": "Eichstätt Cathedral + Old Town",
+          "subtitle": "A baroque episcopal city almost nobody visits",
+          "lat": 48.8910,
+          "lon": 11.1874,
+          "category": "town_center",
+          "visit_duration_minutes": 60,
+          "drive_time_from_prev_minutes": 5,
+          "baby_friendly_score": 5,
+          "highlight": "A perfectly intact baroque episcopal city built by the same Italian architects who rebuilt Rome — transplanted into a Bavarian river valley",
+          "about": "Eichstätt was the seat of a bishop from 741 AD, and like many Prince-Bishop residencies, was substantially rebuilt in the baroque style after the destruction of the Thirty Years' War. The architects brought in were Italian — followers of the Roman baroque — and the result is a small city that looks remarkably unlike anywhere else in Bavaria. The cathedral dates from the 8th century but was transformed repeatedly; its most remarkable feature is the Pappenheim altarpiece, a painted limestone relief of 1489 of exceptional quality. The episcopal residence, the collegiate church, and the town square all form a coherent baroque ensemble. Crucially, the city has no significant industry and no particular tourist draw beyond the fossils, so it has remained exactly as it was built — no chain restaurants, no modern intrusions, just a small city of 13,000 people living inside a baroque stage set.",
+          "hidden_gems": "The Mortuarium (a separate vaulted chapel adjacent to the cathedral) contains the Pappenheim altarpiece — a double-sided carved limestone relief that is one of the great unknown masterpieces of late medieval German sculpture. Almost no guide book mentions it. The Residenzplatz fountain, the Schutzengelkirche (Guardian Angel Church), and the Kapuzinerkirche are all worth looking into. For lunch, the cafés around the Marktplatz serve solid regional Bavarian food with almost no tourist pricing.",
+          "baby_logistics": "The town center is almost entirely flat — one of the most stroller-friendly town centers in Bavaria. The Marktplatz and Residenzplatz are paved but level. The cathedral interior is accessible. The whole area can be covered in a relaxed 60-minute walk with a stroller."
+        },
+        {
+          "id": "solnhofen-quarries",
+          "sequence": 3,
+          "name": "Solnhofen Fossil Quarries",
+          "subtitle": "Split the rock yourself and keep what you find",
+          "lat": 48.8992,
+          "lon": 11.0321,
+          "category": "nature",
+          "visit_duration_minutes": 90,
+          "drive_time_from_prev_minutes": 20,
+          "baby_friendly_score": 4,
+          "highlight": "Active limestone quarries where visitors can split Jurassic slabs and keep any fossil they find — the same quarries where Archaeopteryx was discovered",
+          "about": "The limestone quarries around Solnhofen have been worked since Roman times — the stone, known as lithographic limestone, was the finest material for printing plates and was used in printmaking until photographic processes replaced it in the 20th century. The quarries are still active, supplying high-quality paving and decorative stone. The Jurassic lithographic limestone formed 150 million years ago as fine carbonate sediment settling to the bottom of a shallow, hypersaline lagoon. Creatures that fell into the lagoon — or were washed in — were preserved with extraordinary fidelity in the fine-grained sediment. Visitors to certain accessible quarries (notably the Blumensberg quarry near Solnhofen) can split slabs of limestone using a chisel and hammer and keep whatever fossils emerge. Most finds are small fish, ammonites, shrimp, or plant fragments. Occasionally something extraordinary appears — the quarry owners are required to report significant vertebrate finds to the state.",
+          "hidden_gems": "The Bürgermeister-Müller Museum in Solnhofen village itself is small but has excellent local fossil specimens and explains the geological history clearly. The quarry landscape — white rock terraces, juniper scrub, the valley below — is beautiful in its austerity and almost entirely unvisited beyond local fossil hunters. Ask at the museum about which quarries are currently accessible to visitors; it changes seasonally.",
+          "baby_logistics": "The quarry floor is flat limestone — stroller-manageable if the surface is dry. For splitting rock, you need both hands, so a carrier is better for the active fossil-hunting portion. The museum in the village has a flat interior and accessible toilets. Bring sun protection — the white limestone reflects strongly."
+        },
+        {
+          "id": "pappenheim",
+          "sequence": 4,
+          "name": "Burg Pappenheim",
+          "subtitle": "Ruined medieval castle above the Altmühl river",
+          "lat": 48.9489,
+          "lon": 11.0984,
+          "category": "castle",
+          "visit_duration_minutes": 60,
+          "drive_time_from_prev_minutes": 20,
+          "baby_friendly_score": 3,
+          "highlight": "The ruined seat of the Counts of Pappenheim — Imperial Field Marshals of the Holy Roman Empire for 400 years",
+          "about": "The Pappenheim family held the hereditary title of Reichserbmarschall (Imperial Field Marshal) of the Holy Roman Empire — the highest military ceremonial office — for over 400 years. Their castle above the Altmühl river was the family seat for most of this period. The castle was damaged in the Thirty Years' War and partly demolished thereafter; what remains are substantial ruins on a limestone spur above the town, with good views over the Altmühl Valley. Gottfried Heinrich Graf zu Pappenheim was one of the most significant cavalry commanders of the Thirty Years' War, fighting on the Catholic-Imperial side until his death at the Battle of Lützen in 1632 — the same battle where Gustavus Adolphus of Sweden also died. The town of Pappenheim below the castle is small and genuine, with a weekly market and several small Gasthöfe.",
+          "hidden_gems": "The path from the town up to the castle runs through old terraced gardens — remnants of the formal baroque garden that once extended down the hillside. The lower town has an intact medieval street plan and the church of St. Gallus contains medieval frescoes that are rarely visited. The Altmühl cycling path passes directly through Pappenheim and the flat riverside section toward Solnhofen (westward) is particularly good for a stroller.",
+          "baby_logistics": "The castle ruins involve uneven terrain and some climbing — a carrier is needed for the upper sections. The town itself and the riverside path are fully flat and stroller-friendly. The castle courtyard lower section is accessible. There is a small Gasthof at the castle entrance with outdoor seating."
+        }
+      ]
+    }
+  ],
+  "hotels": [
+    {
+      "id": "hotel-adler-eichstaett",
+      "name": "Hotel Adler",
+      "area": "Eichstätt old town",
+      "type": "Historic Gasthof",
+      "local_character_score": 5,
+      "price_range": "€75–110/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Traditional hotel in the center of Eichstätt with a good regional kitchen. Family-run, straightforward, no tourist pricing.",
+      "why_recommended": "Best positioned hotel for exploring Eichstätt on foot, genuinely local character"
+    },
+    {
+      "id": "gasthof-krone",
+      "name": "Gasthof Krone",
+      "area": "Pappenheim",
+      "type": "Gasthof",
+      "local_character_score": 5,
+      "price_range": "€60–85/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Simple traditional Gasthof in Pappenheim, right on the Altmühl cycling route. Very authentic, very affordable.",
+      "why_recommended": "Perfect if combining with cycling or if you want a quieter base than Eichstätt"
+    }
+  ],
+  "hikes": [
+    {
+      "id": "altmuehl-valley-path",
+      "name": "Altmühl Valley Cycling and Walking Path",
+      "area": "Eichstätt to Solnhofen",
+      "distance_km": 12.0,
+      "elevation_gain_m": 20,
+      "estimated_time_minutes": 180,
+      "difficulty": "easy",
+      "pushchair_friendly": true,
+      "baby_carrier_feasible": true,
+      "surface": "flat paved and gravel cycling path",
+      "description": "The Altmühl is one of the most beautiful river valleys in Bavaria — white limestone cliffs, oxbow meanders, wildflower meadows. The cycling path from Eichstätt to Solnhofen (12km) is entirely flat, paved or firm gravel, and runs directly beside the river. With a stroller or trailer bike it is entirely manageable.",
+      "practical_tip": "Bike rental available in Eichstätt. With a stroller, do the flat 3–4km section from Eichstätt toward Dollnstein for the best scenery without committing to the full distance."
+    },
+    {
+      "id": "hanging-stones",
+      "name": "Hängende Steine (Hanging Stones)",
+      "area": "Above Eichstätt",
+      "distance_km": 3.0,
+      "elevation_gain_m": 120,
+      "estimated_time_minutes": 75,
+      "difficulty": "moderate",
+      "pushchair_friendly": false,
+      "baby_carrier_feasible": true,
+      "surface": "forest path with limestone outcrops",
+      "description": "A short climb above Eichstätt to a dramatic limestone overhang with views over the city and valley. The limestone formations here are part of the same Jurassic reef system that produces the fossils at Solnhofen — you walk on the same rock that was a tropical reef 150 million years ago.",
+      "practical_tip": "Carrier needed. Start from the Willibaldsburg (Jura Museum) car park. The overhang viewpoint is 45 minutes from the start."
+    }
+  ],
+  "practical_notes": [
+    "Fossil quarries: confirm accessibility with the Solnhofen museum before driving out — access changes seasonally.",
+    "Bring a chisel and hammer or rent them from the Solnhofen museum for quarry visits.",
+    "All fossils found in working quarries belong to the quarry owner — visitor finds from designated areas are kept.",
+    "Eichstätt has almost no tourist infrastructure: limited ATMs, limited opening hours. Buy food and snacks early.",
+    "The Altmühl Valley is spectacular in late spring (May) and autumn (October) — avoid August heat."
+  ]
+}
