@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bamberg — Agugagatada</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    /* Shell */
+    .site-nav { border-bottom: 1px solid var(--color-border); padding-block: var(--space-md); }
+    .site-nav__inner { display: flex; align-items: center; gap: var(--space-lg); }
+    .site-nav__home { font-size: var(--text-md); font-weight: 500; color: var(--color-text); letter-spacing: -0.01em; text-decoration: none; }
+    .site-nav__home:hover { text-decoration: none; }
+    .site-nav__back { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .site-nav__back:hover { color: var(--color-accent); text-decoration: none; }
+    .site-footer { border-top: 1px solid var(--color-border); padding-block: var(--space-xl); text-align: center; }
+    .site-footer__line { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+    /* Hero */
+    .hero { padding-top: var(--space-2xl); padding-bottom: var(--space-xl); }
+    .hero__title { font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    .hero__tagline { font-size: var(--text-md); color: var(--color-text-secondary); max-width: 600px; margin-top: var(--space-sm); line-height: 1.5; }
+    .hero__tags { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
+    .hero__rule { border: none; border-top: 1px solid var(--color-border); margin-top: var(--space-xl); }
+
+    /* Intro */
+    .intro { padding-block: var(--space-xl); }
+    .intro__text { font-size: var(--text-md); line-height: 1.7; max-width: 680px; color: var(--color-text); }
+
+    /* Route section */
+    .route-section { padding-bottom: var(--space-2xl); }
+    #map { height: 560px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+    .stops-col { padding-top: var(--space-xs); }
+
+    /* Stop */
+    .stop { padding-bottom: var(--space-lg); }
+    .stop__header { margin-bottom: var(--space-sm); }
+    .stop__name { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; margin-top: var(--space-xs); }
+    .stop__subtitle { font-size: var(--text-base); color: var(--color-text-secondary); margin-top: 2px; }
+    .stop__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm); }
+    .stop__highlight { font-style: italic; font-family: Georgia, serif; font-size: var(--text-base); color: var(--color-text); border-left: 3px solid var(--color-accent); padding-left: var(--space-md); margin-block: var(--space-md); line-height: 1.6; }
+    .stop__expand-row { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-sm); }
+    .stop__expand-content { display: none; font-size: var(--text-base); line-height: 1.7; color: var(--color-text); margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-border); }
+    .stop__expand-content.is-open { display: block; }
+
+    /* Hike card */
+    .hikes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .hikes-section__header { margin-bottom: var(--space-xl); }
+    .hikes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hikes-section__sub { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: var(--space-xs); }
+    .hike-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hike-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hike-card__area { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hike-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hike-card__desc { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); }
+    .hike-card__tip { font-size: var(--text-sm); color: var(--color-text-secondary); font-style: italic; line-height: 1.6; }
+    .hike-card__tip-label { font-style: normal; font-weight: 500; color: var(--color-text-secondary); }
+
+    /* Hotel card */
+    .hotels-section { padding-bottom: var(--space-2xl); }
+    .hotels-section__header { margin-bottom: var(--space-xl); }
+    .hotels-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hotel-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hotel-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hotel-card__meta { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hotel-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hotel-card__rec { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin-top: var(--space-xs); }
+
+    /* Before you go */
+    .notes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .notes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-xl); }
+    .notes-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-xl); max-width: 680px; }
+    .notes-block__note { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text); }
+    .notes-block__rule { border: none; border-top: 1px solid var(--color-border); margin-block: var(--space-md); }
+
+    /* Leaflet label */
+    .stop-label { background: none; border: none; box-shadow: none; font-size: 11px; font-weight: 600; color: #1B3A5C; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.05em; padding: 0; }
+    .stop-label::before { display: none; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="page-shell">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__home">Agugagatada</a>
+        <a href="index.html" class="site-nav__back">All destinations</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content">
+    <div class="page-shell">
+
+      <!-- Hero -->
+      <header class="hero">
+        <h1 class="hero__title">Bamberg</h1>
+        <p class="hero__tagline">A UNESCO city that survived every war intact, built on seven hills like Rome, with the highest brewery density per capita in the world</p>
+        <div class="hero__tags">
+          <span class="tag">2h 10 min from Munich</span>
+          <span class="tag">1 day</span>
+        </div>
+        <hr class="hero__rule">
+      </header>
+
+      <!-- Intro -->
+      <section class="intro">
+        <p class="intro__text">Bamberg is one of the best-kept secrets in Germany, which is extraordinary given that it has a UNESCO World Heritage old town, one of the finest Romanesque cathedrals in Europe, and a beer culture so unique it has no parallel anywhere else on earth. The city was built on seven hills — the parallel to Rome was deliberate and was used in medieval correspondence. It survived the Thirty Years' War, survived the Napoleonic reorganization of Germany, survived WWII without significant bombing. What stands today is largely what stood in the 13th, 14th, and 15th centuries. Most visitors who do come are German. International tourists have barely discovered it.</p>
+      </section>
+
+      <!-- Two-column: map + stops -->
+      <section class="route-section">
+        <div class="two-col">
+
+          <!-- Map -->
+          <div class="two-col__map">
+            <div id="map"></div>
+          </div>
+
+          <!-- Stops -->
+          <div class="stops-col">
+
+            <article class="stop" data-stop-id="bamberger-dom">
+              <div class="stop__header">
+                <span class="stop-number">01</span>
+                <h2 class="stop__name">Bamberger Dom</h2>
+                <p class="stop__subtitle">The only cathedral with a papal tomb north of the Alps</p>
+                <div class="stop__tags">
+                  <span class="tag">75 min</span>
+                  <span class="tag">Church</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">The Bamberger Reiter — a life-size equestrian statue from 1235 that is one of the great mysteries of medieval European art. No one knows who it depicts.</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="dom-about">About this place</button>
+                <button class="expand-btn" data-target="dom-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="dom-baby">Visiting with a baby</button>
+              </div>
+              <div id="dom-about" class="stop__expand-content">The Bamberg Cathedral was consecrated in 1012 by Emperor Henry II (later canonized), who founded it as a visible symbol of his imperial power. The current building dates mostly from the early 13th century — a transitional Romanesque-Gothic structure with four towers at each corner, sitting at the top of the cathedral hill above the city. Inside are several extraordinary things. The tomb of Pope Clement II, who died in Bamberg in 1047 while on a papal visit — the only papal tomb north of the Alps, still intact. The tomb of Emperor Henry II and his wife Kunigunde, carved by Tilman Riemenschneider in the 1490s and considered one of the masterpieces of German late-Gothic sculpture. And the Bamberger Reiter — a life-sized equestrian statue of an unknown knight, placed high on a column in the interior around 1235. The rider is idealized, serene, commanding. Nobody knows who he is meant to represent. Theories range from Emperor Constantine to King Stephen of Hungary to an ideal of Christian kingship. He has been staring down from that column for 790 years.</div>
+              <div id="dom-gems" class="stop__expand-content">The crypt beneath the main floor contains the original altar from Henry II's 1012 consecration — the oldest surviving part of the building. The Diocesan Museum (Diözesanmuseum) directly adjacent to the cathedral has vestments from Henry II's imperial coronation, including his star-mantle — a Byzantine silk garment embroidered with the constellations, given by a Byzantine emperor and worn by Henry at his coronation in 1014. It is one of the most remarkable surviving objects from the Ottonian period.</div>
+              <div id="dom-baby" class="stop__expand-content">The cathedral interior is flat and wide — fully accessible with a stroller through the nave. The four-tower exterior can be circumnavigated on flat paths. The Diocesan Museum has an elevator. The Domplatz (Cathedral Square) is a good space for a stroller walk with views over the city.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <article class="stop" data-stop-id="altes-rathaus">
+              <div class="stop__header">
+                <span class="stop-number">02</span>
+                <h2 class="stop__name">Altes Rathaus</h2>
+                <p class="stop__subtitle">A town hall built on an artificial island in the middle of the river</p>
+                <div class="stop__tags">
+                  <span class="tag">45 min</span>
+                  <span class="tag">Monument</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">A Gothic-baroque town hall sitting on an artificial island, accessible only by two bridges — allegedly built there because the bishop refused to give the burghers land for a town hall</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="rathaus-about">About this place</button>
+                <button class="expand-btn" data-target="rathaus-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="rathaus-baby">Visiting with a baby</button>
+              </div>
+              <div id="rathaus-about" class="stop__expand-content">The story is probably apocryphal but it has persisted for 600 years: the Bishop of Bamberg refused to grant the city burghers any land for a town hall (since all land within the city technically belonged to the bishop). So the burghers drove piles into the bed of the Regnitz river, built an artificial island, and constructed their town hall there — on no one's land. The current building is a 15th-century Gothic tower with an 18th-century baroque extension, connected to both banks by bridges. The trompe-l'oeil frescoes on the external walls include a painted cherub whose leg actually protrudes in three dimensions from the painted surface — a small sculptural joke that surprises most visitors. The interior contains the Ludwig Collection of Meissen porcelain, which is secondary interest; the building and its position are the main event.</div>
+              <div id="rathaus-gems" class="stop__expand-content">The best view of the Altes Rathaus is not from either bridge but from the small path that runs along the eastern (downstream) bank of the island — from here you see both bridge approaches and the complete silhouette of the building over the water. Early morning with mist on the river is extraordinary. The waterside path continues to Klein Venedig (5 min walk), making a natural sequence.</div>
+              <div id="rathaus-baby" class="stop__expand-content">The bridges to the town hall are flat and stroller-accessible. The riverside paths on both banks are paved. The museum interior has stairs — a carrier is needed for upper floors, but the ground floor and exterior are the main draw anyway.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <article class="stop" data-stop-id="klein-venedig">
+              <div class="stop__header">
+                <span class="stop-number">03</span>
+                <h2 class="stop__name">Klein Venedig</h2>
+                <p class="stop__subtitle">Fishermen's houses on wooden piles over the Regnitz</p>
+                <div class="stop__tags">
+                  <span class="tag">45 min</span>
+                  <span class="tag">Town center</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">A row of medieval fishermen's houses built directly over the river on wooden piles, with small boats and flower boxes — genuinely unreconstructed</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="venedig-about">About this place</button>
+                <button class="expand-btn" data-target="venedig-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="venedig-baby">Visiting with a baby</button>
+              </div>
+              <div id="venedig-about" class="stop__expand-content">Klein Venedig ('Little Venice') is a row of half-timbered fishermen's houses that back directly onto the Regnitz river, their rear facades built on wooden piles over the water and accessible by small boats and private landing stages. This has been the fishermen's quarter of Bamberg since the medieval period — the Regnitz was rich in carp, pike, and bream, and the fishermen's guild was one of the most powerful in the city. The houses are private residences today, not museums. What you see is genuinely lived-in, not a heritage reconstruction. The flower boxes on the upper-floor windows and the small boats tied to the piles are just how these people keep their houses. From the opposite bank, the row of houses against the water with the cathedral hill rising behind is one of the most reliably beautiful urban views in Germany.</div>
+              <div id="venedig-gems" class="stop__expand-content">The best photographs are taken from the Markusbrücke (Mark's Bridge) at the northern end of the row in the late afternoon light. The E.T.A. Hoffmann House — the Romantic author of Tales of Hoffmann (the basis for Offenbach's opera) lived and worked in Bamberg for eight years. His house is on the Schillerplatz, a 5-minute walk from Klein Venedig, and contains his original study and manuscript collection.</div>
+              <div id="venedig-baby" class="stop__expand-content">The riverside promenade running the length of Klein Venedig is completely flat, paved, and wide — ideal for a stroller. This is one of the best easy walks in Bamberg with a baby. The riverbank path continues both north and south for longer flat walks.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <article class="stop" data-stop-id="neue-residenz">
+              <div class="stop__header">
+                <span class="stop-number">04</span>
+                <h2 class="stop__name">Neue Residenz + Rose Garden</h2>
+                <p class="stop__subtitle">The Prince-Bishops' baroque palace with the finest garden view in Franconia</p>
+                <div class="stop__tags">
+                  <span class="tag">60 min</span>
+                  <span class="tag">Museum</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">The Rose Garden terraced above the city — 4,500 rose bushes planted on the old fortification walls, with the cathedral, the rooftops, and the Franconian plain stretching to the horizon</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="residenz-about">About this place</button>
+                <button class="expand-btn" data-target="residenz-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="residenz-baby">Visiting with a baby</button>
+              </div>
+              <div id="residenz-about" class="stop__expand-content">The Neue Residenz was built between 1695 and 1704 as the official residence of the Prince-Bishops of Bamberg — a baroque palace replacing the more cramped medieval episcopal quarters next to the cathedral. The interior contains the Imperial Hall (Kaisersaal) with ceiling frescoes by Melchior Steidl, the Chinese Cabinet with its lacquered panels, and the main state apartments largely intact with period furniture. The Bavarian State Painting Collection galleries on the upper floor have significant German Baroque paintings. But the main reason to come is the Rose Garden behind the palace: a formal terraced garden laid out on the old fortification walls with 4,500 rose bushes of 150 varieties. The garden is elevated above the city, and the view from the upper terrace — the cathedral towers, the Altes Rathaus in the river, the red rooftops of the old town receding to the forested hills — is the finest urban panorama in Franconia.</div>
+              <div id="residenz-gems" class="stop__expand-content">The Rose Garden is free and open outside of palace opening hours — come in the early morning before the palace opens when it is empty. The Böttingerhaus on the Judenstrasse below the Residenz is one of the finest baroque private houses in Bamberg, built by the court counselor Ignaz Tobias Böttinger in 1707 and recently restored. Almost no visitors know it.</div>
+              <div id="residenz-baby" class="stop__expand-content">The Rose Garden is accessible with a stroller via the main terrace entrance — flat paths between the rose beds. The palace interior requires stairs for the upper floors; the state apartments on the piano nobile are accessible via the main staircase. The garden café has outdoor seating and high chairs.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <article class="stop" data-stop-id="schlenkerla">
+              <div class="stop__header">
+                <span class="stop-number">05</span>
+                <h2 class="stop__name">Schlenkerla Brewery</h2>
+                <p class="stop__subtitle">Where Bavaria's strangest beer has been brewed since 1405</p>
+                <div class="stop__tags">
+                  <span class="tag">60 min</span>
+                  <span class="tag">Town center</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">Rauchbier — smoked beer made with malt dried over burning beechwood, producing a beer that smells of a campfire and tastes of smoked meat. No other city in the world makes it this way.</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="schlenkerla-about">About this place</button>
+                <button class="expand-btn" data-target="schlenkerla-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="schlenkerla-baby">Visiting with a baby</button>
+              </div>
+              <div id="schlenkerla-about" class="stop__expand-content">Rauchbier (smoked beer) is Bamberg's singular contribution to brewing culture. Before the adoption of coke and indirect kilning in the 19th century, all malt was dried over an open fire, giving all beer a smoked character. Everywhere else in Europe, brewers switched to coke kilning and the smoky flavor disappeared. In Bamberg, they kept the fire. The Schlenkerla brewery (formally the Heller brewery) has been producing Rauchbier on this site since at least 1405 and is the most famous producer. The beer is served directly from wooden lagering barrels in the ancient vaulted taproom. The smell when you walk in — smoke, wood, damp stone — is like no other brewery in the world. The Märzen (the classic dark Rauchbier) is the beer to try. Bamberg has 9 active breweries in a city of 77,000 people — the highest brewery density per capita anywhere on earth.</div>
+              <div id="schlenkerla-gems" class="stop__expand-content">The brewery also produces a Weizen (wheat beer) and a seasonal Bock — both smoked — that are available only in the taproom. The cellar under the taproom is where the lagering barrels are kept; ask at the bar if they are doing cellar tours on the day you visit (irregular, informal). The Spezial brewery across town (Obere Königsstrasse) produces a lighter Rauchbier with a more subtle smoke character — worth comparing.</div>
+              <div id="schlenkerla-baby" class="stop__expand-content">The Schlenkerla taproom is a traditional Gasthaus — family-friendly, with outdoor courtyard seating. High chairs available. The stone floors and low lighting are atmospheric. Non-alcoholic options available. The courtyard is flat and stroller-friendly.</div>
+            </article>
+
+          </div><!-- /stops-col -->
+        </div><!-- /two-col -->
+      </section>
+
+      <!-- Hikes -->
+      <section class="hikes-section">
+        <div class="hikes-section__header">
+          <h2 class="hikes-section__title">On foot</h2>
+          <p class="hikes-section__sub">Walks and hikes from this base</p>
+        </div>
+        <div class="card-grid">
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Regnitz River Loop</h3>
+            <p class="hike-card__area">Bamberg</p>
+            <div class="hike-card__tags">
+              <span class="tag">6 km</span>
+              <span class="tag">+20 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">A flat loop along both arms of the Regnitz river, passing Klein Venedig, the Altes Rathaus, and the island park. The best way to understand Bamberg's geography and see the city from the water level.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Start from the Kettenbrücke. Cross to the island, walk north past Klein Venedig, cross back via the Markusbrücke. The whole loop takes 90 minutes at a relaxed pace with stops.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Stephansberg and Cathedral Hill Walk</h3>
+            <p class="hike-card__area">Bamberg cathedral quarter</p>
+            <div class="hike-card__tags">
+              <span class="tag">3 km</span>
+              <span class="tag">+80 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">A walk through the cathedral quarter on the hill, passing through the Domgarten, the Residenz garden, and the quiet lanes of the Bergstadt (upper town). The upper town has a completely different character from the commercial lower town.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Start at the Domplatz and walk the perimeter of the cathedral hill before descending. Most tourists stay on the Domplatz — the side lanes are quiet.</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Hotels -->
+      <section class="hotels-section">
+        <div class="hotels-section__header">
+          <h2 class="hotels-section__title">Where to stay</h2>
+        </div>
+        <div class="card-grid">
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Sankt Nepomuk</h3>
+            <p class="hotel-card__meta">Boutique Hotel — Bamberg, on the Regnitz</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€110–160/night</span>
+              <span class="tag">Crib available</span>
+            </div>
+            <p class="hotel-card__rec">Best location and character in Bamberg — the mill building is beautiful and the river terrace is exceptional.</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Brauereigasthof Pelikan</h3>
+            <p class="hotel-card__meta">Gasthof — Bamberg old town</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€75–100/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Maximum authenticity — the kind of place Bamberg residents send friends when they visit.</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Residenzschloss</h3>
+            <p class="hotel-card__meta">Historic Hotel — Bamberg, near Residenz</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€130–180/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Best practical option for families needing more facilities and guaranteed parking.</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Before you go -->
+      <section class="notes-section">
+        <h2 class="notes-section__title">Before you go</h2>
+        <div class="notes-block">
+          <p class="notes-block__note">Bamberg is best visited midweek — weekend visitors have started to discover it.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Rauchbier is an acquired taste for many — try a small glass first before committing.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">The cathedral Domschatz (treasury): excellent medieval goldwork, rarely crowded.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">E.T.A. Hoffmann House: small, excellent, allow 45 minutes.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Parking: use the Parkhaus Geyerswörth on the island — central and flat access to the old town.</p>
+        </div>
+      </section>
+
+    </div><!-- /page-shell -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell">
+      <p class="site-footer__line">Munich-based, hand-curated.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ── Stop data ──────────────────────────────────────────────────────────
+    const stops = [
+      { id: 'bamberger-dom',  lat: 49.8978, lon: 10.8944 },
+      { id: 'altes-rathaus',  lat: 49.8975, lon: 10.8962 },
+      { id: 'klein-venedig',  lat: 49.8968, lon: 10.8977 },
+      { id: 'neue-residenz',  lat: 49.8985, lon: 10.8937 },
+      { id: 'schlenkerla',    lat: 49.8977, lon: 10.8951 }
+    ];
+
+    const driveLine = [
+      [48.1351, 11.5820], [48.5012, 11.2548], [49.0265, 10.9743], [49.5, 10.9], [49.8988, 10.9028]
+    ];
+
+    // ── Map setup ──────────────────────────────────────────────────────────
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+
+    L.polyline(driveLine, { color: '#1B3A5C', opacity: 0.4, weight: 2, dashArray: '5 7' }).addTo(map);
+
+    const GREY = '#AAAAAA', ACCENT = '#1B3A5C';
+    const markerMap = {};
+
+    const localLine = L.polyline(stops.map(s => [s.lat, s.lon]), { color: ACCENT, opacity: 0.85, weight: 2 }).addTo(map);
+
+    stops.forEach((s, i) => {
+      const m = L.circleMarker([s.lat, s.lon], { radius: 7, fillColor: GREY, color: '#FFF', weight: 2, fillOpacity: 1 }).addTo(map);
+      m.bindTooltip(String(i + 1).padStart(2, '0'), { permanent: true, direction: 'right', className: 'stop-label', offset: [8, 0] });
+      markerMap[s.id] = m;
+    });
+
+    const allPts = [...driveLine, ...stops.map(s => [s.lat, s.lon])];
+    map.fitBounds(L.latLngBounds(allPts), { padding: [40, 40] });
+
+    // Activate first stop on load
+    markerMap[stops[0].id].setStyle({ fillColor: ACCENT, radius: 10 });
+
+    // ── Expand / collapse ──────────────────────────────────────────────────
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(btn.dataset.target);
+        const open = panel.classList.toggle('is-open');
+        btn.style.textDecoration = open ? 'underline' : 'none';
+      });
+    });
+
+    // ── Scroll-linked map highlighting ────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.dataset.stopId;
+        if (!markerMap[id]) return;
+        Object.entries(markerMap).forEach(([mid, m]) => {
+          const active = mid === id;
+          m.setStyle({ fillColor: active ? ACCENT : GREY, radius: active ? 10 : 7 });
+          if (active) map.panTo(m.getLatLng(), { animate: true, duration: 0.4 });
+        });
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stop[data-stop-id]').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

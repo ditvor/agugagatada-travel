@@ -1,1307 +1,462 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Berchtesgaden & the Königssee — Agugagatada Travel</title>
-
-  <!-- Leaflet -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Berchtesgaden — Agugagatada</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* Shell */
+    .site-nav { border-bottom: 1px solid var(--color-border); padding-block: var(--space-md); }
+    .site-nav__inner { display: flex; align-items: center; gap: var(--space-lg); }
+    .site-nav__home { font-size: var(--text-md); font-weight: 500; color: var(--color-text); letter-spacing: -0.01em; text-decoration: none; }
+    .site-nav__home:hover { text-decoration: none; }
+    .site-nav__back { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .site-nav__back:hover { color: var(--color-accent); text-decoration: none; }
+    .site-footer { border-top: 1px solid var(--color-border); padding-block: var(--space-xl); text-align: center; }
+    .site-footer__line { font-size: var(--text-sm); color: var(--color-text-secondary); }
 
-    :root {
-      --orange:   #F05A28;
-      --orange-light: #FEF0EB;
-      --green:    #2D8653;
-      --green-light: #EAF4EE;
-      --blue:     #2B6CB0;
-      --blue-light: #EBF4FF;
-      --purple:   #6B46C1;
-      --purple-light: #F3EFFE;
-      --bg:       #F7F7F5;
-      --card:     #FFFFFF;
-      --border:   #E5E7EB;
-      --text:     #1A1A1A;
-      --muted:    #6B7280;
-      --radius:   12px;
-    }
+    /* Hero */
+    .hero { padding-top: var(--space-2xl); padding-bottom: var(--space-xl); }
+    .hero__title { font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    .hero__tagline { font-size: var(--text-md); color: var(--color-text-secondary); max-width: 600px; margin-top: var(--space-sm); line-height: 1.5; }
+    .hero__tags { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
+    .hero__rule { border: none; border-top: 1px solid var(--color-border); margin-top: var(--space-xl); }
 
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      font-size: 15px;
-    }
+    /* Intro */
+    .intro { padding-block: var(--space-xl); }
+    .intro__text { font-size: var(--text-md); line-height: 1.7; max-width: 680px; color: var(--color-text); }
 
-    /* ── NAVBAR ── */
-    .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-      height: 56px;
+    /* Day switcher */
+    .day-switcher { display: flex; gap: var(--space-sm); margin-bottom: var(--space-xl); flex-wrap: wrap; }
+    .day-btn {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+      border: 1px solid var(--color-border); padding: 2px 8px; border-radius: 2px;
+      color: var(--color-text-secondary); background: none; cursor: pointer;
+      font-family: inherit; font-weight: 500; line-height: 1.6; transition: border-color 150ms, color 150ms;
     }
-    .logo {
-      font-weight: 800;
-      font-size: 18px;
-      color: var(--orange);
-      letter-spacing: -0.5px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .logo svg { width: 26px; height: 26px; }
-    .nav-center {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-      opacity: 0.75;
-    }
-    .btn-share {
-      background: var(--orange);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 7px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-share:hover { background: #d94e1f; }
+    .day-btn.is-active { border-color: var(--color-accent); color: var(--color-accent); font-weight: 500; }
 
-    /* ── HERO ── */
-    .hero {
-      background: linear-gradient(160deg, #1a2744 0%, #2d4a6b 40%, #3a6b5a 75%, #2d5c3a 100%);
-      padding: 52px 24px 44px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff08' d='M0,192L80,186.7C160,181,320,171,480,160C640,149,800,139,960,154.7C1120,171,1280,213,1360,234.7L1440,256L1440,320L0,320Z'/%3E%3Cpath fill='%23ffffff05' d='M0,256L60,245.3C120,235,240,213,360,208C480,203,600,213,720,224C840,235,960,245,1080,234.7C1200,224,1320,192,1380,176L1440,160L1440,320L0,320Z'/%3E%3C/svg%3E");
-      background-size: cover;
-      background-position: bottom;
-    }
-    /* Mountain silhouette */
-    .mountain-bg {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 120px;
-      opacity: 0.15;
-    }
-    .hero-content { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; }
-    .hero-breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.6);
-      margin-bottom: 16px;
-    }
-    .hero-breadcrumb span { color: rgba(255,255,255,0.4); }
-    .hero h1 {
-      font-size: clamp(28px, 5vw, 44px);
-      font-weight: 800;
-      color: #fff;
-      letter-spacing: -1px;
-      line-height: 1.15;
-      margin-bottom: 10px;
-    }
-    .hero-tagline {
-      font-size: 16px;
-      color: rgba(255,255,255,0.75);
-      margin-bottom: 28px;
-      font-style: italic;
-    }
-    .hero-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .meta-pill {
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 100px;
-      padding: 6px 14px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .meta-pill .icon { font-size: 15px; }
+    /* Route section */
+    .route-section { padding-bottom: var(--space-2xl); }
+    #map { height: 560px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+    .stops-col { padding-top: var(--space-xs); }
 
-    /* ── STAT BAR ── */
-    .stat-bar {
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .stat-bar::-webkit-scrollbar { display: none; }
-    .stat-item {
-      flex: 1;
-      min-width: 120px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      padding: 16px 12px;
-      border-right: 1px solid var(--border);
-    }
-    .stat-item:last-child { border-right: none; }
-    .stat-value {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--text);
-      line-height: 1;
-    }
-    .stat-label {
-      font-size: 11px;
-      font-weight: 500;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .stat-icon { font-size: 18px; margin-bottom: 2px; }
+    /* Stop */
+    .stop { padding-bottom: var(--space-lg); }
+    .stop__header { margin-bottom: var(--space-sm); }
+    .stop__name { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; margin-top: var(--space-xs); }
+    .stop__subtitle { font-size: var(--text-base); color: var(--color-text-secondary); margin-top: 2px; }
+    .stop__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm); }
+    .stop__highlight { font-style: italic; font-family: Georgia, serif; font-size: var(--text-base); color: var(--color-text); border-left: 3px solid var(--color-accent); padding-left: var(--space-md); margin-block: var(--space-md); line-height: 1.6; }
+    .stop__expand-row { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-sm); }
+    .stop__expand-content { display: none; font-size: var(--text-base); line-height: 1.7; color: var(--color-text); margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-border); }
+    .stop__expand-content.is-open { display: block; }
 
-    /* ── MAP ── */
-    .map-section { position: relative; }
-    #map {
-      height: 480px;
-      width: 100%;
-      z-index: 0;
-    }
-    .map-legend {
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-      background: rgba(255,255,255,0.95);
-      border-radius: 10px;
-      padding: 12px 14px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-      z-index: 500;
-      font-size: 12px;
-    }
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-      color: var(--text);
-      font-weight: 500;
-    }
-    .legend-item:last-child { margin-bottom: 0; }
-    .legend-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 2px solid #fff;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
-    .legend-line {
-      width: 20px;
-      height: 3px;
-      border-radius: 2px;
-    }
+    /* Hike card */
+    .hikes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .hikes-section__header { margin-bottom: var(--space-xl); }
+    .hikes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hikes-section__sub { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: var(--space-xs); }
+    .hike-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hike-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hike-card__area { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hike-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hike-card__desc { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); }
+    .hike-card__tip { font-size: var(--text-sm); color: var(--color-text-secondary); font-style: italic; line-height: 1.6; }
+    .hike-card__tip-label { font-style: normal; font-weight: 500; color: var(--color-text-secondary); }
 
-    /* ── MAIN LAYOUT ── */
-    .main { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+    /* Hotel card */
+    .hotels-section { padding-bottom: var(--space-2xl); }
+    .hotels-section__header { margin-bottom: var(--space-xl); }
+    .hotels-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hotel-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hotel-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hotel-card__meta { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hotel-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hotel-card__rec { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin-top: var(--space-xs); }
 
-    /* ── INTRO ── */
-    .intro-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 28px 32px;
-      margin-bottom: 40px;
-      font-size: 15.5px;
-      line-height: 1.75;
-      color: #374151;
-    }
+    /* Before you go */
+    .notes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .notes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-xl); }
+    .notes-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-xl); max-width: 680px; }
+    .notes-block__note { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text); }
+    .notes-block__rule { border: none; border-top: 1px solid var(--color-border); margin-block: var(--space-md); }
 
-    /* ── DAY HEADER ── */
-    .day-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 24px;
-      margin-top: 48px;
-    }
-    .day-badge {
-      background: var(--orange);
-      color: #fff;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      border-radius: 100px;
-      padding: 5px 14px;
-      white-space: nowrap;
-    }
-    .day-title {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-    .day-summary {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
-    .day-divider {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    /* ── STOP CARD ── */
-    .stop-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      margin-bottom: 20px;
-      overflow: hidden;
-      transition: box-shadow 0.2s;
-    }
-    .stop-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
-
-    .stop-header {
-      padding: 20px 24px 16px;
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-    }
-    .stop-number {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--orange);
-      color: #fff;
-      font-weight: 800;
-      font-size: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    .stop-number.nature { background: var(--green); }
-    .stop-number.museum { background: var(--blue); }
-
-    .stop-name {
-      font-size: 19px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      line-height: 1.2;
-    }
-    .stop-subtitle {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .stop-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 0 24px 16px 74px;
-    }
-    .chip {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 12px;
-      font-weight: 500;
-      padding: 4px 10px;
-      border-radius: 100px;
-      border: 1px solid var(--border);
-      color: var(--muted);
-      background: var(--bg);
-    }
-    .chip.highlight {
-      background: var(--orange-light);
-      border-color: #F7C5B3;
-      color: var(--orange);
-    }
-    .chip.baby { background: var(--green-light); border-color: #A7D7B9; color: var(--green); }
-    .chip.drive { background: #F3F4F6; border-color: var(--border); }
-
-    .stop-highlight {
-      padding: 14px 24px 14px 74px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #374151;
-      border-top: 1px solid var(--bg);
-      border-bottom: 1px solid var(--border);
-      background: #FAFAFA;
-      font-style: italic;
-    }
-    .stop-highlight::before { content: '✦  '; color: var(--orange); }
-
-    /* Accordion sections */
-    .accordion { border-top: 1px solid var(--border); }
-    .accordion-item { border-bottom: 1px solid var(--border); }
-    .accordion-item:last-child { border-bottom: none; }
-    .accordion-trigger {
-      width: 100%;
-      background: none;
-      border: none;
-      text-align: left;
-      cursor: pointer;
-      padding: 14px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-family: inherit;
-    }
-    .accordion-trigger:hover { background: var(--bg); }
-    .accordion-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-    }
-    .section-tag {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.8px;
-      text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: 100px;
-    }
-    .tag-history { background: var(--blue-light); color: var(--blue); }
-    .tag-gem { background: var(--purple-light); color: var(--purple); }
-    .tag-baby { background: var(--green-light); color: var(--green); }
-
-    .accordion-chevron {
-      font-size: 11px;
-      color: var(--muted);
-      transition: transform 0.2s;
-      user-select: none;
-    }
-    .accordion-chevron.open { transform: rotate(180deg); }
-    .accordion-body {
-      display: none;
-      padding: 4px 24px 20px 24px;
-      font-size: 14.5px;
-      line-height: 1.75;
-      color: #374151;
-    }
-    .accordion-body.open { display: block; }
-
-    /* Drive connector */
-    .drive-connector {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 28px;
-      margin: -4px 0 16px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 500;
-    }
-    .connector-line {
-      width: 2px;
-      height: 28px;
-      background: repeating-linear-gradient(to bottom, var(--border) 0px, var(--border) 4px, transparent 4px, transparent 8px);
-      margin-left: 17px;
-    }
-    .connector-text {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 100px;
-      padding: 4px 12px;
-    }
-
-    /* ── SECTION HEADER ── */
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      margin-top: 52px;
-    }
-    .section-title {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-    .section-divider { flex: 1; height: 1px; background: var(--border); }
-
-    /* ── HOTEL CARDS ── */
-    .hotels-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-    }
-    .hotel-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 20px;
-      transition: box-shadow 0.2s;
-    }
-    .hotel-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
-    .hotel-type {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--orange);
-      margin-bottom: 6px;
-    }
-    .hotel-name {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .hotel-area {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .hotel-desc {
-      font-size: 13px;
-      line-height: 1.6;
-      color: #4B5563;
-      margin-bottom: 14px;
-    }
-    .hotel-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .hotel-price {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-    }
-    .hotel-amenities {
-      display: flex;
-      gap: 6px;
-    }
-    .amenity-badge {
-      font-size: 11px;
-      padding: 2px 8px;
-      border-radius: 100px;
-      background: var(--green-light);
-      color: var(--green);
-      font-weight: 500;
-    }
-    .local-stars {
-      display: flex;
-      gap: 2px;
-      margin-bottom: 10px;
-    }
-    .star { font-size: 13px; }
-
-    /* ── HIKE CARDS ── */
-    .hikes-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 16px;
-    }
-    .hike-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 20px;
-      transition: box-shadow 0.2s;
-    }
-    .hike-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.07); }
-    .hike-difficulty {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      padding: 3px 10px;
-      border-radius: 100px;
-      margin-bottom: 10px;
-    }
-    .diff-easy { background: var(--green-light); color: var(--green); }
-    .diff-moderate { background: #FEF3C7; color: #92400E; }
-    .hike-name {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      line-height: 1.3;
-    }
-    .hike-area { font-size: 12px; color: var(--muted); margin-bottom: 12px; }
-    .hike-stats {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 12px;
-    }
-    .hike-stat {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-    }
-    .hike-stat-val { font-size: 15px; font-weight: 700; }
-    .hike-stat-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); font-weight: 500; }
-    .hike-desc {
-      font-size: 13px;
-      line-height: 1.6;
-      color: #4B5563;
-      margin-bottom: 12px;
-    }
-    .hike-tip {
-      font-size: 12px;
-      color: var(--muted);
-      font-style: italic;
-      padding-top: 10px;
-      border-top: 1px solid var(--border);
-    }
-    .hike-tip::before { content: '💡  '; }
-    .hike-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
-    .hike-badge {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 2px 8px;
-      border-radius: 100px;
-    }
-    .badge-stroller { background: var(--green-light); color: var(--green); }
-    .badge-carrier { background: var(--blue-light); color: var(--blue); }
-
-    /* ── PRACTICAL NOTES ── */
-    .notes-card {
-      background: var(--card);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      padding: 24px 28px;
-      margin-top: 40px;
-      margin-bottom: 60px;
-    }
-    .notes-title {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .notes-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .notes-list li {
-      display: flex;
-      gap: 10px;
-      font-size: 13.5px;
-      color: #374151;
-    }
-    .notes-list li::before {
-      content: '→';
-      color: var(--orange);
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    /* ── FOOTER ── */
-    .footer {
-      background: var(--text);
-      color: rgba(255,255,255,0.5);
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-    }
-    .footer strong { color: rgba(255,255,255,0.8); }
-
-    /* ── LEAFLET CUSTOM MARKERS ── */
-    .custom-marker {
-      width: 32px;
-      height: 32px;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      border: 3px solid #fff;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .marker-inner {
-      transform: rotate(45deg);
-      color: #fff;
-      font-weight: 700;
-      font-size: 13px;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 600px) {
-      .hero { padding: 36px 16px 32px; }
-      .main { padding: 28px 14px; }
-      .stop-header { padding: 16px; }
-      .stop-chips { padding-left: 16px; }
-      .stop-highlight { padding-left: 16px; }
-      .accordion-trigger { padding: 12px 16px; }
-      .accordion-body { padding: 4px 16px 16px; }
-      .stat-item { min-width: 90px; padding: 12px 8px; }
-      .stat-value { font-size: 17px; }
-      .navbar { padding: 0 14px; }
-      .nav-center { display: none; }
-    }
+    /* Leaflet label */
+    .stop-label { background: none; border: none; box-shadow: none; font-size: 11px; font-weight: 600; color: #1B3A5C; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.05em; padding: 0; }
+    .stop-label::before { display: none; }
   </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-  <div class="logo">
-    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="16" cy="16" r="16" fill="#F05A28"/>
-      <path d="M8 22 L14 10 L16 14 L19 8 L24 22Z" fill="white" opacity="0.9"/>
-      <circle cx="11" cy="20" r="2" fill="white" opacity="0.6"/>
-    </svg>
-    Agugagatada Travel
-  </div>
-  <div class="nav-center">Berchtesgaden & the Königssee</div>
-  <button class="btn-share">
-    <span>↗</span> Share
-  </button>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <svg class="mountain-bg" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,120 L0,80 L120,20 L240,70 L320,10 L440,60 L520,0 L640,50 L720,30 L840,70 L960,15 L1080,65 L1160,20 L1280,55 L1360,30 L1440,50 L1440,120 Z" fill="white"/>
-  </svg>
-  <div class="hero-content">
-    <div class="hero-breadcrumb">
-      <span>Germany</span>
-      <span>›</span>
-      <span>Bavaria</span>
-      <span>›</span>
-      Berchtesgaden
-    </div>
-    <h1>Berchtesgaden &amp; the Königssee</h1>
-    <div class="hero-tagline">Alpine drama, ancient salt, and the shadow of history</div>
-    <div class="hero-meta">
-      <div class="meta-pill"><span class="icon">📍</span> 105 min from Munich</div>
-      <div class="meta-pill"><span class="icon">📅</span> 2 days</div>
-      <div class="meta-pill"><span class="icon">🏰</span> 4 stops</div>
-      <div class="meta-pill"><span class="icon">👶</span> Baby friendly</div>
-      <div class="meta-pill"><span class="icon">🏛️</span> Deep history</div>
-    </div>
-  </div>
-</section>
-
-<!-- STAT BAR -->
-<div class="stat-bar">
-  <div class="stat-item">
-    <div class="stat-icon">🚗</div>
-    <div class="stat-value">105</div>
-    <div class="stat-label">min from Munich</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-icon">📍</div>
-    <div class="stat-value">4</div>
-    <div class="stat-label">stops</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-icon">📅</div>
-    <div class="stat-value">2</div>
-    <div class="stat-label">days</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-icon">👶</div>
-    <div class="stat-value">4/5</div>
-    <div class="stat-label">baby friendly</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-icon">🏛️</div>
-    <div class="stat-value">5/5</div>
-    <div class="stat-label">history depth</div>
-  </div>
-  <div class="stat-item">
-    <div class="stat-icon">🌿</div>
-    <div class="stat-value">Low</div>
-    <div class="stat-label">touristy feel</div>
-  </div>
-</div>
-
-<!-- MAP -->
-<div class="map-section">
-  <div id="map"></div>
-  <div class="map-legend">
-    <div class="legend-item">
-      <div class="legend-dot" style="background:#2D8653"></div>
-      Nature / Lake
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background:#2B6CB0"></div>
-      Museum / History
-    </div>
-    <div class="legend-item">
-      <div class="legend-dot" style="background:#9CA3AF"></div>
-      Munich (start)
-    </div>
-    <div class="legend-item">
-      <div class="legend-line" style="background:#F05A28"></div>
-      Drive route
-    </div>
-  </div>
-</div>
-
-<!-- MAIN CONTENT -->
-<main class="main">
-
-  <!-- INTRO -->
-  <div class="intro-card">
-    Berchtesgaden sits at the bottom of a geological accident — a bowl of alpine rock so steep and dramatic it feels like the landscape is hiding something. And it is: 500 years of salt wealth, a king's fairytale mountain refuge, and the most politically charged hilltop in Europe. This is one of the few places where you can stand inside a working salt mine that predates the Reformation, take a boat across a lake so clean it's used as drinking water, and look out from a building that was once Hitler's retreat — all in the same day. The history here comes in layers, and most visitors only see the top one.
-  </div>
-
-  <!-- DAY 1 -->
-  <div class="day-header">
-    <div>
-      <div class="day-badge">Day 1</div>
-      <div class="day-title">Königssee + Ramsau</div>
-      <div class="day-summary">Silent electric boats, a 12th-century chapel, and a fairytale forest</div>
-    </div>
-    <div class="day-divider"></div>
-  </div>
-
-  <!-- Stop 1: Königssee -->
-  <div class="stop-card" id="stop-koenigssee">
-    <div class="stop-header">
-      <div class="stop-number nature">1</div>
-      <div>
-        <div class="stop-name">Königssee</div>
-        <div class="stop-subtitle">The silent lake</div>
+  <nav class="site-nav">
+    <div class="page-shell">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__home">Agugagatada</a>
+        <a href="index.html" class="site-nav__back">All destinations</a>
       </div>
     </div>
-    <div class="stop-chips">
-      <div class="chip highlight">🏔️ Nature</div>
-      <div class="chip">⏱ 3 hours</div>
-      <div class="chip baby">👶 5/5 baby friendly</div>
-    </div>
-    <div class="stop-highlight">Electric boat ride to a 12th-century chapel pressed against sheer vertical cliffs</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-history">History</span>
-            About this place
+  </nav>
+
+  <main id="content">
+    <div class="page-shell">
+
+      <!-- Hero -->
+      <header class="hero">
+        <h1 class="hero__title">Berchtesgaden</h1>
+        <p class="hero__tagline">Alpine drama, ancient salt, and the shadow of history</p>
+        <div class="hero__tags">
+          <span class="tag">1h 45 min from Munich</span>
+          <span class="tag">2 days</span>
+        </div>
+        <hr class="hero__rule">
+      </header>
+
+      <!-- Intro -->
+      <section class="intro">
+        <p class="intro__text">Berchtesgaden sits at the bottom of a geological accident — a bowl of alpine rock so steep and dramatic it feels like the landscape is hiding something. And it is: 500 years of salt wealth, a king's fairytale mountain refuge, and the most politically charged hilltop in Europe. This is one of the few places where you can stand inside a working salt mine that predates the Reformation, take a boat across a lake so clean it's used as drinking water, and look out from a building that was once Hitler's retreat — all in the same day. The history here comes in layers, and most visitors only see the top one.</p>
+      </section>
+
+      <!-- Two-column: map + stops -->
+      <section class="route-section">
+        <div class="two-col">
+
+          <!-- Map -->
+          <div class="two-col__map">
+            <div id="map"></div>
           </div>
-          <span class="accordion-chevron open">▼</span>
-        </button>
-        <div class="accordion-body open">
-          The Königssee is not a typical alpine lake. The walls of the Watzmann massif drop almost vertically into the water, making the lake exceptionally deep (190m) and narrow — more like a Norwegian fjord pressed into Bavaria. Since motorized boats are banned to protect the water quality, the journey to St. Bartholomä is made entirely in silence on electric boats, a rule in place since 1909.
-          <br><br>
-          The red-domed chapel of St. Bartholomä on the peninsula was built in the 12th century on a site of Christian worship that probably displaced an even older Bavarian cult. The Wittelsbach dukes used the peninsula as a hunting ground for centuries. The captain's echo demonstration halfway down the lake — a trumpet played against the Falkenwand cliff face — has been performed on every passenger boat since the 19th century.
+
+          <!-- Stops with day switcher -->
+          <div class="stops-col">
+
+            <div class="day-switcher">
+              <button class="day-btn is-active" data-day="1">Day 1 — Königssee + Ramsau</button>
+              <button class="day-btn" data-day="2">Day 2 — Eagle's Nest + Salt Mine</button>
+            </div>
+
+            <!-- Day 1 stops -->
+            <div id="day-1-stops">
+
+              <article class="stop" data-stop-id="koenigssee" data-day="1">
+                <div class="stop__header">
+                  <span class="stop-number">01</span>
+                  <h2 class="stop__name">Königssee</h2>
+                  <p class="stop__subtitle">The silent lake</p>
+                  <div class="stop__tags">
+                    <span class="tag">180 min</span>
+                    <span class="tag">Nature</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">Electric boat ride to a 12th-century chapel pressed against sheer vertical cliffs</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="koenigssee-about">About this place</button>
+                  <button class="expand-btn" data-target="koenigssee-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="koenigssee-baby">Visiting with a baby</button>
+                </div>
+                <div id="koenigssee-about" class="stop__expand-content">The Königssee is not a typical alpine lake. The walls of the Watzmann massif drop almost vertically into the water, making the lake exceptionally deep (190m) and narrow — more like a Norwegian fjord pressed into Bavaria. Since motorized boats are banned to protect the water quality, the journey to St. Bartholomä is made entirely in silence on electric boats, a rule in place since 1909. The red-domed chapel of St. Bartholomä on the peninsula was built in the 12th century on a site of Christian worship that probably displaced an even older Bavarian cult. The Wittelsbach dukes used the peninsula as a hunting ground for centuries. The captain's echo demonstration is not a gimmick: halfway down the lake, the captain plays a trumpet and the notes bounce off the Falkenwand cliff face across the water. It has been done on every passenger boat since the 19th century.</div>
+                <div id="koenigssee-gems" class="stop__expand-content">Almost everyone stops at St. Bartholomä and turns back. Continue on foot from St. Bartholomä to the Obersee — a 20-minute flat walk through a meadow. The Obersee is wilder, smaller, and on a calm morning completely deserted. The Röthbach waterfall at its far end falls 470 meters — the highest in Germany — and is visible from the shore. For the best view before boarding, walk 10 minutes south from the boat dock to the Malerwinkel (Painters' Corner), a classic viewpoint that every 19th-century Romantic landscape painter came to. Arrive before 10am for the best light.</div>
+                <div id="koenigssee-baby" class="stop__expand-content">The boat ride is one of the easiest excursions in the region with a stroller — flat boarding, benches, covered sections if it rains. Arrive before 9:30am as the car park fills fast. There is a nursing room and changing facilities in the visitor center at the boat dock. The restaurant at St. Bartholomä has high chairs and outdoor terrace seating.</div>
+              </article>
+
+              <div class="drive-connector"></div>
+
+              <article class="stop" data-stop-id="ramsau-hintersee" data-day="1">
+                <div class="stop__header">
+                  <span class="stop-number">02</span>
+                  <h2 class="stop__name">Ramsau + Hintersee</h2>
+                  <p class="stop__subtitle">The village Berchtesgaden wishes it still was</p>
+                  <div class="stop__tags">
+                    <span class="tag">120 min</span>
+                    <span class="tag">Nature</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">Zauberwald — a mossy ancient forest over glacier boulders beside a turquoise lake</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="ramsau-about">About this place</button>
+                  <button class="expand-btn" data-target="ramsau-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="ramsau-baby">Visiting with a baby</button>
+                </div>
+                <div id="ramsau-about" class="stop__expand-content">Ramsau is the village Berchtesgaden wishes it still was. While the main town has grown into a resort, Ramsau has stayed almost exactly as it looked in the 19th century — a scattering of farmhouses, a church, and a fast clear river cutting through the valley. The Church of St. Sebastian sits on a small bridge over the Ramsauer Ache and is one of the most painted scenes in Bavaria. The reason painters came here in such numbers from the 1800s onward is the quality of light — the narrow valley funnels afternoon sun at a low angle that makes the white church walls glow orange against dark spruce forest. Caspar David Friedrich drew the landscape here. The Romantic movement essentially invented the emotional vocabulary through which we still understand mountains — Ramsau was one of the places where that happened.</div>
+                <div id="ramsau-gems" class="stop__expand-content">Drive 5 minutes further to Hintersee, a small turquoise lake that most visitors skip because it requires one more turn off the main road. The path around the near end of the lake passes through the Zauberwald (Magic Forest), ancient mossy spruce forest where roots grow over enormous boulders left by a prehistoric rockfall. It genuinely looks like a fairy tale, and on a weekday morning you will often have it entirely to yourself. For lunch, Gasthof Oberwirt in Ramsau has been family-run since 1612. Try the Kaspressknödelsuppe.</div>
+                <div id="ramsau-baby" class="stop__expand-content">The village is extremely easy — flat valley floor, no crowds, quiet roads. The Zauberwald path at Hintersee is stroller-friendly on the flat lakeside section. The section over the boulders requires a carrier. Good spot for a late afternoon feed and a slow walk before dinner.</div>
+              </article>
+
+            </div><!-- /day-1-stops -->
+
+            <!-- Day 2 stops -->
+            <div id="day-2-stops" style="display:none">
+
+              <article class="stop" data-stop-id="obersalzberg-eagles-nest" data-day="2">
+                <div class="stop__header">
+                  <span class="stop-number">01</span>
+                  <h2 class="stop__name">Dokumentation Obersalzberg + Eagle's Nest</h2>
+                  <p class="stop__subtitle">The most politically charged hilltop in Europe</p>
+                  <div class="stop__tags">
+                    <span class="tag">240 min</span>
+                    <span class="tag">Museum</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">A brass elevator drilled through solid rock, still running, rising to Hitler's mountain retreat</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="eagles-nest-about">About this place</button>
+                  <button class="expand-btn" data-target="eagles-nest-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="eagles-nest-baby">Visiting with a baby</button>
+                </div>
+                <div id="eagles-nest-about" class="stop__expand-content">The Obersalzberg mountain was a quiet farming area until Hitler first rented a small house here in the 1920s. He returned repeatedly, eventually bought the property (renamed it the Berghof), and transformed the entire mountain into a heavily fortified compound for Nazi leadership — Bormann, Göring, Speer all had villas here. The Dokumentation Obersalzberg museum is one of the best historical documentation centers in Germany, including access to parts of the original bunker system built in 1943. The Kehlsteinhaus — the 'Eagle's Nest' — sits 1000 meters above the Obersalzberg at 1834m. Built in 14 months as a 50th birthday gift for Hitler from the Nazi Party in 1938, the engineering is extraordinary: a 6.5km road blasted through rock and a 124-meter shaft drilled vertically into the summit for a brass-paneled elevator. Hitler reportedly had a fear of heights and visited only a handful of times. It is now a restaurant and mountain refuge, and the original brass elevator still runs.</div>
+                <div id="eagles-nest-gems" class="stop__expand-content">The Kehlsteinhaus requires a special RVO bus from the Obersalzberg bus station — private cars are not permitted on the upper road. Buy your ticket at the Documentation Center or online in advance; queues for buses can be 45 minutes long in peak summer. Take the first bus of the day (~9am). Most visitors rush through the Documentation Center to reach the Eagle's Nest — spend real time in the bunker section. The scale of what was built underground here is astonishing and the exhibition is unusually candid about local complicity.</div>
+                <div id="eagles-nest-baby" class="stop__expand-content">The Documentation Center is fully accessible with elevator and flat floors. The Kehlsteinhaus requires the bus then the elevator — stroller is not practical at the summit, use a carrier. Bring an extra layer for the baby even in summer as it can be 10-15 degrees Celsius cooler at 1834m than in the valley. The bus ride is dramatic but perfectly safe.</div>
+              </article>
+
+              <div class="drive-connector"></div>
+
+              <article class="stop" data-stop-id="salzbergwerk" data-day="2">
+                <div class="stop__header">
+                  <span class="stop-number">02</span>
+                  <h2 class="stop__name">Berchtesgaden Salt Mine</h2>
+                  <p class="stop__subtitle">Five centuries of white gold</p>
+                  <div class="stop__tags">
+                    <span class="tag">90 min</span>
+                    <span class="tag">Museum</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">Sliding down wooden chutes through a mine active since 1517, crossing an underground lake in total darkness</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="salzbergwerk-about">About this place</button>
+                  <button class="expand-btn" data-target="salzbergwerk-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="salzbergwerk-baby">Visiting with a baby</button>
+                </div>
+                <div id="salzbergwerk-about" class="stop__expand-content">Salt extraction in Berchtesgaden began in 1517 — the mine has been continuously operating for over 500 years. 'White gold' is not a metaphor: salt was the primary source of wealth for the Wittelsbach dynasty and the reason Berchtesgaden developed at all. The mine tunnels run for around 50km inside the mountain and production continues today. The visitor tour is theatrical in a way that works: you change into miners' overalls, slide down long wooden chutes between levels, cross an underground salt lake on a wooden raft in complete darkness, and walk through crystalline formations that look like another planet. The salt here formed 250 million years ago from an ancient inland sea.</div>
+                <div id="salzbergwerk-gems" class="stop__expand-content">The mine shop sells Berchtesgadener Salz — salt from this exact mine — in various grades. It is an excellent and genuinely local souvenir that costs almost nothing. The smoked salt is particularly good. If the mine queue is long, the Berchtesgaden Palace (Schloss Berchtesgaden) in the town center is worth the time: a 12th-century Augustinian priory converted into a Wittelsbach royal palace, with original medieval cloisters intact.</div>
+                <div id="salzbergwerk-baby" class="stop__expand-content">The temperature inside the mine is a constant 12°C — bring a warm layer for the baby regardless of the weather outside. The wooden slides are fast; you hold the baby on your lap. The mine provides overalls that fit over a baby carrier. The raft crossing is completely calm. The enclosed, dark, quiet interior often sends babies to sleep.</div>
+              </article>
+
+            </div><!-- /day-2-stops -->
+
+          </div><!-- /stops-col -->
+        </div><!-- /two-col -->
+      </section>
+
+      <!-- Hikes -->
+      <section class="hikes-section">
+        <div class="hikes-section__header">
+          <h2 class="hikes-section__title">On foot</h2>
+          <p class="hikes-section__sub">Walks and hikes from this base</p>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-gem">Hidden Gem</span>
-            Local tips
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Almost everyone stops at St. Bartholomä and turns back. Continue on foot to the <strong>Obersee</strong> — a 20-minute flat walk through a meadow. The Obersee is wilder, smaller, and on a calm morning completely deserted. The Röthbach waterfall at its far end falls 470 meters — the highest in Germany. Before boarding, walk 10 minutes south from the dock to the <strong>Malerwinkel</strong> (Painters' Corner): the viewpoint where every 19th-century Romantic landscape painter came. Arrive before 10am for the best light.
+        <div class="card-grid">
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Zauberwald at Hintersee</h3>
+            <p class="hike-card__area">Ramsau / Hintersee</p>
+            <div class="hike-card__tags">
+              <span class="tag">3.5 km</span>
+              <span class="tag">+50 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">The flat lakeside section is fully stroller-accessible on packed gravel. The forest section over the glacier boulders requires a carrier but is short. The atmosphere is exceptional — moss-covered roots, turquoise water glimpses through the trees. On a weekday morning you may have it entirely to yourself.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Start from the Hintersee car park. Go early — the light through the forest is best before 10am.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Malerwinkel — Königssee Painters' Corner</h3>
+            <p class="hike-card__area">Schönau am Königssee</p>
+            <div class="hike-card__tags">
+              <span class="tag">2 km</span>
+              <span class="tag">+10 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">The classic Romantic-era viewpoint of the Königssee. Paved path along the lakeshore, fully flat. Every 19th-century landscape painter came here for this exact view.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Best light before 10am with the sun hitting the Watzmann from the east. Do this before boarding the boat.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Almbachklamm Gorge</h3>
+            <p class="hike-card__area">Marktschellenberg</p>
+            <div class="hike-card__tags">
+              <span class="tag">5 km</span>
+              <span class="tag">+280 m</span>
+              <span class="tag">Moderate</span>
+              <span class="tag">Carrier recommended</span>
+            </div>
+            <p class="hike-card__desc">One of the best gorge walks in the region, surprisingly uncrowded. The path winds through narrow limestone gorge alongside a roaring stream. A 400-year-old marble mill at the entrance is still operational. Ends at an alpine meadow with a Hütte serving drinks.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Not stroller-friendly beyond the first kilometer. Use a carrier. The marble mill at the entrance is genuinely worth 20 minutes.</p>
+          </article>
+
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-baby">Baby</span>
-            Visiting with a baby
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The boat ride is one of the easiest excursions in the region with a stroller — flat boarding, benches, covered sections if it rains. <strong>Arrive before 9:30am</strong> as the car park fills fast. There is a nursing room and changing facilities in the visitor center at the boat dock. The restaurant at St. Bartholomä has high chairs and an outdoor terrace over the water.
+      </section>
+
+      <!-- Hotels -->
+      <section class="hotels-section">
+        <div class="hotels-section__header">
+          <h2 class="hotels-section__title">Where to stay</h2>
         </div>
-      </div>
-    </div>
-  </div>
+        <div class="card-grid">
 
-  <div class="drive-connector">
-    <div class="connector-line"></div>
-    <div class="connector-text">🚗 15 min drive to Ramsau</div>
-  </div>
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Alpenpension Gastager</h3>
+            <p class="hotel-card__meta">Pension — Ramsau</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€90–120/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Authentic Bavarian Pension character, positioned perfectly for Day 1.</p>
+          </article>
 
-  <!-- Stop 2: Ramsau -->
-  <div class="stop-card" id="stop-ramsau">
-    <div class="stop-header">
-      <div class="stop-number nature">2</div>
-      <div>
-        <div class="stop-name">Ramsau + Hintersee</div>
-        <div class="stop-subtitle">The village Berchtesgaden wishes it still was</div>
-      </div>
-    </div>
-    <div class="stop-chips">
-      <div class="chip highlight">🌲 Nature + Village</div>
-      <div class="chip">⏱ 2 hours</div>
-      <div class="chip baby">👶 5/5 baby friendly</div>
-    </div>
-    <div class="stop-highlight">Zauberwald — a mossy ancient forest over glacier boulders beside a turquoise lake</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-history">History</span>
-            About this place
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Ramsau is the village Berchtesgaden wishes it still was. While the main town has grown into a resort, Ramsau has stayed almost exactly as it looked in the 19th century — farmhouses, a church, and a fast clear river cutting through the valley. The Church of St. Sebastian sits on a small bridge over the Ramsauer Ache and is one of the most painted scenes in Bavaria. The reason painters came in such numbers was the quality of light: the narrow valley funnels afternoon sun at a low angle that makes the white church walls glow orange against dark spruce forest. Caspar David Friedrich drew the landscape here. The Romantic movement invented the emotional vocabulary through which we still understand mountains — Ramsau was one of the places where that happened.
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Rehlegg</h3>
+            <p class="hotel-card__meta">Boutique Hotel — Ramsau</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€150–200/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Best comfort-to-local-character ratio in the area.</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Landhaus Gitti</h3>
+            <p class="hotel-card__meta">Guesthouse — Schönau am Königssee</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€75–100/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Perfect location for morning Königssee visit, minimal tourist pricing.</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Kempinski Hotel Berchtesgaden</h3>
+            <p class="hotel-card__meta">Luxury Hotel — Berchtesgaden</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€300+/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Worth it if budget allows — the view from the terrace is unreal.</p>
+          </article>
+
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-gem">Hidden Gem</span>
-            Local tips
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Drive 5 minutes further to <strong>Hintersee</strong> — a small turquoise lake that most visitors skip. The path passes through the <strong>Zauberwald</strong> (Magic Forest): ancient mossy spruce forest where roots grow over enormous boulders left by a prehistoric rockfall. It genuinely looks like a fairy tale, and on a weekday morning you will often have it entirely to yourself. For lunch, <strong>Gasthof Oberwirt</strong> in Ramsau has been family-run since 1612. Try the Kaspressknödelsuppe.
+      </section>
+
+      <!-- Before you go -->
+      <section class="notes-section">
+        <h2 class="notes-section__title">Before you go</h2>
+        <div class="notes-block">
+          <p class="notes-block__note">Arrive at Königssee before 9:30am — the car park fills fast in summer.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Eagle's Nest buses must be booked online. Take the first bus of the day (~9am).</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Salt mine temperature is 12°C inside — bring a warm layer for the baby.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Ramsau roads are narrow. Drive slowly — farm traffic is real.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Changing facilities: Königssee dock, Documentation Center, Salt Mine.</p>
         </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-baby">Baby</span>
-            Visiting with a baby
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The village is extremely easy — flat valley floor, no crowds, quiet roads. The Zauberwald path at Hintersee is stroller-friendly on the flat lakeside section; the section over the boulders requires a carrier. Good spot for a late afternoon feed and a slow walk before dinner.
-        </div>
-      </div>
+      </section>
+
+    </div><!-- /page-shell -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell">
+      <p class="site-footer__line">Munich-based, hand-curated.</p>
     </div>
-  </div>
+  </footer>
 
-  <!-- DAY 2 -->
-  <div class="day-header">
-    <div>
-      <div class="day-badge">Day 2</div>
-      <div class="day-title">Eagle's Nest + Salt Mine</div>
-      <div class="day-summary">The Third Reich's mountain retreat and 500 years of white gold</div>
-    </div>
-    <div class="day-divider"></div>
-  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ── Stop data by day ───────────────────────────────────────────────────
+    const stopsByDay = {
+      1: [
+        { id: 'koenigssee',       lat: 47.5929, lon: 12.9983 },
+        { id: 'ramsau-hintersee', lat: 47.6169, lon: 12.8516 }
+      ],
+      2: [
+        { id: 'obersalzberg-eagles-nest', lat: 47.6312, lon: 13.0483 },
+        { id: 'salzbergwerk',             lat: 47.6379, lon: 13.0044 }
+      ]
+    };
 
-  <!-- Stop 3: Eagle's Nest -->
-  <div class="stop-card" id="stop-eaglesnest">
-    <div class="stop-header">
-      <div class="stop-number museum">3</div>
-      <div>
-        <div class="stop-name">Dokumentation Obersalzberg + Eagle's Nest</div>
-        <div class="stop-subtitle">The most politically charged hilltop in Europe</div>
-      </div>
-    </div>
-    <div class="stop-chips">
-      <div class="chip highlight">🏛️ History + Museum</div>
-      <div class="chip">⏱ 4 hours</div>
-      <div class="chip" style="background:#FEF3C7;border-color:#FDE68A;color:#92400E">👶 3/5 — carrier at summit</div>
-    </div>
-    <div class="stop-highlight">A brass elevator drilled through solid rock, still running, rising to Hitler's mountain retreat at 1834m</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-history">History</span>
-            About this place
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The Obersalzberg was a quiet farming area until Hitler first rented a small house here in the 1920s. He returned repeatedly, eventually transforming the entire mountain into a heavily fortified compound — Bormann, Göring, and Speer all had villas here. By the late 1930s it was effectively the second seat of the Third Reich.
-          <br><br>
-          The <strong>Dokumentation Obersalzberg</strong> museum is one of the best historical documentation centers in Germany, including access to parts of the original <strong>bunker system</strong> built in 1943 when Allied bombing became a real threat. The <strong>Kehlsteinhaus</strong> was built in 14 months as a 50th birthday gift for Hitler from the Nazi Party in 1938 — a 6.5km road blasted through rock and a 124-meter shaft drilled vertically into the summit for a brass-paneled elevator that still runs today. Hitler reportedly had a fear of heights and visited only a handful of times.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-gem">Hidden Gem</span>
-            Local tips
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The Kehlsteinhaus requires a <strong>special RVO bus</strong> from the Obersalzberg bus station — private cars are not permitted on the upper road. Book tickets online or at the Documentation Center; bus queues can be 45 minutes in peak summer. Take the first bus of the day (~9am). Most visitors rush through the Documentation Center to get to the Eagle's Nest — spend real time in the <strong>bunker section</strong>. The scale of what was built underground is astonishing, and the exhibition is unusually candid about local complicity.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-baby">Baby</span>
-            Visiting with a baby
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The Documentation Center is fully accessible with elevator and flat floors. The Kehlsteinhaus summit requires the bus then the elevator — stroller is not practical at 1834m, use a carrier. <strong>Bring an extra layer for the baby</strong> even in summer as it can be 10–15°C cooler than in the valley. The bus ride is dramatic but perfectly safe; many babies sleep through it.
-        </div>
-      </div>
-    </div>
-  </div>
+    const driveLine = [
+      [48.1351, 11.5820], [47.9574, 11.8548], [47.8571, 12.1208], [47.7643, 12.4892], [47.7265, 12.8743], [47.6306, 13.0019]
+    ];
 
-  <div class="drive-connector">
-    <div class="connector-line"></div>
-    <div class="connector-text">🚗 10 min drive to Salt Mine</div>
-  </div>
+    // ── Map setup ──────────────────────────────────────────────────────────
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
 
-  <!-- Stop 4: Salt Mine -->
-  <div class="stop-card" id="stop-saltmine">
-    <div class="stop-header">
-      <div class="stop-number museum">4</div>
-      <div>
-        <div class="stop-name">Berchtesgaden Salt Mine</div>
-        <div class="stop-subtitle">Five centuries of white gold</div>
-      </div>
-    </div>
-    <div class="stop-chips">
-      <div class="chip highlight">⛏️ Mine + History</div>
-      <div class="chip">⏱ 1.5 hours</div>
-      <div class="chip baby">👶 4/5 — 12°C inside, dress warm</div>
-    </div>
-    <div class="stop-highlight">Sliding down wooden chutes through a mine active since 1517, crossing an underground lake by raft in total darkness</div>
-    <div class="accordion">
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-history">History</span>
-            About this place
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          Salt extraction in Berchtesgaden began in 1517 — the mine has been continuously operating for over 500 years. "White gold" is not a metaphor: salt was the primary source of wealth for the Wittelsbach dynasty and the reason Berchtesgaden developed at all. The mine tunnels run for around 50km and production continues today.
-          <br><br>
-          The visitor tour is theatrical in a way that works: you change into miners' overalls, slide down long wooden chutes between levels, cross an underground salt lake on a wooden raft in complete darkness, and walk through crystalline formations that look like another planet. The salt here formed 250 million years ago from an ancient inland sea.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-gem">Hidden Gem</span>
-            Local tips
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The mine shop sells <strong>Berchtesgadener Salz</strong> from this exact mine in various grades — an excellent local souvenir for almost nothing. The smoked salt is particularly good. If the mine queue is long, the <strong>Berchtesgaden Palace</strong> (Schloss Berchtesgaden) in the town center is a 12th-century Augustinian priory converted into a Wittelsbach royal palace, with original medieval cloisters intact.
-        </div>
-      </div>
-      <div class="accordion-item">
-        <button class="accordion-trigger" onclick="toggle(this)">
-          <div class="accordion-label">
-            <span class="section-tag tag-baby">Baby</span>
-            Visiting with a baby
-          </div>
-          <span class="accordion-chevron">▼</span>
-        </button>
-        <div class="accordion-body">
-          The temperature inside is a constant <strong>12°C</strong> — bring a warm layer for the baby regardless of outdoor weather. The wooden slides are fast; you hold the baby on your lap. The mine provides overalls that fit over a baby carrier. The raft crossing is completely calm. The enclosed, dark, quiet interior often sends babies straight to sleep.
-        </div>
-      </div>
-    </div>
-  </div>
+    L.polyline(driveLine, { color: '#1B3A5C', opacity: 0.4, weight: 2, dashArray: '5 7' }).addTo(map);
 
-  <!-- HOTELS -->
-  <div class="section-header">
-    <div class="section-title">🏡 Where to stay</div>
-    <div class="section-divider"></div>
-  </div>
-  <div class="hotels-grid">
+    const GREY = '#AAAAAA', ACCENT = '#1B3A5C';
+    let localLine = null;
+    const markerMap = {};
 
-    <div class="hotel-card">
-      <div class="hotel-type">⭐ Best local character</div>
-      <div class="hotel-name">Alpenpension Gastager</div>
-      <div class="hotel-area">📍 Ramsau</div>
-      <div class="local-stars">
-        <span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span>
-        <span style="font-size:11px;color:var(--muted);margin-left:4px;align-self:center">Local character 5/5</span>
-      </div>
-      <div class="hotel-desc">Traditional family-run Pension with views of the Reiter Alpe. Very quiet, very local. Positioned perfectly for the Day 1 Königssee start.</div>
-      <div class="hotel-footer">
-        <div class="hotel-price">€90–120 / night</div>
-        <div class="hotel-amenities">
-          <span class="amenity-badge">🛏 Crib</span>
-          <span class="amenity-badge">🚗 Parking</span>
-        </div>
-      </div>
-    </div>
+    function buildDay(day) {
+      const stops = stopsByDay[day];
+      // Remove old local line and markers
+      if (localLine) { map.removeLayer(localLine); localLine = null; }
+      Object.values(markerMap).forEach(m => map.removeLayer(m));
+      Object.keys(markerMap).forEach(k => delete markerMap[k]);
 
-    <div class="hotel-card">
-      <div class="hotel-type">Best comfort</div>
-      <div class="hotel-name">Hotel Rehlegg</div>
-      <div class="hotel-area">📍 Ramsau</div>
-      <div class="local-stars">
-        <span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star" style="opacity:0.3">🟠</span>
-        <span style="font-size:11px;color:var(--muted);margin-left:4px;align-self:center">Local character 4/5</span>
-      </div>
-      <div class="hotel-desc">Small 4-star with Alpine spa and family rooms. Still family-run with genuine local character. Best comfort-to-authenticity ratio in the area.</div>
-      <div class="hotel-footer">
-        <div class="hotel-price">€150–200 / night</div>
-        <div class="hotel-amenities">
-          <span class="amenity-badge">🛏 Crib</span>
-          <span class="amenity-badge">🚗 Parking</span>
-        </div>
-      </div>
-    </div>
+      localLine = L.polyline(stops.map(s => [s.lat, s.lon]), { color: ACCENT, opacity: 0.85, weight: 2 }).addTo(map);
 
-    <div class="hotel-card">
-      <div class="hotel-type">Best location</div>
-      <div class="hotel-name">Landhaus Gitti</div>
-      <div class="hotel-area">📍 Schönau am Königssee</div>
-      <div class="local-stars">
-        <span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span><span class="star">🟠</span>
-        <span style="font-size:11px;color:var(--muted);margin-left:4px;align-self:center">Local character 5/5</span>
-      </div>
-      <div class="hotel-desc">Simple Pension 5 minutes walk from the Königssee boat dock. Local owners. Minimal tourist pricing for a prime location.</div>
-      <div class="hotel-footer">
-        <div class="hotel-price">€75–100 / night</div>
-        <div class="hotel-amenities">
-          <span class="amenity-badge">🛏 Crib</span>
-          <span class="amenity-badge">🚗 Parking</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="hotel-card">
-      <div class="hotel-type">Splurge</div>
-      <div class="hotel-name">Kempinski Hotel Berchtesgaden</div>
-      <div class="hotel-area">📍 Berchtesgaden</div>
-      <div class="local-stars">
-        <span class="star">🟠</span><span class="star">🟠</span><span class="star" style="opacity:0.3">🟠</span><span class="star" style="opacity:0.3">🟠</span><span class="star" style="opacity:0.3">🟠</span>
-        <span style="font-size:11px;color:var(--muted);margin-left:4px;align-self:center">Local character 2/5</span>
-      </div>
-      <div class="hotel-desc">Worth it if budget allows. The view of the Watzmann from the terrace is genuinely breathtaking. Full baby facilities.</div>
-      <div class="hotel-footer">
-        <div class="hotel-price">€300+ / night</div>
-        <div class="hotel-amenities">
-          <span class="amenity-badge">🛏 Crib</span>
-          <span class="amenity-badge">🚗 Parking</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- HIKES -->
-  <div class="section-header">
-    <div class="section-title">🥾 Hikes in the area</div>
-    <div class="section-divider"></div>
-  </div>
-  <div class="hikes-grid">
-
-    <div class="hike-card">
-      <div class="hike-difficulty diff-easy">Easy</div>
-      <div class="hike-name">Zauberwald at Hintersee</div>
-      <div class="hike-area">📍 Ramsau / Hintersee</div>
-      <div class="hike-stats">
-        <div class="hike-stat"><div class="hike-stat-val">3.5 km</div><div class="hike-stat-lbl">Distance</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">50 m</div><div class="hike-stat-lbl">Elevation</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">~1.5 h</div><div class="hike-stat-lbl">Duration</div></div>
-      </div>
-      <div class="hike-desc">The flat lakeside section is fully stroller-accessible. The forest section over glacier boulders requires a carrier but is short. Atmosphere is exceptional — moss-covered roots, turquoise water through the trees.</div>
-      <div class="hike-badges">
-        <span class="hike-badge badge-stroller">🚼 Stroller (partial)</span>
-        <span class="hike-badge badge-carrier">🎒 Baby carrier</span>
-      </div>
-      <div class="hike-tip">Start from Hintersee car park. Best light through the forest before 10am.</div>
-    </div>
-
-    <div class="hike-card">
-      <div class="hike-difficulty diff-easy">Easy</div>
-      <div class="hike-name">Malerwinkel — Painters' Corner</div>
-      <div class="hike-area">📍 Schönau am Königssee</div>
-      <div class="hike-stats">
-        <div class="hike-stat"><div class="hike-stat-val">2 km</div><div class="hike-stat-lbl">Distance</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">10 m</div><div class="hike-stat-lbl">Elevation</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">~45 min</div><div class="hike-stat-lbl">Duration</div></div>
-      </div>
-      <div class="hike-desc">The classic Romantic-era viewpoint of the Königssee on a fully paved, flat lakeshore path. The same view every 19th-century landscape painter came for.</div>
-      <div class="hike-badges">
-        <span class="hike-badge badge-stroller">🚼 Fully stroller-friendly</span>
-      </div>
-      <div class="hike-tip">Best light before 10am with the sun hitting the Watzmann from the east. Do this before boarding the boat.</div>
-    </div>
-
-    <div class="hike-card">
-      <div class="hike-difficulty diff-moderate">Moderate</div>
-      <div class="hike-name">Almbachklamm Gorge</div>
-      <div class="hike-area">📍 Marktschellenberg</div>
-      <div class="hike-stats">
-        <div class="hike-stat"><div class="hike-stat-val">5 km</div><div class="hike-stat-lbl">Distance</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">280 m</div><div class="hike-stat-lbl">Elevation</div></div>
-        <div class="hike-stat"><div class="hike-stat-val">~2.5 h</div><div class="hike-stat-lbl">Duration</div></div>
-      </div>
-      <div class="hike-desc">One of the best gorge walks in the region and surprisingly uncrowded. Narrow limestone gorge, roaring stream, wooden boardwalks. A 400-year-old marble mill at the entrance is still operational.</div>
-      <div class="hike-badges">
-        <span class="hike-badge badge-carrier">🎒 Baby carrier recommended</span>
-      </div>
-      <div class="hike-tip">The marble mill at the entrance is worth 20 minutes. Ends at an alpine meadow with a Hütte.</div>
-    </div>
-
-  </div>
-
-  <!-- PRACTICAL NOTES -->
-  <div class="notes-card">
-    <div class="notes-title">📋 Practical notes</div>
-    <ul class="notes-list">
-      <li>Arrive at Königssee before 9:30am — the car park fills fast in summer.</li>
-      <li>Eagle's Nest buses must be booked online. Take the first bus of the day (~9am).</li>
-      <li>Salt mine is 12°C inside — bring a warm layer for the baby regardless of weather.</li>
-      <li>Ramsau roads are narrow. Drive slowly — farm traffic is real.</li>
-      <li>Changing facilities at: Königssee boat dock, Documentation Center, Salt Mine.</li>
-    </ul>
-  </div>
-
-</main>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <strong>Agugagatada Travel</strong> — AI-powered family trip planning from Munich &nbsp;·&nbsp; Generated 22 March 2026
-</footer>
-
-<script>
-  // ── ACCORDION TOGGLE ──
-  function toggle(btn) {
-    const body = btn.nextElementSibling;
-    const chevron = btn.querySelector('.accordion-chevron');
-    const isOpen = body.classList.contains('open');
-    body.classList.toggle('open', !isOpen);
-    chevron.classList.toggle('open', !isOpen);
-  }
-
-  // ── LEAFLET MAP ──
-  const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
-
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap © CARTO',
-    maxZoom: 18
-  }).addTo(map);
-
-  // Route polyline: Munich → Berchtesgaden
-  const driveRoute = [
-    [48.1351, 11.5820],
-    [47.9574, 11.8548],
-    [47.8571, 12.1208],
-    [47.7643, 12.4892],
-    [47.7265, 12.8743],
-    [47.6306, 13.0019]
-  ];
-
-  L.polyline(driveRoute, {
-    color: '#F05A28',
-    weight: 3,
-    opacity: 0.7,
-    dashArray: '8 6'
-  }).addTo(map);
-
-  // Stop-to-stop route in the Berchtesgaden area
-  const localRoute = [
-    [47.5929, 12.9983], // Königssee
-    [47.6169, 12.8516], // Ramsau + Hintersee
-    [47.6312, 13.0483], // Obersalzberg
-    [47.6379, 13.0044]  // Salt Mine
-  ];
-
-  L.polyline(localRoute, {
-    color: '#F05A28',
-    weight: 3,
-    opacity: 0.9
-  }).addTo(map);
-
-  // Custom marker factory
-  function makeIcon(color, label) {
-    return L.divIcon({
-      className: '',
-      html: `
-        <div style="
-          width:34px; height:34px; border-radius:50% 50% 50% 0;
-          transform:rotate(-45deg); background:${color};
-          border:3px solid #fff;
-          box-shadow:0 3px 10px rgba(0,0,0,0.28);
-          display:flex; align-items:center; justify-content:center;
-        ">
-          <span style="
-            transform:rotate(45deg); color:#fff; font-weight:800;
-            font-size:13px; font-family:Inter,sans-serif; line-height:1;
-          ">${label}</span>
-        </div>`,
-      iconSize: [34, 34],
-      iconAnchor: [17, 34],
-      popupAnchor: [0, -36]
-    });
-  }
-
-  // Munich origin marker
-  L.marker([48.1351, 11.5820], {
-    icon: L.divIcon({
-      className: '',
-      html: `<div style="
-        width:14px;height:14px;border-radius:50%;
-        background:#9CA3AF;border:3px solid #fff;
-        box-shadow:0 2px 6px rgba(0,0,0,0.2)
-      "></div>`,
-      iconSize: [14, 14],
-      iconAnchor: [7, 7]
-    })
-  }).addTo(map).bindPopup('<strong>Munich</strong><br>Starting point · 105 min drive');
-
-  // Stop markers
-  const stops = [
-    { lat: 47.5929, lon: 12.9983, label: '1', color: '#2D8653', name: 'Königssee', desc: 'Day 1 · 3 hours · Nature', id: 'stop-koenigssee' },
-    { lat: 47.6169, lon: 12.8516, label: '2', color: '#2D8653', name: 'Ramsau + Hintersee', desc: 'Day 1 · 2 hours · Village + Nature', id: 'stop-ramsau' },
-    { lat: 47.6312, lon: 13.0483, label: '3', color: '#2B6CB0', name: "Obersalzberg + Eagle's Nest", desc: 'Day 2 · 4 hours · History', id: 'stop-eaglesnest' },
-    { lat: 47.6379, lon: 13.0044, label: '4', color: '#2B6CB0', name: 'Berchtesgaden Salt Mine', desc: 'Day 2 · 1.5 hours · History', id: 'stop-saltmine' }
-  ];
-
-  stops.forEach(s => {
-    L.marker([s.lat, s.lon], { icon: makeIcon(s.color, s.label) })
-      .addTo(map)
-      .bindPopup(`<strong>${s.name}</strong><br><span style="color:#6B7280;font-size:12px">${s.desc}</span>`)
-      .on('click', () => {
-        const el = document.getElementById(s.id);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      stops.forEach((s, i) => {
+        const m = L.circleMarker([s.lat, s.lon], { radius: 7, fillColor: GREY, color: '#FFF', weight: 2, fillOpacity: 1 }).addTo(map);
+        m.bindTooltip(String(i + 1).padStart(2, '0'), { permanent: true, direction: 'right', className: 'stop-label', offset: [8, 0] });
+        markerMap[s.id] = m;
       });
-  });
 
-  // Fit map to show everything with padding
-  const allPoints = [[48.1351, 11.5820], ...stops.map(s => [s.lat, s.lon])];
-  map.fitBounds(allPoints, { padding: [40, 40] });
-</script>
+      const allPts = [...driveLine, ...stops.map(s => [s.lat, s.lon])];
+      map.fitBounds(L.latLngBounds(allPts), { padding: [40, 40] });
+      // Activate first stop
+      Object.values(markerMap)[0]?.setStyle({ fillColor: ACCENT, radius: 10 });
+    }
+
+    buildDay(1);
+
+    // ── Day switcher ───────────────────────────────────────────────────────
+    document.querySelectorAll('.day-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const day = Number(btn.dataset.day);
+        document.querySelectorAll('.day-btn').forEach(b => b.classList.toggle('is-active', b === btn));
+        document.getElementById('day-1-stops').style.display = day === 1 ? '' : 'none';
+        document.getElementById('day-2-stops').style.display = day === 2 ? '' : 'none';
+        buildDay(day);
+      });
+    });
+
+    // ── Expand / collapse ──────────────────────────────────────────────────
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(btn.dataset.target);
+        const open = panel.classList.toggle('is-open');
+        btn.style.textDecoration = open ? 'underline' : 'none';
+      });
+    });
+
+    // ── Scroll-linked map highlighting ────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.dataset.stopId;
+        if (!markerMap[id]) return;
+        Object.entries(markerMap).forEach(([mid, m]) => {
+          const active = mid === id;
+          m.setStyle({ fillColor: active ? ACCENT : GREY, radius: active ? 10 : 7 });
+          if (active) map.panTo(m.getLatLng(), { animate: true, duration: 0.4 });
+        });
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stop[data-stop-id]').forEach(el => observer.observe(el));
+  </script>
 
 </body>
 </html>

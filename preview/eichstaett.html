@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eichstätt &amp; Solnhofen — Agugagatada</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    /* Shell */
+    .site-nav { border-bottom: 1px solid var(--color-border); padding-block: var(--space-md); }
+    .site-nav__inner { display: flex; align-items: center; gap: var(--space-lg); }
+    .site-nav__home { font-size: var(--text-md); font-weight: 500; color: var(--color-text); letter-spacing: -0.01em; text-decoration: none; }
+    .site-nav__home:hover { text-decoration: none; }
+    .site-nav__back { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .site-nav__back:hover { color: var(--color-accent); text-decoration: none; }
+    .site-footer { border-top: 1px solid var(--color-border); padding-block: var(--space-xl); text-align: center; }
+    .site-footer__line { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+    /* Hero */
+    .hero { padding-top: var(--space-2xl); padding-bottom: var(--space-xl); }
+    .hero__title { font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    .hero__tagline { font-size: var(--text-md); color: var(--color-text-secondary); max-width: 600px; margin-top: var(--space-sm); line-height: 1.5; }
+    .hero__tags { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
+    .hero__rule { border: none; border-top: 1px solid var(--color-border); margin-top: var(--space-xl); }
+
+    /* Intro */
+    .intro { padding-block: var(--space-xl); }
+    .intro__text { font-size: var(--text-md); line-height: 1.7; max-width: 680px; color: var(--color-text); }
+
+    /* Route section */
+    .route-section { padding-bottom: var(--space-2xl); }
+    #map { height: 560px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+    .stops-col { padding-top: var(--space-xs); }
+
+    /* Stop */
+    .stop { padding-bottom: var(--space-lg); }
+    .stop__header { margin-bottom: var(--space-sm); }
+    .stop__name { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; margin-top: var(--space-xs); }
+    .stop__subtitle { font-size: var(--text-base); color: var(--color-text-secondary); margin-top: 2px; }
+    .stop__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm); }
+    .stop__highlight { font-style: italic; font-family: Georgia, serif; font-size: var(--text-base); color: var(--color-text); border-left: 3px solid var(--color-accent); padding-left: var(--space-md); margin-block: var(--space-md); line-height: 1.6; }
+    .stop__expand-row { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-sm); }
+    .stop__expand-content { display: none; font-size: var(--text-base); line-height: 1.7; color: var(--color-text); margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-border); }
+    .stop__expand-content.is-open { display: block; }
+
+    /* Hike card */
+    .hikes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .hikes-section__header { margin-bottom: var(--space-xl); }
+    .hikes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hikes-section__sub { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: var(--space-xs); }
+    .hike-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hike-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hike-card__area { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hike-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hike-card__desc { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); }
+    .hike-card__tip { font-size: var(--text-sm); color: var(--color-text-secondary); font-style: italic; line-height: 1.6; }
+    .hike-card__tip-label { font-style: normal; font-weight: 500; color: var(--color-text-secondary); }
+
+    /* Hotel card */
+    .hotels-section { padding-bottom: var(--space-2xl); }
+    .hotels-section__header { margin-bottom: var(--space-xl); }
+    .hotels-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hotel-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hotel-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hotel-card__meta { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hotel-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hotel-card__rec { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin-top: var(--space-xs); }
+
+    /* Before you go */
+    .notes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .notes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-xl); }
+    .notes-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-xl); max-width: 680px; }
+    .notes-block__note { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text); }
+    .notes-block__rule { border: none; border-top: 1px solid var(--color-border); margin-block: var(--space-md); }
+
+    /* Leaflet label */
+    .stop-label { background: none; border: none; box-shadow: none; font-size: 11px; font-weight: 600; color: #1B3A5C; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.05em; padding: 0; }
+    .stop-label::before { display: none; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="page-shell">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__home">Agugagatada</a>
+        <a href="index.html" class="site-nav__back">All destinations</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content">
+    <div class="page-shell">
+
+      <!-- Hero -->
+      <header class="hero">
+        <h1 class="hero__title">Eichstätt &amp; Solnhofen</h1>
+        <p class="hero__tagline">A baroque episcopal city in a Jurassic limestone valley where you can dig up 150-million-year-old fossils yourself</p>
+        <div class="hero__tags">
+          <span class="tag">1h 15 min from Munich</span>
+          <span class="tag">1 day</span>
+        </div>
+        <hr class="hero__rule">
+      </header>
+
+      <!-- Intro -->
+      <section class="intro">
+        <p class="intro__text">Most people have never heard of Eichstätt. This is a mistake. The Altmühl Valley where it sits is Jurassic limestone country — the same reef system that formed the Alps, now eroded into a plateau of white rock and pine forest. 150 million years ago this was a shallow tropical lagoon, and the exceptionally fine limestone sediment preserved the creatures that fell into it with extraordinary fidelity. Archaeopteryx — the first feathered creature, the link between dinosaurs and birds — was found in these quarries. You can visit the actual quarries, split the rock yourself, and keep what you find. And Eichstätt itself, the small baroque city that almost no tourist ever visits, is one of the most beautiful episcopal towns in Germany.</p>
+      </section>
+
+      <!-- Two-column: map + stops -->
+      <section class="route-section">
+        <div class="two-col">
+
+          <!-- Map -->
+          <div class="two-col__map">
+            <div id="map"></div>
+          </div>
+
+          <!-- Stops -->
+          <div class="stops-col">
+
+            <article class="stop" id="jura-museum" data-stop-id="jura-museum">
+              <div class="stop__header">
+                <span class="stop-number">01</span>
+                <h2 class="stop__name">Jura Museum Eichstätt</h2>
+                <p class="stop__subtitle">Home of the Eichstätt Archaeopteryx</p>
+                <div class="stop__tags">
+                  <span class="tag">90 min</span>
+                  <span class="tag">Museum</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">One of only 12 known Archaeopteryx specimens in the world — the 150-million-year-old first bird, found 20km from where you're standing</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="jura-museum-about">About this place</button>
+                <button class="expand-btn" data-target="jura-museum-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="jura-museum-baby">Visiting with a baby</button>
+              </div>
+              <div id="jura-museum-about" class="stop__expand-content">The Jura Museum is housed in the Willibaldsburg castle above Eichstätt and contains one of the finest collections of Jurassic marine fossils in Europe, including the Eichstätt specimen of Archaeopteryx — one of only 12 known examples of this creature in the world. Archaeopteryx is perhaps the most scientifically important fossil ever found: discovered in 1861, just two years after Darwin published On the Origin of Species, it was immediately recognized as transitional evidence between dinosaurs and birds — it has feathers, but also teeth, clawed wings, and a long bony tail. It was the first direct fossil evidence for evolution. The museum also holds extraordinary specimens of Pterodactyls (also first scientifically described from Solnhofen fossils), ichthyosaurs, fish, ammonites, and other Jurassic lagoon creatures preserved in the fine lithographic limestone. The quality of preservation is unmatched — soft tissue impressions, individual feather barbs, stomach contents. The castle building itself offers views over the Altmühl Valley.</div>
+              <div id="jura-museum-gems" class="stop__expand-content">The basement of the museum has the actual working tools used in fossil preparation — the air scribes, brushes, and magnifiers — and periodic demonstrations of how matrix is removed from specimens. The castle's bastions can be walked and give the best view of the river valley and the white limestone cliff faces that characterize the Jurassic terrain. The museum shop sells quality fossil replicas that are actually educational rather than tourist kitsch.</div>
+              <div id="jura-museum-baby" class="stop__expand-content">Fully accessible — elevator, flat exhibition floors, stroller-friendly throughout. The castle terrace is accessible via ramp. Good café on site with outdoor seating. Changing facilities in the main toilets block.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <article class="stop" id="eichstaett-oldtown" data-stop-id="eichstaett-oldtown">
+              <div class="stop__header">
+                <span class="stop-number">02</span>
+                <h2 class="stop__name">Eichstätt Cathedral + Old Town</h2>
+                <p class="stop__subtitle">A baroque episcopal city almost nobody visits</p>
+                <div class="stop__tags">
+                  <span class="tag">60 min</span>
+                  <span class="tag">Town center</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">A perfectly intact baroque episcopal city built by the same Italian architects who rebuilt Rome — transplanted into a Bavarian river valley</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="eichstaett-oldtown-about">About this place</button>
+                <button class="expand-btn" data-target="eichstaett-oldtown-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="eichstaett-oldtown-baby">Visiting with a baby</button>
+              </div>
+              <div id="eichstaett-oldtown-about" class="stop__expand-content">Eichstätt was the seat of a bishop from 741 AD, and like many Prince-Bishop residencies, was substantially rebuilt in the baroque style after the destruction of the Thirty Years' War. The architects brought in were Italian — followers of the Roman baroque — and the result is a small city that looks remarkably unlike anywhere else in Bavaria. The cathedral dates from the 8th century but was transformed repeatedly; its most remarkable feature is the Pappenheim altarpiece, a painted limestone relief of 1489 of exceptional quality. The episcopal residence, the collegiate church, and the town square all form a coherent baroque ensemble. Crucially, the city has no significant industry and no particular tourist draw beyond the fossils, so it has remained exactly as it was built — no chain restaurants, no modern intrusions, just a small city of 13,000 people living inside a baroque stage set.</div>
+              <div id="eichstaett-oldtown-gems" class="stop__expand-content">The Mortuarium (a separate vaulted chapel adjacent to the cathedral) contains the Pappenheim altarpiece — a double-sided carved limestone relief that is one of the great unknown masterpieces of late medieval German sculpture. Almost no guide book mentions it. The Residenzplatz fountain, the Schutzengelkirche (Guardian Angel Church), and the Kapuzinerkirche are all worth looking into. For lunch, the cafés around the Marktplatz serve solid regional Bavarian food with almost no tourist pricing.</div>
+              <div id="eichstaett-oldtown-baby" class="stop__expand-content">The town center is almost entirely flat — one of the most stroller-friendly town centers in Bavaria. The Marktplatz and Residenzplatz are paved but level. The cathedral interior is accessible. The whole area can be covered in a relaxed 60-minute walk with a stroller.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <article class="stop" id="solnhofen-quarries" data-stop-id="solnhofen-quarries">
+              <div class="stop__header">
+                <span class="stop-number">03</span>
+                <h2 class="stop__name">Solnhofen Fossil Quarries</h2>
+                <p class="stop__subtitle">Split the rock yourself and keep what you find</p>
+                <div class="stop__tags">
+                  <span class="tag">90 min</span>
+                  <span class="tag">Nature</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">Active limestone quarries where visitors can split Jurassic slabs and keep any fossil they find — the same quarries where Archaeopteryx was discovered</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="solnhofen-quarries-about">About this place</button>
+                <button class="expand-btn" data-target="solnhofen-quarries-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="solnhofen-quarries-baby">Visiting with a baby</button>
+              </div>
+              <div id="solnhofen-quarries-about" class="stop__expand-content">The limestone quarries around Solnhofen have been worked since Roman times — the stone, known as lithographic limestone, was the finest material for printing plates and was used in printmaking until photographic processes replaced it in the 20th century. The quarries are still active, supplying high-quality paving and decorative stone. The Jurassic lithographic limestone formed 150 million years ago as fine carbonate sediment settling to the bottom of a shallow, hypersaline lagoon. Creatures that fell into the lagoon — or were washed in — were preserved with extraordinary fidelity in the fine-grained sediment. Visitors to certain accessible quarries (notably the Blumensberg quarry near Solnhofen) can split slabs of limestone using a chisel and hammer and keep whatever fossils emerge. Most finds are small fish, ammonites, shrimp, or plant fragments. Occasionally something extraordinary appears — the quarry owners are required to report significant vertebrate finds to the state.</div>
+              <div id="solnhofen-quarries-gems" class="stop__expand-content">The Bürgermeister-Müller Museum in Solnhofen village itself is small but has excellent local fossil specimens and explains the geological history clearly. The quarry landscape — white rock terraces, juniper scrub, the valley below — is beautiful in its austerity and almost entirely unvisited beyond local fossil hunters. Ask at the museum about which quarries are currently accessible to visitors; it changes seasonally.</div>
+              <div id="solnhofen-quarries-baby" class="stop__expand-content">The quarry floor is flat limestone — stroller-manageable if the surface is dry. For splitting rock, you need both hands, so a carrier is better for the active fossil-hunting portion. The museum in the village has a flat interior and accessible toilets. Bring sun protection — the white limestone reflects strongly.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <article class="stop" id="pappenheim" data-stop-id="pappenheim">
+              <div class="stop__header">
+                <span class="stop-number">04</span>
+                <h2 class="stop__name">Burg Pappenheim</h2>
+                <p class="stop__subtitle">Ruined medieval castle above the Altmühl river</p>
+                <div class="stop__tags">
+                  <span class="tag">60 min</span>
+                  <span class="tag">Castle</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">The ruined seat of the Counts of Pappenheim — Imperial Field Marshals of the Holy Roman Empire for 400 years</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="pappenheim-about">About this place</button>
+                <button class="expand-btn" data-target="pappenheim-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="pappenheim-baby">Visiting with a baby</button>
+              </div>
+              <div id="pappenheim-about" class="stop__expand-content">The Pappenheim family held the hereditary title of Reichserbmarschall (Imperial Field Marshal) of the Holy Roman Empire — the highest military ceremonial office — for over 400 years. Their castle above the Altmühl river was the family seat for most of this period. The castle was damaged in the Thirty Years' War and partly demolished thereafter; what remains are substantial ruins on a limestone spur above the town, with good views over the Altmühl Valley. Gottfried Heinrich Graf zu Pappenheim was one of the most significant cavalry commanders of the Thirty Years' War, fighting on the Catholic-Imperial side until his death at the Battle of Lützen in 1632 — the same battle where Gustavus Adolphus of Sweden also died. The town of Pappenheim below the castle is small and genuine, with a weekly market and several small Gasthöfe.</div>
+              <div id="pappenheim-gems" class="stop__expand-content">The path from the town up to the castle runs through old terraced gardens — remnants of the formal baroque garden that once extended down the hillside. The lower town has an intact medieval street plan and the church of St. Gallus contains medieval frescoes that are rarely visited. The Altmühl cycling path passes directly through Pappenheim and the flat riverside section toward Solnhofen (westward) is particularly good for a stroller.</div>
+              <div id="pappenheim-baby" class="stop__expand-content">The castle ruins involve uneven terrain and some climbing — a carrier is needed for the upper sections. The town itself and the riverside path are fully flat and stroller-friendly. The castle courtyard lower section is accessible. There is a small Gasthof at the castle entrance with outdoor seating.</div>
+            </article>
+
+          </div><!-- /stops-col -->
+        </div><!-- /two-col -->
+      </section>
+
+      <!-- Hikes -->
+      <section class="hikes-section">
+        <div class="hikes-section__header">
+          <h2 class="hikes-section__title">On foot</h2>
+          <p class="hikes-section__sub">Walks and hikes from this base</p>
+        </div>
+        <div class="card-grid">
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Altmühl Valley Cycling and Walking Path</h3>
+            <p class="hike-card__area">Eichstätt to Solnhofen</p>
+            <div class="hike-card__tags">
+              <span class="tag">12 km</span>
+              <span class="tag">+20 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">The Altmühl is one of the most beautiful river valleys in Bavaria — white limestone cliffs, oxbow meanders, wildflower meadows. The cycling path from Eichstätt to Solnhofen (12km) is entirely flat, paved or firm gravel, and runs directly beside the river. With a stroller or trailer bike it is entirely manageable.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Bike rental available in Eichstätt. With a stroller, do the flat 3–4km section from Eichstätt toward Dollnstein for the best scenery without committing to the full distance.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Hängende Steine (Hanging Stones)</h3>
+            <p class="hike-card__area">Above Eichstätt</p>
+            <div class="hike-card__tags">
+              <span class="tag">3 km</span>
+              <span class="tag">+120 m</span>
+              <span class="tag">Moderate</span>
+              <span class="tag">Carrier needed</span>
+            </div>
+            <p class="hike-card__desc">A short climb above Eichstätt to a dramatic limestone overhang with views over the city and valley. The limestone formations here are part of the same Jurassic reef system that produces the fossils at Solnhofen — you walk on the same rock that was a tropical reef 150 million years ago.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Carrier needed. Start from the Willibaldsburg (Jura Museum) car park. The overhang viewpoint is 45 minutes from the start.</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Hotels -->
+      <section class="hotels-section">
+        <div class="hotels-section__header">
+          <h2 class="hotels-section__title">Where to stay</h2>
+        </div>
+        <div class="card-grid">
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Adler</h3>
+            <p class="hotel-card__meta">Historic Gasthof — Eichstätt old town</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€75–110/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Best positioned hotel for exploring Eichstätt on foot, genuinely local character</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Gasthof Krone</h3>
+            <p class="hotel-card__meta">Gasthof — Pappenheim</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€60–85/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Perfect if combining with cycling or if you want a quieter base than Eichstätt</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Before you go -->
+      <section class="notes-section">
+        <h2 class="notes-section__title">Before you go</h2>
+        <div class="notes-block">
+          <p class="notes-block__note">Fossil quarries: confirm accessibility with the Solnhofen museum before driving out — access changes seasonally.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Bring a chisel and hammer or rent them from the Solnhofen museum for quarry visits.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">All fossils found in working quarries belong to the quarry owner — visitor finds from designated areas are kept.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Eichstätt has almost no tourist infrastructure: limited ATMs, limited opening hours. Buy food and snacks early.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">The Altmühl Valley is spectacular in late spring (May) and autumn (October) — avoid August heat.</p>
+        </div>
+      </section>
+
+    </div><!-- /page-shell -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell">
+      <p class="site-footer__line">Munich-based, hand-curated.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ── Stop data ──────────────────────────────────────────────────────────
+    const stops = [
+      { id: 'jura-museum',          lat: 48.8920, lon: 11.1886 },
+      { id: 'eichstaett-oldtown',   lat: 48.8910, lon: 11.1874 },
+      { id: 'solnhofen-quarries',   lat: 48.8992, lon: 11.0321 },
+      { id: 'pappenheim',           lat: 48.9489, lon: 11.0984 }
+    ];
+
+    const driveLine = [
+      [48.1351, 11.5820], [48.4012, 11.4548], [48.7265, 11.2743], [48.8922, 11.1890]
+    ];
+
+    // ── Map setup ──────────────────────────────────────────────────────────
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+
+    L.polyline(driveLine, { color: '#1B3A5C', opacity: 0.4, weight: 2, dashArray: '5 7' }).addTo(map);
+
+    const GREY = '#AAAAAA', ACCENT = '#1B3A5C';
+    const markerMap = {};
+
+    const localLine = L.polyline(stops.map(s => [s.lat, s.lon]), { color: ACCENT, opacity: 0.85, weight: 2 }).addTo(map);
+
+    stops.forEach((s, i) => {
+      const m = L.circleMarker([s.lat, s.lon], { radius: 7, fillColor: GREY, color: '#FFF', weight: 2, fillOpacity: 1 }).addTo(map);
+      m.bindTooltip(String(i + 1).padStart(2, '0'), { permanent: true, direction: 'right', className: 'stop-label', offset: [8, 0] });
+      markerMap[s.id] = m;
+    });
+
+    const allPts = [...driveLine, ...stops.map(s => [s.lat, s.lon])];
+    map.fitBounds(L.latLngBounds(allPts), { padding: [40, 40] });
+
+    // Activate first stop on load
+    markerMap[stops[0].id].setStyle({ fillColor: ACCENT, radius: 10 });
+
+    // ── Expand / collapse ──────────────────────────────────────────────────
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(btn.dataset.target);
+        const open = panel.classList.toggle('is-open');
+        btn.style.textDecoration = open ? 'underline' : 'none';
+      });
+    });
+
+    // ── Scroll-linked map highlighting ────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.dataset.stopId;
+        if (!markerMap[id]) return;
+        Object.entries(markerMap).forEach(([mid, m]) => {
+          const active = mid === id;
+          m.setStyle({ fillColor: active ? ACCENT : GREY, radius: active ? 10 : 7 });
+          if (active) map.panTo(m.getLatLng(), { animate: true, duration: 0.4 });
+        });
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stop[data-stop-id]').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

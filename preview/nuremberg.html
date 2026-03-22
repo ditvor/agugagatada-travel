@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuremberg — Agugagatada</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    /* Shell */
+    .site-nav { border-bottom: 1px solid var(--color-border); padding-block: var(--space-md); }
+    .site-nav__inner { display: flex; align-items: center; gap: var(--space-lg); }
+    .site-nav__home { font-size: var(--text-md); font-weight: 500; color: var(--color-text); letter-spacing: -0.01em; text-decoration: none; }
+    .site-nav__home:hover { text-decoration: none; }
+    .site-nav__back { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .site-nav__back:hover { color: var(--color-accent); text-decoration: none; }
+    .site-footer { border-top: 1px solid var(--color-border); padding-block: var(--space-xl); text-align: center; }
+    .site-footer__line { font-size: var(--text-sm); color: var(--color-text-secondary); }
+
+    /* Hero */
+    .hero { padding-top: var(--space-2xl); padding-bottom: var(--space-xl); }
+    .hero__title { font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+    .hero__tagline { font-size: var(--text-md); color: var(--color-text-secondary); max-width: 600px; margin-top: var(--space-sm); line-height: 1.5; }
+    .hero__tags { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
+    .hero__rule { border: none; border-top: 1px solid var(--color-border); margin-top: var(--space-xl); }
+
+    /* Intro */
+    .intro { padding-block: var(--space-xl); }
+    .intro__text { font-size: var(--text-md); line-height: 1.7; max-width: 680px; color: var(--color-text); }
+
+    /* Day switcher */
+    .day-switcher { display: flex; gap: var(--space-sm); margin-bottom: var(--space-xl); flex-wrap: wrap; }
+    .day-btn {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+      border: 1px solid var(--color-border); padding: 2px 8px; border-radius: 2px;
+      color: var(--color-text-secondary); background: none; cursor: pointer;
+      font-family: inherit; font-weight: 500; line-height: 1.6; transition: border-color 150ms, color 150ms;
+    }
+    .day-btn.is-active { border-color: var(--color-accent); color: var(--color-accent); font-weight: 500; }
+
+    /* Route section */
+    .route-section { padding-bottom: var(--space-2xl); }
+    #map { height: 560px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+    .stops-col { padding-top: var(--space-xs); }
+
+    /* Stop */
+    .stop { padding-bottom: var(--space-lg); }
+    .stop__header { margin-bottom: var(--space-sm); }
+    .stop__name { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; margin-top: var(--space-xs); }
+    .stop__subtitle { font-size: var(--text-base); color: var(--color-text-secondary); margin-top: 2px; }
+    .stop__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm); }
+    .stop__highlight { font-style: italic; font-family: Georgia, serif; font-size: var(--text-base); color: var(--color-text); border-left: 3px solid var(--color-accent); padding-left: var(--space-md); margin-block: var(--space-md); line-height: 1.6; }
+    .stop__expand-row { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-sm); }
+    .stop__expand-content { display: none; font-size: var(--text-base); line-height: 1.7; color: var(--color-text); margin-top: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-border); }
+    .stop__expand-content.is-open { display: block; }
+
+    /* Hike card */
+    .hikes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .hikes-section__header { margin-bottom: var(--space-xl); }
+    .hikes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hikes-section__sub { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: var(--space-xs); }
+    .hike-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hike-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hike-card__area { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hike-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hike-card__desc { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); }
+    .hike-card__tip { font-size: var(--text-sm); color: var(--color-text-secondary); font-style: italic; line-height: 1.6; }
+    .hike-card__tip-label { font-style: normal; font-weight: 500; color: var(--color-text-secondary); }
+
+    /* Hotel card */
+    .hotels-section { padding-bottom: var(--space-2xl); }
+    .hotels-section__header { margin-bottom: var(--space-xl); }
+    .hotels-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+    .hotel-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
+    .hotel-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+    .hotel-card__meta { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hotel-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+    .hotel-card__rec { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin-top: var(--space-xs); }
+
+    /* Before you go */
+    .notes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
+    .notes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-xl); }
+    .notes-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-xl); max-width: 680px; }
+    .notes-block__note { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text); }
+    .notes-block__rule { border: none; border-top: 1px solid var(--color-border); margin-block: var(--space-md); }
+
+    /* Leaflet label */
+    .stop-label { background: none; border: none; box-shadow: none; font-size: 11px; font-weight: 600; color: #1B3A5C; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.05em; padding: 0; }
+    .stop-label::before { display: none; }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="page-shell">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__home">Agugagatada</a>
+        <a href="index.html" class="site-nav__back">All destinations</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content">
+    <div class="page-shell">
+
+      <!-- Hero -->
+      <header class="hero">
+        <h1 class="hero__title">Nuremberg</h1>
+        <p class="hero__tagline">The symbolic heart of the Holy Roman Empire, the city of the Nazis' greatest spectacles, and the birthplace of the world's first printed globe</p>
+        <div class="hero__tags">
+          <span class="tag">1h 40 min from Munich</span>
+          <span class="tag">2 days</span>
+        </div>
+        <hr class="hero__rule">
+      </header>
+
+      <!-- Intro -->
+      <section class="intro">
+        <p class="intro__text">Nuremberg carries more weight of history per square meter than almost anywhere in Germany. For 500 years it was the unofficial capital of the Holy Roman Empire — the place where emperors were crowned, where imperial regalia was kept, where the first diets were held. Then, in the 1930s, it became the stage for the Nazi party's most theatrical displays of power. And then, in 1945, the courtroom where the architects of those crimes were tried. Albrecht Dürer was born here. The first printed globe was made here. The world's first railway in the German-speaking world ran from here. The history arrives in layers of radically different kinds.</p>
+      </section>
+
+      <!-- Two-column: map + stops -->
+      <section class="route-section">
+        <div class="two-col">
+
+          <!-- Map -->
+          <div class="two-col__map">
+            <div id="map"></div>
+          </div>
+
+          <!-- Stops with day switcher -->
+          <div class="stops-col">
+
+            <div class="day-switcher">
+              <button class="day-btn is-active" data-day="1">Day 1 — Kaiserburg + Old Town + Dürer</button>
+              <button class="day-btn" data-day="2">Day 2 — Documentation Center + Trials</button>
+            </div>
+
+            <!-- Day 1 stops -->
+            <div id="day-1-stops">
+
+              <article class="stop" data-stop-id="kaiserburg" data-day="1">
+                <div class="stop__header">
+                  <span class="stop-number">01</span>
+                  <h2 class="stop__name">Kaiserburg</h2>
+                  <p class="stop__subtitle">The symbolic center of the Holy Roman Empire</p>
+                  <div class="stop__tags">
+                    <span class="tag">90 min</span>
+                    <span class="tag">Castle</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">The castle from which every Holy Roman Emperor governed — no emperor was considered legitimate without spending time here</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="kaiserburg-about">About this place</button>
+                  <button class="expand-btn" data-target="kaiserburg-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="kaiserburg-baby">Visiting with a baby</button>
+                </div>
+                <div id="kaiserburg-about" class="stop__expand-content">The Kaiserburg was not merely a residence but a constitutional symbol: the Golden Bull of 1356 specified that every new emperor had to hold his first diet here, making Nuremberg the de facto capital of the Holy Roman Empire for centuries. The castle complex began in the 11th century and grew continuously until the 16th. Inside the Palas (palace building), the Kaisersaal (Imperial Hall) and the Double Chapel — with its extraordinary two-level construction separating the emperor from his court during services — are the most significant spaces. The deep well (52 meters, hand-dug through solid rock) is one of the engineering wonders of medieval Germany. The views from the castle walls over the red-roofed city — the medieval street grid intact within the old walls — are extraordinary and the best introduction to the city's layout.</div>
+                <div id="kaiserburg-gems" class="stop__expand-content">The castle gardens on the north side of the hill are almost always quiet and give the best exterior views of the fortifications. Below the castle, the Burgviertel (castle quarter) has the densest concentration of medieval half-timbered houses in Nuremberg — almost none of the tourists from the castle come down into these streets. The Dürerplatz just below is where Dürer's house stands; doing the castle first and Dürer's house second is the logical sequence.</div>
+                <div id="kaiserburg-baby" class="stop__expand-content">The castle involves significant uneven terrain and stone steps throughout. A carrier is needed for most of the interior. The castle gardens and outer walls are more accessible. The view from the outer ramparts can be reached via a gentler path. Allow time and don't rush — the views reward patience.</div>
+              </article>
+
+              <div class="drive-connector"></div>
+
+              <article class="stop" data-stop-id="duerer-house" data-day="1">
+                <div class="stop__header">
+                  <span class="stop-number">02</span>
+                  <h2 class="stop__name">Albrecht Dürer's House</h2>
+                  <p class="stop__subtitle">The workshop where the Northern Renaissance was invented</p>
+                  <div class="stop__tags">
+                    <span class="tag">60 min</span>
+                    <span class="tag">Museum</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">The actual workshop where Dürer produced the Apocalypse woodcuts, the first great prints in European art history</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="duerer-about">About this place</button>
+                  <button class="expand-btn" data-target="duerer-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="duerer-baby">Visiting with a baby</button>
+                </div>
+                <div id="duerer-about" class="stop__expand-content">Albrecht Dürer (1471–1528) was born in Nuremberg and lived in this house from 1509 until his death. He is the pivotal figure in Northern European Renaissance art — the man who brought Italian Renaissance ideas north of the Alps and synthesized them with the German tradition into something entirely new. The Apocalypse series (1498), his self-portraits, his studies of proportion, his watercolors of the natural world — all produced in this workshop. The house is well-preserved: four floors of a 15th-century merchant's house with period rooms, printing press demonstrations, and the Agnes room (his wife's workspace). Dürer was also a theorist — he wrote treatises on proportion and perspective that remained standard references for a century. He made the first scientific map of the northern sky. He corresponded with Erasmus, met Luther, and was the most famous living artist in Europe at the time of his death.</div>
+                <div id="duerer-gems" class="stop__expand-content">The printing press demonstrations run at fixed times and show how the woodcut and engraving processes actually worked — not just what the prints look like but how technically demanding their production was. The tiny garden behind the house is quiet and gives a sense of the domestic scale of the place. Dürer's grave is in the Johannisfriedhof cemetery a 15-minute walk away — a simple flat slab next to the grave of his friend Willibald Pirckheimer.</div>
+                <div id="duerer-baby" class="stop__expand-content">Multiple floors with narrow stairs — a carrier is necessary inside the house. The demonstration areas on the ground floor are accessible. The street outside and the Tiergärtnertor square in front are flat and a good spot for a break.</div>
+              </article>
+
+              <div class="drive-connector"></div>
+
+              <article class="stop" data-stop-id="germanisches-nationalmuseum" data-day="1">
+                <div class="stop__header">
+                  <span class="stop-number">03</span>
+                  <h2 class="stop__name">Germanisches Nationalmuseum</h2>
+                  <p class="stop__subtitle">Germany's largest cultural history museum</p>
+                  <div class="stop__tags">
+                    <span class="tag">120 min</span>
+                    <span class="tag">Museum</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">The world's first printed globe (1492), made the same year Columbus reached America — and it shows no Americas</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="gnm-about">About this place</button>
+                  <button class="expand-btn" data-target="gnm-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="gnm-baby">Visiting with a baby</button>
+                </div>
+                <div id="gnm-about" class="stop__expand-content">The Germanisches Nationalmuseum holds Germany's largest collection of cultural artifacts spanning prehistoric times to the 20th century. Founded in 1852 in a former Carthusian monastery, it now occupies a vast complex of connected buildings. The medieval and early modern collections are extraordinary: the Behaim Globe (1492) is the oldest surviving terrestrial globe in the world, made by Martin Behaim of Nuremberg in the same year Columbus sailed — it shows a world without the Americas because the commission was completed before word of Columbus returned. The instruments, clocks, scientific tools, playing cards, weapons, furniture, and paintings together form the most comprehensive picture of German material culture anywhere.</div>
+                <div id="gnm-gems" class="stop__expand-content">Most visitors rush through to the famous objects and miss the craft and trade collections on the upper floors — the goldsmiths' tools, the pewter casters' workshops, the early printing equipment. Nuremberg was the Silicon Valley of the 15th and 16th centuries: the first pocket watches (Nuremberg eggs), the first mass-produced scientific instruments, the first printed maps with consistent projection. The museum documents this in extraordinary depth. The courtyard café inside the old monastery cloister is excellent for lunch.</div>
+                <div id="gnm-baby" class="stop__expand-content">Fully accessible throughout — elevators, flat floors, wide corridors. Excellent baby changing room near the main entrance. The cloister courtyard has outdoor seating. Strollers work well through most of the collections.</div>
+              </article>
+
+            </div><!-- /day-1-stops -->
+
+            <!-- Day 2 stops -->
+            <div id="day-2-stops" style="display:none">
+
+              <article class="stop" data-stop-id="documentation-center" data-day="2">
+                <div class="stop__header">
+                  <span class="stop-number">01</span>
+                  <h2 class="stop__name">Documentation Center Reichsparteitagsgelände</h2>
+                  <p class="stop__subtitle">Inside the unfinished Congress Hall of the Nazi party rallies</p>
+                  <div class="stop__tags">
+                    <span class="tag">120 min</span>
+                    <span class="tag">Museum</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">The museum is housed inside the unfinished Nazi Congress Hall — a building larger than the Colosseum, abandoned mid-construction in 1939</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="doc-about">About this place</button>
+                  <button class="expand-btn" data-target="doc-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="doc-baby">Visiting with a baby</button>
+                </div>
+                <div id="doc-about" class="stop__expand-content">From 1933 to 1938, Nuremberg hosted the annual Nazi party rallies — mass choreographed spectacles of power involving up to 700,000 people, designed by Albert Speer and filmed by Leni Riefenstahl. The rally grounds southeast of the city center were to be a permanent monumental complex: a Congress Hall larger than the Roman Colosseum, a Zeppelin Field, a Great Road 2km long, a March Field for military exercises. Construction stopped in 1939 when the war began. The Congress Hall stands unfinished, its red brick facade like a horseshoe open to the sky. The Documentation Center occupies a glass and steel insertion into one wing of the building — the contrast between the Nazi megalomaniac architecture and the light-filled contemporary museum inside is deliberate. The permanent exhibition 'Fascination and Terror' is one of the most rigorous examinations of how the Nazi movement rose, how it used spectacle and aesthetics, and what it did. The Zeppelin Field is a 10-minute walk away — the tribune from which Hitler addressed the rallies still partially stands, crumbling.</div>
+                <div id="doc-gems" class="stop__expand-content">The audio guide to the open-air rally grounds (available at the Documentation Center) takes you to the Zeppelin Field, the Great Road, and the remnants of the other structures. Walking the actual scale of what was planned is more affecting than any photograph. The Silbersee lake to the north of the complex occupies a former quarry where forced laborers extracted granite for the buildings — the documentation center mentions this but the lake itself, now a quiet swimming spot for locals, is a strange place to sit with that knowledge.</div>
+                <div id="doc-baby" class="stop__expand-content">The Documentation Center is fully accessible — elevator, flat floors, stroller-friendly throughout. The outdoor rally grounds involve long flat walking on stone and gravel — entirely manageable with a stroller. Allow time; the open-air section alone is 2–3km of walking.</div>
+              </article>
+
+              <div class="drive-connector"></div>
+
+              <article class="stop" data-stop-id="courtroom-600" data-day="2">
+                <div class="stop__header">
+                  <span class="stop-number">02</span>
+                  <h2 class="stop__name">Courtroom 600 — Nuremberg Trials</h2>
+                  <p class="stop__subtitle">The room where the architects of the Holocaust were tried</p>
+                  <div class="stop__tags">
+                    <span class="tag">75 min</span>
+                    <span class="tag">Museum</span>
+                  </div>
+                </div>
+                <blockquote class="stop__highlight">The actual courtroom where Göring, Hess, Ribbentrop and 21 other defendants sat for 218 days of trial — still an active courthouse today</blockquote>
+                <div class="stop__expand-row">
+                  <button class="expand-btn" data-target="court-about">About this place</button>
+                  <button class="expand-btn" data-target="court-gems">Hidden gems</button>
+                  <button class="expand-btn" data-target="court-baby">Visiting with a baby</button>
+                </div>
+                <div id="court-about" class="stop__expand-content">The choice of Nuremberg for the war crimes trials was deliberate: the city most associated with Nazi ceremonial power would be the place where that power was judged. Courtroom 600 in the Palace of Justice was chosen because it was large enough and because the adjacent prison could hold the defendants. The trials ran from November 1945 to October 1946. Göring was convicted and sentenced to death, cheated the hangman with a cyanide capsule, and was found dead in his cell the night before the execution. Of the 24 defendants, 12 were sentenced to death, 7 imprisoned, 3 acquitted. The trials established the legal precedents for crimes against humanity and genocide that underpin international law today. Courtroom 600 is still an active German court — trials run here regularly. When it is not in session, visitors can enter and sit where the defendants, judges, prosecutors, and press sat. A permanent exhibition in the adjacent rooms explains the trials in detail.</div>
+                <div id="court-gems" class="stop__expand-content">The exhibition in the adjoining rooms documents the pre-trial negotiations between the Allied powers — the debates about whether to hold trials at all (Churchill initially wanted summary execution) and how to define the charges. The creation of the concept of 'crimes against humanity' as a legal category happened in these negotiations. Advance booking is required for entry and it sells out — book online at least a week before.</div>
+                <div id="court-baby" class="stop__expand-content">The courthouse building is accessible with an elevator. The courtroom itself has fixed wooden benches — a carrier or lap-held baby is fine. The exhibition rooms have wide corridors. Advance booking essential. The visit is emotionally heavy; the quiet focus it requires may be difficult with a baby who needs attention.</div>
+              </article>
+
+            </div><!-- /day-2-stops -->
+
+          </div><!-- /stops-col -->
+        </div><!-- /two-col -->
+      </section>
+
+      <!-- Hikes -->
+      <section class="hikes-section">
+        <div class="hikes-section__header">
+          <h2 class="hikes-section__title">On foot</h2>
+          <p class="hikes-section__sub">Walks and hikes from this base</p>
+        </div>
+        <div class="card-grid">
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Nuremberg City Walls Loop</h3>
+            <p class="hike-card__area">Nuremberg old town</p>
+            <div class="hike-card__tags">
+              <span class="tag">5 km</span>
+              <span class="tag">+30 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">A nearly complete circuit of the medieval city walls with their towers and gates. The path runs between the inner and outer walls through a green belt. All gates are original medieval construction.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Start at Königstor (King's Gate) near the train station. The Handwerkerhof inside the walls near the station is a reconstructed medieval craftsmen's courtyard worth a 20-minute stop.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Pegnitz River Meadows</h3>
+            <p class="hike-card__area">Through the old town</p>
+            <div class="hike-card__tags">
+              <span class="tag">4 km</span>
+              <span class="tag">Easy</span>
+              <span class="tag tag--accent">Stroller-friendly</span>
+            </div>
+            <p class="hike-card__desc">The Pegnitz river runs through the middle of the old town. The riverside path passes the Henkersteg (Hangman's Bridge), the Weinstadel (medieval wine warehouse), and several medieval towers reflected in the water.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Walk from the Maxbrücke to the Kettensteg iron footbridge. The Heilig-Geist-Spital (Holy Spirit Hospital) spans the river on arches and has a good café.</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Hotels -->
+      <section class="hotels-section">
+        <div class="hotels-section__header">
+          <h2 class="hotels-section__title">Where to stay</h2>
+        </div>
+        <div class="card-grid">
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Drei Raben</h3>
+            <p class="hotel-card__meta">Boutique Hotel — Nuremberg old town</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€110–160/night</span>
+              <span class="tag">Crib available</span>
+            </div>
+            <p class="hotel-card__rec">Most characterful hotel in the city. The storytelling concept is fun and matches the historically-minded traveler.</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Burghotel Nürnberg</h3>
+            <p class="hotel-card__meta">Historic Hotel — Below the Kaiserburg</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€130–180/night</span>
+              <span class="tag">Crib available</span>
+            </div>
+            <p class="hotel-card__rec">Unique position — you wake up under the imperial castle</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Agneshof Nürnberg</h3>
+            <p class="hotel-card__meta">Boutique Hotel — Nuremberg old town</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€95–130/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Best combination of location, character, and practical family amenities</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Before you go -->
+      <section class="notes-section">
+        <h2 class="notes-section__title">Before you go</h2>
+        <div class="notes-block">
+          <p class="notes-block__note">Courtroom 600: advance booking essential, sells out weeks ahead — book online.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Kaiserburg: allow 90 minutes minimum, carrier needed inside.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Documentation Center: the outdoor rally grounds are 2–3km of walking — wear comfortable shoes.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Germanisches Nationalmuseum: closed Monday.</p>
+          <hr class="notes-block__rule">
+          <p class="notes-block__note">Nuremberg Lebkuchen (gingerbread): buy from Lebkuchen-Schmidt on the main market, not from stalls.</p>
+        </div>
+      </section>
+
+    </div><!-- /page-shell -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell">
+      <p class="site-footer__line">Munich-based, hand-curated.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ── Stop data by day ───────────────────────────────────────────────────
+    const stopsByDay = {
+      1: [
+        { id: 'kaiserburg',                  lat: 49.4591, lon: 11.0742 },
+        { id: 'duerer-house',                lat: 49.4582, lon: 11.0779 },
+        { id: 'germanisches-nationalmuseum', lat: 49.4516, lon: 11.0793 }
+      ],
+      2: [
+        { id: 'documentation-center', lat: 49.4287, lon: 11.1118 },
+        { id: 'courtroom-600',        lat: 49.4487, lon: 11.0679 }
+      ]
+    };
+
+    const driveLine = [
+      [48.1351, 11.5820], [48.5012, 11.3548], [48.9265, 11.1743], [49.4521, 11.0767]
+    ];
+
+    // ── Map setup ──────────────────────────────────────────────────────────
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd', maxZoom: 19
+    }).addTo(map);
+
+    L.polyline(driveLine, { color: '#1B3A5C', opacity: 0.4, weight: 2, dashArray: '5 7' }).addTo(map);
+
+    const GREY = '#AAAAAA', ACCENT = '#1B3A5C';
+    let localLine = null;
+    const markerMap = {};
+
+    function buildDay(day) {
+      const stops = stopsByDay[day];
+      // Remove old local line and markers
+      if (localLine) { map.removeLayer(localLine); localLine = null; }
+      Object.values(markerMap).forEach(m => map.removeLayer(m));
+      Object.keys(markerMap).forEach(k => delete markerMap[k]);
+
+      localLine = L.polyline(stops.map(s => [s.lat, s.lon]), { color: ACCENT, opacity: 0.85, weight: 2 }).addTo(map);
+
+      stops.forEach((s, i) => {
+        const m = L.circleMarker([s.lat, s.lon], { radius: 7, fillColor: GREY, color: '#FFF', weight: 2, fillOpacity: 1 }).addTo(map);
+        m.bindTooltip(String(i + 1).padStart(2, '0'), { permanent: true, direction: 'right', className: 'stop-label', offset: [8, 0] });
+        markerMap[s.id] = m;
+      });
+
+      const allPts = [...driveLine, ...stops.map(s => [s.lat, s.lon])];
+      map.fitBounds(L.latLngBounds(allPts), { padding: [40, 40] });
+      // Activate first stop
+      Object.values(markerMap)[0]?.setStyle({ fillColor: ACCENT, radius: 10 });
+    }
+
+    buildDay(1);
+
+    // ── Day switcher ───────────────────────────────────────────────────────
+    document.querySelectorAll('.day-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const day = Number(btn.dataset.day);
+        document.querySelectorAll('.day-btn').forEach(b => b.classList.toggle('is-active', b === btn));
+        document.getElementById('day-1-stops').style.display = day === 1 ? '' : 'none';
+        document.getElementById('day-2-stops').style.display = day === 2 ? '' : 'none';
+        buildDay(day);
+      });
+    });
+
+    // ── Expand / collapse ──────────────────────────────────────────────────
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(btn.dataset.target);
+        const open = panel.classList.toggle('is-open');
+        btn.style.textDecoration = open ? 'underline' : 'none';
+      });
+    });
+
+    // ── Scroll-linked map highlighting ────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.dataset.stopId;
+        if (!markerMap[id]) return;
+        Object.entries(markerMap).forEach(([mid, m]) => {
+          const active = mid === id;
+          m.setStyle({ fillColor: active ? ACCENT : GREY, radius: active ? 10 : 7 });
+          if (active) map.panTo(m.getLatLng(), { animate: true, duration: 0.4 });
+        });
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stop[data-stop-id]').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
