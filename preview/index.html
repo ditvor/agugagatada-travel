@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agugagatada — Day trips from Munich</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .site-nav {
+      border-bottom: 1px solid var(--color-border);
+      padding-block: var(--space-md);
+    }
+
+    .site-nav__name {
+      font-size: var(--text-md);
+      font-weight: 500;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--color-border);
+      padding-block: var(--space-xl);
+      text-align: center;
+    }
+
+    .site-footer__line {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
+
+    /* Page header */
+    .page-header {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-xl);
+    }
+
+    .page-header__title {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .page-header__subtitle {
+      font-size: var(--text-md);
+      color: var(--color-text-secondary);
+      margin-top: var(--space-sm);
+    }
+
+    /* Destination card */
+    .dest-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      transition: border-color 150ms ease;
+    }
+
+    .dest-card:hover {
+      border-color: var(--color-accent);
+    }
+
+    .dest-card__name {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .dest-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+
+    .dest-card__intro {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      line-height: 1.65;
+      flex: 1;
+    }
+
+    .dest-card__link {
+      font-size: var(--text-sm);
+      color: var(--color-accent);
+      font-weight: 500;
+      margin-top: var(--space-xs);
+    }
+
+    .dest-card__link:hover {
+      text-decoration: underline;
+    }
+
+    #content {
+      padding-block: var(--space-2xl);
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="page-shell">
+      <span class="site-nav__name">Agugagatada</span>
+    </div>
+  </nav>
+
+  <main id="content">
+    <div class="page-shell">
+
+      <header class="page-header">
+        <h1 class="page-header__title">Day trips from Munich</h1>
+        <p class="page-header__subtitle">7 drives worth the detour</p>
+      </header>
+
+      <div class="card-grid">
+
+        <!-- 1. Eichstätt + Solnhofen — 75 min -->
+        <article class="dest-card">
+          <h2 class="dest-card__name">Eichstätt &amp; Solnhofen</h2>
+          <div class="dest-card__tags">
+            <span class="tag">1h 15 min</span>
+            <span class="tag">1 day</span>
+          </div>
+          <p class="dest-card__intro">
+            Most people have never heard of Eichstätt.
+          </p>
+          <a href="eichstaett.html" class="dest-card__link">See the route</a>
+        </article>
+
+        <!-- 2. Regensburg — 95 min -->
+        <article class="dest-card">
+          <h2 class="dest-card__name">Regensburg</h2>
+          <div class="dest-card__tags">
+            <span class="tag">1h 35 min</span>
+            <span class="tag">1 day</span>
+          </div>
+          <p class="dest-card__intro">
+            Regensburg is one of the great surprises of Germany.
+          </p>
+          <a href="regensburg.html" class="dest-card__link">See the route</a>
+        </article>
+
+        <!-- 3. Nuremberg — 100 min -->
+        <article class="dest-card">
+          <h2 class="dest-card__name">Nuremberg</h2>
+          <div class="dest-card__tags">
+            <span class="tag">1h 40 min</span>
+            <span class="tag">2 days</span>
+          </div>
+          <p class="dest-card__intro">
+            Nuremberg carries more weight of history per square meter than almost anywhere in Germany.
+          </p>
+          <a href="nuremberg.html" class="dest-card__link">See the route</a>
+        </article>
+
+        <!-- 4. Berchtesgaden — 105 min -->
+        <article class="dest-card">
+          <h2 class="dest-card__name">Berchtesgaden</h2>
+          <div class="dest-card__tags">
+            <span class="tag">1h 45 min</span>
+            <span class="tag">2 days</span>
+          </div>
+          <p class="dest-card__intro">
+            Berchtesgaden sits at the bottom of a geological accident — a bowl of alpine rock so steep and dramatic it feels like the landscape is hiding something.
+          </p>
+          <a href="berchtesgaden.html" class="dest-card__link">See the route</a>
+        </article>
+
+        <!-- 5. Passau — 110 min -->
+        <article class="dest-card">
+          <h2 class="dest-card__name">Passau</h2>
+          <div class="dest-card__tags">
+            <span class="tag">1h 50 min</span>
+            <span class="tag">1 day</span>
+          </div>
+          <p class="dest-card__intro">
+            Passau is built on an impossibly narrow peninsula where three rivers converge — the Danube from the west, the Inn from the south, and the small dark Ilz from the north.
+          </p>
+          <a href="passau.html" class="dest-card__link">See the route</a>
+        </article>
+
+        <!-- 6. Bodensee — 110 min -->
+        <article class="dest-card">
+          <h2 class="dest-card__name">Bodensee</h2>
+          <div class="dest-card__tags">
+            <span class="tag">1h 50 min</span>
+            <span class="tag">2 days</span>
+          </div>
+          <p class="dest-card__intro">
+            The Bodensee sits at the junction of Germany, Austria, and Switzerland, and its shores carry 4,000 years of history in an unusually dense stretch of land.
+          </p>
+          <a href="bodensee.html" class="dest-card__link">See the route</a>
+        </article>
+
+        <!-- 7. Bamberg — 130 min -->
+        <article class="dest-card">
+          <h2 class="dest-card__name">Bamberg</h2>
+          <div class="dest-card__tags">
+            <span class="tag">2h 10 min</span>
+            <span class="tag">1 day</span>
+          </div>
+          <p class="dest-card__intro">
+            Bamberg is one of the best-kept secrets in Germany, which is extraordinary given that it has a UNESCO World Heritage old town, one of the finest Romanesque cathedrals in Europe, and a beer culture so unique it has no parallel anywhere else on earth.
+          </p>
+          <a href="bamberg.html" class="dest-card__link">See the route</a>
+        </article>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell">
+      <p class="site-footer__line">Munich-based, hand-curated.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
