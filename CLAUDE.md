@@ -1,8 +1,8 @@
-# Gaga Travel — Claude Code Guide
+# Agugagatada Travel — Claude Code Guide
 
 ## Project Overview
 
-**Gaga Travel** is an AI-powered travel route planner for curious families. The user enters a destination and receives a curated itinerary with historical context, hidden gems, hotel recommendations, and hike suggestions — all baby-friendly aware.
+**Agugagatada Travel** is an AI-powered travel route planner for curious families. The user enters a destination and receives a curated itinerary with historical context, hidden gems, hotel recommendations, and hike suggestions — all baby-friendly aware.
 
 **Target user:** Family based in Munich with a young baby. Interests: history, scientific museums, old castles, non-touristy places.
 
@@ -65,7 +65,7 @@ User input: "Lindau" + dates
 ## Project Structure
 
 ```
-gaga_travel/
+agugagatada_travel/
 ├── app/                        # Next.js App Router
 │   ├── (home)/                 # Landing page
 │   ├── trip/[id]/              # Trip detail page

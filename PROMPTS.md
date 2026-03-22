@@ -1,4 +1,4 @@
-# Gaga Travel — Prompt Scripts
+# Agugagatada Travel — Prompt Scripts
 
 These are the full prompt templates used in `lib/ai/prompts.ts`.
 Variables are written as `{{VARIABLE_NAME}}`.
