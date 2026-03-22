@@ -1,0 +1,218 @@
+{
+  "id": "berchtesgaden-weekend-2026",
+  "title": "Berchtesgaden & the Königssee",
+  "tagline": "Alpine drama, ancient salt, and the shadow of history",
+  "destination": {
+    "name": "Berchtesgaden",
+    "region": "Bavaria, Germany",
+    "lat": 47.6306,
+    "lon": 13.0019
+  },
+  "origin": {
+    "name": "Munich",
+    "lat": 48.1351,
+    "lon": 11.5820
+  },
+  "drive_time_from_origin_minutes": 105,
+  "duration_days": 2,
+  "generated_at": "2026-03-22",
+  "stats": {
+    "total_stops": 4,
+    "baby_friendly_score": 4,
+    "history_depth_score": 5,
+    "touristic_score": 2,
+    "drive_total_km": 175
+  },
+  "intro": "Berchtesgaden sits at the bottom of a geological accident — a bowl of alpine rock so steep and dramatic it feels like the landscape is hiding something. And it is: 500 years of salt wealth, a king's fairytale mountain refuge, and the most politically charged hilltop in Europe. This is one of the few places where you can stand inside a working salt mine that predates the Reformation, take a boat across a lake so clean it's used as drinking water, and look out from a building that was once Hitler's retreat — all in the same day. The history here comes in layers, and most visitors only see the top one.",
+  "route_polyline": [
+    [48.1351, 11.5820],
+    [47.9574, 11.8548],
+    [47.8571, 12.1208],
+    [47.7643, 12.4892],
+    [47.7265, 12.8743],
+    [47.6306, 13.0019]
+  ],
+  "days": [
+    {
+      "day_number": 1,
+      "title": "Königssee + Ramsau",
+      "theme": "Nature, medieval history, hidden lake",
+      "summary": "Silent electric boats, a 12th-century chapel, and a fairytale forest",
+      "stops": [
+        {
+          "id": "koenigssee",
+          "sequence": 1,
+          "name": "Königssee",
+          "subtitle": "The silent lake",
+          "lat": 47.5929,
+          "lon": 12.9983,
+          "category": "nature",
+          "visit_duration_minutes": 180,
+          "drive_time_from_prev_minutes": 0,
+          "baby_friendly_score": 5,
+          "highlight": "Electric boat ride to a 12th-century chapel pressed against sheer vertical cliffs",
+          "about": "The Königssee is not a typical alpine lake. The walls of the Watzmann massif drop almost vertically into the water, making the lake exceptionally deep (190m) and narrow — more like a Norwegian fjord pressed into Bavaria. Since motorized boats are banned to protect the water quality, the journey to St. Bartholomä is made entirely in silence on electric boats, a rule in place since 1909. The red-domed chapel of St. Bartholomä on the peninsula was built in the 12th century on a site of Christian worship that probably displaced an even older Bavarian cult. The Wittelsbach dukes used the peninsula as a hunting ground for centuries. The captain's echo demonstration is not a gimmick: halfway down the lake, the captain plays a trumpet and the notes bounce off the Falkenwand cliff face across the water. It has been done on every passenger boat since the 19th century.",
+          "hidden_gems": "Almost everyone stops at St. Bartholomä and turns back. Continue on foot from St. Bartholomä to the Obersee — a 20-minute flat walk through a meadow. The Obersee is wilder, smaller, and on a calm morning completely deserted. The Röthbach waterfall at its far end falls 470 meters — the highest in Germany — and is visible from the shore. For the best view before boarding, walk 10 minutes south from the boat dock to the Malerwinkel (Painters' Corner), a classic viewpoint that every 19th-century Romantic landscape painter came to. Arrive before 10am for the best light.",
+          "baby_logistics": "The boat ride is one of the easiest excursions in the region with a stroller — flat boarding, benches, covered sections if it rains. Arrive before 9:30am as the car park fills fast. There is a nursing room and changing facilities in the visitor center at the boat dock. The restaurant at St. Bartholomä has high chairs and outdoor terrace seating."
+        },
+        {
+          "id": "ramsau-hintersee",
+          "sequence": 2,
+          "name": "Ramsau + Hintersee",
+          "subtitle": "The village Berchtesgaden wishes it still was",
+          "lat": 47.6169,
+          "lon": 12.8516,
+          "category": "nature",
+          "visit_duration_minutes": 120,
+          "drive_time_from_prev_minutes": 15,
+          "baby_friendly_score": 5,
+          "highlight": "Zauberwald — a mossy ancient forest over glacier boulders beside a turquoise lake",
+          "about": "Ramsau is the village Berchtesgaden wishes it still was. While the main town has grown into a resort, Ramsau has stayed almost exactly as it looked in the 19th century — a scattering of farmhouses, a church, and a fast clear river cutting through the valley. The Church of St. Sebastian sits on a small bridge over the Ramsauer Ache and is one of the most painted scenes in Bavaria. The reason painters came here in such numbers from the 1800s onward is the quality of light — the narrow valley funnels afternoon sun at a low angle that makes the white church walls glow orange against dark spruce forest. Caspar David Friedrich drew the landscape here. The Romantic movement essentially invented the emotional vocabulary through which we still understand mountains — Ramsau was one of the places where that happened.",
+          "hidden_gems": "Drive 5 minutes further to Hintersee, a small turquoise lake that most visitors skip because it requires one more turn off the main road. The path around the near end of the lake passes through the Zauberwald (Magic Forest), ancient mossy spruce forest where roots grow over enormous boulders left by a prehistoric rockfall. It genuinely looks like a fairy tale, and on a weekday morning you will often have it entirely to yourself. For lunch, Gasthof Oberwirt in Ramsau has been family-run since 1612. Try the Kaspressknödelsuppe.",
+          "baby_logistics": "The village is extremely easy — flat valley floor, no crowds, quiet roads. The Zauberwald path at Hintersee is stroller-friendly on the flat lakeside section. The section over the boulders requires a carrier. Good spot for a late afternoon feed and a slow walk before dinner."
+        }
+      ]
+    },
+    {
+      "day_number": 2,
+      "title": "Eagle's Nest + Salt Mine",
+      "theme": "Heavy history, underground adventure",
+      "summary": "The Third Reich's mountain retreat and 500 years of white gold",
+      "stops": [
+        {
+          "id": "obersalzberg-eagles-nest",
+          "sequence": 1,
+          "name": "Dokumentation Obersalzberg + Eagle's Nest",
+          "subtitle": "The most politically charged hilltop in Europe",
+          "lat": 47.6312,
+          "lon": 13.0483,
+          "category": "museum",
+          "visit_duration_minutes": 240,
+          "drive_time_from_prev_minutes": 10,
+          "baby_friendly_score": 3,
+          "highlight": "A brass elevator drilled through solid rock, still running, rising to Hitler's mountain retreat",
+          "about": "The Obersalzberg mountain was a quiet farming area until Hitler first rented a small house here in the 1920s. He returned repeatedly, eventually bought the property (renamed it the Berghof), and transformed the entire mountain into a heavily fortified compound for Nazi leadership — Bormann, Göring, Speer all had villas here. The Dokumentation Obersalzberg museum is one of the best historical documentation centers in Germany, including access to parts of the original bunker system built in 1943. The Kehlsteinhaus — the 'Eagle's Nest' — sits 1000 meters above the Obersalzberg at 1834m. Built in 14 months as a 50th birthday gift for Hitler from the Nazi Party in 1938, the engineering is extraordinary: a 6.5km road blasted through rock and a 124-meter shaft drilled vertically into the summit for a brass-paneled elevator. Hitler reportedly had a fear of heights and visited only a handful of times. It is now a restaurant and mountain refuge, and the original brass elevator still runs.",
+          "hidden_gems": "The Kehlsteinhaus requires a special RVO bus from the Obersalzberg bus station — private cars are not permitted on the upper road. Buy your ticket at the Documentation Center or online in advance; queues for buses can be 45 minutes long in peak summer. Take the first bus of the day (~9am). Most visitors rush through the Documentation Center to reach the Eagle's Nest — spend real time in the bunker section. The scale of what was built underground here is astonishing and the exhibition is unusually candid about local complicity.",
+          "baby_logistics": "The Documentation Center is fully accessible with elevator and flat floors. The Kehlsteinhaus requires the bus then the elevator — stroller is not practical at the summit, use a carrier. Bring an extra layer for the baby even in summer as it can be 10-15°C cooler at 1834m than in the valley. The bus ride is dramatic but perfectly safe."
+        },
+        {
+          "id": "salzbergwerk",
+          "sequence": 2,
+          "name": "Berchtesgaden Salt Mine",
+          "subtitle": "Five centuries of white gold",
+          "lat": 47.6379,
+          "lon": 13.0044,
+          "category": "museum",
+          "visit_duration_minutes": 90,
+          "drive_time_from_prev_minutes": 10,
+          "baby_friendly_score": 4,
+          "highlight": "Sliding down wooden chutes through a mine active since 1517, crossing an underground lake in total darkness",
+          "about": "Salt extraction in Berchtesgaden began in 1517 — the mine has been continuously operating for over 500 years. 'White gold' is not a metaphor: salt was the primary source of wealth for the Wittelsbach dynasty and the reason Berchtesgaden developed at all. The mine tunnels run for around 50km inside the mountain and production continues today. The visitor tour is theatrical in a way that works: you change into miners' overalls, slide down long wooden chutes between levels, cross an underground salt lake on a wooden raft in complete darkness, and walk through crystalline formations that look like another planet. The salt here formed 250 million years ago from an ancient inland sea.",
+          "hidden_gems": "The mine shop sells Berchtesgadener Salz — salt from this exact mine — in various grades. It is an excellent and genuinely local souvenir that costs almost nothing. The smoked salt is particularly good. If the mine queue is long, the Berchtesgaden Palace (Schloss Berchtesgaden) in the town center is worth the time: a 12th-century Augustinian priory converted into a Wittelsbach royal palace, with original medieval cloisters intact.",
+          "baby_logistics": "The temperature inside the mine is a constant 12°C — bring a warm layer for the baby regardless of the weather outside. The wooden slides are fast; you hold the baby on your lap. The mine provides overalls that fit over a baby carrier. The raft crossing is completely calm. The enclosed, dark, quiet interior often sends babies to sleep."
+        }
+      ]
+    }
+  ],
+  "hotels": [
+    {
+      "id": "alpenpension-gastager",
+      "name": "Alpenpension Gastager",
+      "area": "Ramsau",
+      "type": "Pension",
+      "local_character_score": 5,
+      "price_range": "€90–120/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Traditional family-run Pension with views of the Reiter Alpe. Very quiet, very local.",
+      "why_recommended": "Authentic Bavarian Pension character, positioned perfectly for Day 1"
+    },
+    {
+      "id": "hotel-rehlegg",
+      "name": "Hotel Rehlegg",
+      "area": "Ramsau",
+      "type": "Boutique Hotel",
+      "local_character_score": 4,
+      "price_range": "€150–200/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Small 4-star with Alpine spa, family rooms, parking, high chairs. Still family-run.",
+      "why_recommended": "Best comfort-to-local-character ratio in the area"
+    },
+    {
+      "id": "landhaus-gitti",
+      "name": "Landhaus Gitti",
+      "area": "Schönau am Königssee",
+      "type": "Guesthouse",
+      "local_character_score": 5,
+      "price_range": "€75–100/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Simple Pension 5 minutes walk from the Königssee boat dock. Local owners.",
+      "why_recommended": "Perfect location for morning Königssee visit, minimal tourist pricing"
+    },
+    {
+      "id": "kempinski-berchtesgaden",
+      "name": "Kempinski Hotel Berchtesgaden",
+      "area": "Berchtesgaden",
+      "type": "Luxury Hotel",
+      "local_character_score": 2,
+      "price_range": "€300+/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Splurge option. Dramatic views of the Watzmann. Full baby facilities.",
+      "why_recommended": "Worth it if budget allows — the view from the terrace is unreal"
+    }
+  ],
+  "hikes": [
+    {
+      "id": "zauberwald",
+      "name": "Zauberwald at Hintersee",
+      "area": "Ramsau / Hintersee",
+      "distance_km": 3.5,
+      "elevation_gain_m": 50,
+      "estimated_time_minutes": 90,
+      "difficulty": "easy",
+      "pushchair_friendly": true,
+      "baby_carrier_feasible": true,
+      "surface": "packed gravel and forest path",
+      "description": "The flat lakeside section is fully stroller-accessible on packed gravel. The forest section over the glacier boulders requires a carrier but is short. The atmosphere is exceptional — moss-covered roots, turquoise water glimpses through the trees. On a weekday morning you may have it entirely to yourself.",
+      "practical_tip": "Start from the Hintersee car park. Go early — the light through the forest is best before 10am."
+    },
+    {
+      "id": "malerwinkel",
+      "name": "Malerwinkel — Königssee Painters' Corner",
+      "area": "Schönau am Königssee",
+      "distance_km": 2.0,
+      "elevation_gain_m": 10,
+      "estimated_time_minutes": 45,
+      "difficulty": "easy",
+      "pushchair_friendly": true,
+      "baby_carrier_feasible": true,
+      "surface": "paved lakeside path",
+      "description": "The classic Romantic-era viewpoint of the Königssee. Paved path along the lakeshore, fully flat. Every 19th-century landscape painter came here for this exact view.",
+      "practical_tip": "Best light before 10am with the sun hitting the Watzmann from the east. Do this before boarding the boat."
+    },
+    {
+      "id": "almbachklamm",
+      "name": "Almbachklamm Gorge",
+      "area": "Marktschellenberg",
+      "distance_km": 5.0,
+      "elevation_gain_m": 280,
+      "estimated_time_minutes": 150,
+      "difficulty": "moderate",
+      "pushchair_friendly": false,
+      "baby_carrier_feasible": true,
+      "surface": "wooden boardwalks, rocky path",
+      "description": "One of the best gorge walks in the region, surprisingly uncrowded. The path winds through narrow limestone gorge alongside a roaring stream. A 400-year-old marble mill at the entrance is still operational. Ends at an alpine meadow with a Hütte serving drinks.",
+      "practical_tip": "Not stroller-friendly beyond the first kilometer. Use a carrier. The marble mill at the entrance is genuinely worth 20 minutes."
+    }
+  ],
+  "practical_notes": [
+    "Arrive at Königssee before 9:30am — the car park fills fast in summer.",
+    "Eagle's Nest buses must be booked online. Take the first bus of the day (~9am).",
+    "Salt mine temperature is 12°C inside — bring a warm layer for the baby.",
+    "Ramsau roads are narrow. Drive slowly — farm traffic is real.",
+    "Changing facilities: Königssee dock, Documentation Center, Salt Mine."
+  ]
+}

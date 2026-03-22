@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Route Composer — Gaga Travel</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange:       #F05A28;
+      --orange-light: #FEF0EB;
+      --green:        #2D8653;
+      --green-light:  #EAF4EE;
+      --blue:         #2B6CB0;
+      --blue-light:   #EBF4FF;
+      --purple:       #6B46C1;
+      --teal:         #0D7377;
+      --brown:        #92400E;
+      --brown-light:  #FEF3C7;
+      --red:          #DC2626;
+      --red-light:    #FEE2E2;
+      --yellow:       #D97706;
+      --yellow-light: #FEF3C7;
+      --bg:           #F4F4F2;
+      --card:         #FFFFFF;
+      --border:       #E5E7EB;
+      --text:         #1A1A1A;
+      --muted:        #6B7280;
+      --radius:       12px;
+      --nav-h:        56px;
+      --var-h:        54px;
+    }
+
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; overflow-x: hidden; }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      height: var(--nav-h);
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo { font-weight: 800; font-size: 17px; color: var(--orange); display: flex; align-items: center; gap: 7px; }
+    .logo svg { width: 24px; height: 24px; }
+    .nav-dest { font-size: 13px; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+    .nav-dest strong { color: var(--text); }
+    .btn-generate { background: var(--orange); color: #fff; border: none; border-radius: 8px; padding: 7px 16px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .btn-generate:hover { background: #d94e1f; }
+
+    /* ── VARIANT BAR ── */
+    .variant-bar {
+      height: var(--var-h);
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 20px;
+      position: sticky;
+      top: var(--nav-h);
+      z-index: 999;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .variant-bar::-webkit-scrollbar { display: none; }
+    .variant-label { font-size: 12px; font-weight: 600; color: var(--muted); white-space: nowrap; margin-right: 4px; }
+    .variant-btn {
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .variant-btn:hover { border-color: var(--orange); color: var(--orange); background: var(--orange-light); }
+    .variant-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+    /* ── COMPOSER LAYOUT ── */
+    .composer {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      height: calc(100vh - var(--nav-h) - var(--var-h));
+    }
+
+    /* ── MAP PANE ── */
+    .map-pane { position: relative; }
+    #map { height: 100%; width: 100%; }
+
+    /* Map overlay: Munich label */
+    .map-origin-label {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 500;
+      background: rgba(255,255,255,0.9);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .map-origin-label span { color: var(--muted); font-weight: 400; }
+
+    /* ── ROUTE PANE ── */
+    .route-pane {
+      background: var(--bg);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Budget bar */
+    .budget-section {
+      background: #fff;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .budget-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .budget-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+    .budget-time { font-size: 14px; font-weight: 800; color: var(--text); }
+    .budget-time .over { color: var(--red); }
+    .budget-track {
+      height: 8px;
+      background: var(--bg);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .budget-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--green), #4CAF50);
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s;
+    }
+    .budget-fill.warn { background: linear-gradient(90deg, var(--yellow), #F59E0B); }
+    .budget-fill.over { background: linear-gradient(90deg, var(--red), #EF4444); }
+    .budget-segments {
+      display: flex;
+      gap: 4px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .budget-seg {
+      font-size: 10px;
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: 100px;
+      background: var(--bg);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    .budget-seg.active { background: var(--orange-light); color: var(--orange); border-color: #F7C5B3; }
+
+    /* Scrollable inner */
+    .route-scroll { flex: 1; overflow-y: auto; padding: 0 0 40px; }
+
+    /* Section heading */
+    .route-section-head {
+      padding: 14px 18px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .route-section-head .count {
+      background: var(--text);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Active stop row */
+    .stop-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 18px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+      animation: slideIn 0.25s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .stop-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 12px;
+      color: #fff;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .stop-row-body { flex: 1; min-width: 0; }
+    .stop-row-name { font-size: 13px; font-weight: 700; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .stop-row-meta { font-size: 11px; color: var(--muted); margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+    .stop-row-duration { font-size: 12px; font-weight: 700; color: var(--text); white-space: nowrap; }
+    .btn-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #D1D5DB;
+      font-size: 16px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      line-height: 1;
+      transition: color 0.15s;
+      flex-shrink: 0;
+    }
+    .btn-remove:hover { color: var(--red); }
+
+    /* Drive time connector */
+    .drive-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 18px 4px 36px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+    .drive-dot-line {
+      width: 2px;
+      height: 16px;
+      background: repeating-linear-gradient(to bottom, #D1D5DB 0, #D1D5DB 3px, transparent 3px, transparent 6px);
+      margin-left: 3px;
+    }
+    .drive-row-text { font-size: 11px; color: var(--muted); }
+
+    /* Detour divider */
+    .detour-divider {
+      margin: 16px 18px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .detour-divider-line { flex: 1; height: 1px; background: var(--border); }
+    .detour-divider-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* Detour card */
+    .detour-card {
+      margin: 0 12px 10px;
+      background: #fff;
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      padding: 14px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .detour-card:hover { border-color: #D1D5DB; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .detour-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .detour-name { font-size: 13px; font-weight: 700; line-height: 1.3; flex: 1; }
+    .detour-duration { font-size: 12px; font-weight: 700; color: var(--text); white-space: nowrap; }
+    .detour-tags { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px; }
+    .dtag {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 100px;
+    }
+    .dtag-cat   { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+    .dtag-crowd-low    { background: var(--green-light); color: var(--green); }
+    .dtag-crowd-medium { background: var(--yellow-light); color: var(--yellow); }
+    .dtag-crowd-high   { background: var(--red-light); color: var(--red); }
+    .detour-note {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .detour-highlight {
+      font-size: 12px;
+      color: #4B5563;
+      line-height: 1.55;
+      margin-bottom: 10px;
+    }
+    .btn-add {
+      width: 100%;
+      background: var(--orange-light);
+      color: var(--orange);
+      border: 1.5px solid #F7C5B3;
+      border-radius: 8px;
+      padding: 7px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+    }
+    .btn-add:hover { background: var(--orange); color: #fff; border-color: var(--orange); }
+
+    /* Empty detour state */
+    .detour-empty {
+      text-align: center;
+      padding: 28px 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .composer { grid-template-columns: 1fr; grid-template-rows: 320px 1fr; height: auto; }
+      .route-pane { border-left: none; border-top: 1px solid var(--border); height: auto; overflow: visible; }
+      .route-scroll { overflow: visible; }
+      #map { height: 320px; }
+      .nav-dest { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">
+    <svg viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="16" fill="#F05A28"/>
+      <path d="M8 22 L14 10 L16 14 L19 8 L24 22Z" fill="white" opacity="0.9"/>
+      <circle cx="11" cy="20" r="2" fill="white" opacity="0.6"/>
+    </svg>
+    Gaga Travel
+  </div>
+  <div class="nav-dest">
+    <span>Trip to</span>
+    <strong>Bodensee, Germany</strong>
+    <span>·</span>
+    <span>Day trip from Munich</span>
+  </div>
+  <button class="btn-generate">✦ Regenerate</button>
+</nav>
+
+<!-- VARIANT BAR -->
+<div class="variant-bar">
+  <span class="variant-label">Route style:</span>
+  <button class="variant-btn active" data-variant="history"  onclick="setVariant('history')">🏛️ Deep History</button>
+  <button class="variant-btn"        data-variant="castles"  onclick="setVariant('castles')">🏰 Castles + Nature</button>
+  <button class="variant-btn"        data-variant="easy"     onclick="setVariant('easy')">👶 Easy Day</button>
+</div>
+
+<!-- COMPOSER -->
+<div class="composer">
+
+  <!-- MAP -->
+  <div class="map-pane">
+    <div class="map-origin-label">📍 Munich <span>· starting point</span></div>
+    <div id="map"></div>
+  </div>
+
+  <!-- ROUTE PANEL -->
+  <div class="route-pane">
+
+    <!-- Time budget -->
+    <div class="budget-section">
+      <div class="budget-header">
+        <div class="budget-title">⏱ Activity time budget</div>
+        <div class="budget-time" id="budgetLabel">0h 0min / 8h</div>
+      </div>
+      <div class="budget-track">
+        <div class="budget-fill" id="budgetFill" style="width:0%"></div>
+      </div>
+      <div class="budget-segments" id="budgetSegments"></div>
+    </div>
+
+    <!-- Scrollable content -->
+    <div class="route-scroll" id="routeScroll">
+      <!-- Active stops injected here by JS -->
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+const STOPS = {
+  neuschwanstein: {
+    id: 'neuschwanstein', name: 'Neuschwanstein + Hohenschwangau',
+    area: 'Füssen · 45 min off-route',
+    category: '🏰 Castle', color: '#92400E', lat: 47.5576, lon: 10.7498,
+    durationMin: 120, crowdLevel: 'high', crowdLabel: 'Very touristy',
+    detourNote: '📍 On the way to Bodensee · +45 min detour',
+    highlight: "Worth it before 9am. Ludwig II was a reclusive king who bankrupted Bavaria building fantasy castles, was declared insane by his ministers, and was found dead in a lake 3 days after his arrest. The mystery of his death has never been resolved. Hohenschwangau castle directly below is older, less crowded, and more authentic."
+  },
+  lindau: {
+    id: 'lindau', name: 'Lindau',
+    area: 'Bodensee · island town',
+    category: '🏘️ Island Town', color: '#0D7377', lat: 47.5462, lon: 9.6817,
+    durationMin: 90, crowdLevel: 'medium', crowdLabel: 'Moderate crowds',
+    detourNote: '📍 Eastern entry point to the lake',
+    highlight: "A medieval Free Imperial City on an island in the lake, answerable to no one but the Holy Roman Emperor for 600 years. Roman walls still standing. Completely flat — perfect with a stroller."
+  },
+  zeppelin: {
+    id: 'zeppelin', name: 'Zeppelin Museum',
+    area: 'Friedrichshafen',
+    category: '✈️ Technical Museum', color: '#2B6CB0', lat: 47.6554, lon: 9.4802,
+    durationMin: 120, crowdLevel: 'low', crowdLabel: 'Rarely crowded',
+    highlight: "Full-scale Hindenburg passenger gondola with the original Art Deco furniture still intact. The finest airship museum in the world. Almost nobody outside Germany knows it exists."
+  },
+  unteruhldingen: {
+    id: 'unteruhldingen', name: 'Pfahlbaumuseum',
+    area: 'Unteruhldingen · UNESCO',
+    category: '🏛️ Open-Air Museum', color: '#2B6CB0', lat: 47.7674, lon: 9.2637,
+    durationMin: 90, crowdLevel: 'low', crowdLabel: 'Rarely crowded',
+    highlight: "Bronze Age villages rebuilt over the lake — on the exact site where the 4,000-year-old originals still lie under the sediment. One of the most important prehistoric sites in Central Europe. Almost no one outside Bavaria knows it exists."
+  },
+  meersburg: {
+    id: 'meersburg', name: 'Meersburg Altes Schloss',
+    area: 'Meersburg',
+    category: '🏰 7th-Century Castle', color: '#92400E', lat: 47.6941, lon: 9.2712,
+    durationMin: 90, crowdLevel: 'medium', crowdLabel: 'Moderate crowds',
+    highlight: "Oldest inhabited castle in Germany. Parts possibly date to the Merovingian period. Germany's greatest female poet died here in 1848 — her rooms are preserved exactly as she left them."
+  },
+  reichenau: {
+    id: 'reichenau', name: 'Reichenau Island',
+    area: 'Reichenau · UNESCO',
+    category: '⛪ Romanesque Churches', color: '#6B46C1', lat: 47.6924, lon: 9.0622,
+    durationMin: 90, crowdLevel: 'low', crowdLabel: 'Rarely crowded',
+    detourNote: '📍 Small detour between Meersburg and Konstanz',
+    highlight: "1,000-year-old Ottonian frescoes painted in 1000 AD — still the finest in existence — in a near-empty church on a completely flat island. The medieval vegetable gardens are still being farmed."
+  },
+  konstanz: {
+    id: 'konstanz', name: 'Konstanz',
+    area: 'Bodensee · Swiss border',
+    category: '🏘️ Medieval City', color: '#0D7377', lat: 47.6603, lon: 9.1750,
+    durationMin: 150, crowdLevel: 'medium', crowdLabel: 'Moderate crowds',
+    highlight: "The city that left its lights on in WWII to be mistaken for Switzerland and emerged with one of the most intact medieval old towns in Germany. The Council of Constance ended the Great Schism here — and burned Jan Hus at the stake."
+  },
+  ueberlingen: {
+    id: 'ueberlingen', name: 'Überlingen',
+    area: 'Bodensee',
+    category: '🏘️ Medieval Town', color: '#0D7377', lat: 47.7686, lon: 9.1656,
+    durationMin: 60, crowdLevel: 'low', crowdLabel: 'Very few tourists',
+    detourNote: '📍 Quick stop between Meersburg and Konstanz',
+    highlight: "The most underrated town on the lake. Intact medieval walls, a Gothic minster with a world-class altarpiece, and virtually no tourists. Can be added with just 1 extra hour."
+  }
+}
+
+const GEOGRAPHIC_ORDER = ['neuschwanstein','lindau','zeppelin','unteruhldingen','ueberlingen','meersburg','reichenau','konstanz']
+
+const VARIANTS = {
+  history: { active: new Set(['zeppelin','unteruhldingen','meersburg','konstanz']) },
+  castles: { active: new Set(['neuschwanstein','lindau','meersburg','reichenau']) },
+  easy:    { active: new Set(['lindau','zeppelin','meersburg']) }
+}
+
+const DRIVE_TIMES = {
+  'neuschwanstein→lindau': 45, 'lindau→zeppelin': 40, 'zeppelin→unteruhldingen': 25,
+  'unteruhldingen→ueberlingen': 10, 'ueberlingen→meersburg': 8, 'unteruhldingen→meersburg': 10,
+  'meersburg→reichenau': 30, 'meersburg→konstanz': 35, 'reichenau→konstanz': 15,
+  'ueberlingen→reichenau': 25, 'ueberlingen→konstanz': 22,
+  'lindau→meersburg': 55, 'zeppelin→meersburg': 35, 'neuschwanstein→zeppelin': 80,
+  'neuschwanstein→meersburg': 100, 'lindau→unteruhldingen': 55,
+}
+
+const MUNICH_COORDS = [48.1351, 11.5820]
+const BUDGET_MIN = 480 // 8h activity budget
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+let activeIds = new Set(['zeppelin','unteruhldingen','meersburg','konstanz'])
+let currentVariant = 'history'
+
+// ─────────────────────────────────────────────
+// MAP SETUP
+// ─────────────────────────────────────────────
+const map = L.map('map', { zoomControl: true, scrollWheelZoom: false })
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap © CARTO', maxZoom: 18
+}).addTo(map)
+
+// Munich marker
+L.marker(MUNICH_COORDS, {
+  icon: L.divIcon({
+    className: '',
+    html: `<div style="width:12px;height:12px;border-radius:50%;background:#9CA3AF;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.25)"></div>`,
+    iconSize: [12,12], iconAnchor: [6,6]
+  })
+}).addTo(map).bindPopup('<strong>Munich</strong><br>Starting point')
+
+// Stop markers (stored for updates)
+const markers = {}
+let routeLine = null
+let detourLines = []
+
+function makeActiveIcon(color, num) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);background:${color};border:3px solid #fff;box-shadow:0 3px 10px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center"><span style="transform:rotate(45deg);color:#fff;font-weight:800;font-size:12px;font-family:Inter,sans-serif">${num}</span></div>`,
+    iconSize: [32,32], iconAnchor: [16,32], popupAnchor: [0,-34]
+  })
+}
+
+function makeInactiveIcon() {
+  return L.divIcon({
+    className: '',
+    html: `<div style="width:24px;height:24px;border-radius:50%;background:#fff;border:2.5px solid #D1D5DB;box-shadow:0 2px 6px rgba(0,0,0,0.12);display:flex;align-items:center;justify-content:center"><div style="width:8px;height:8px;border-radius:50%;background:#D1D5DB"></div></div>`,
+    iconSize: [24,24], iconAnchor: [12,12], popupAnchor: [0,-14]
+  })
+}
+
+// Create all markers
+Object.values(STOPS).forEach(s => {
+  const marker = L.marker([s.lat, s.lon], { icon: makeInactiveIcon() })
+    .addTo(map)
+    .bindPopup(`<strong>${s.name}</strong><br><span style="color:#6B7280;font-size:12px">${s.area}</span>`)
+  markers[s.id] = marker
+})
+
+function refreshMap() {
+  // Get ordered active stops
+  const ordered = GEOGRAPHIC_ORDER.filter(id => activeIds.has(id))
+
+  // Update all markers
+  let num = 1
+  Object.keys(STOPS).forEach(id => {
+    if (activeIds.has(id)) {
+      markers[id].setIcon(makeActiveIcon(STOPS[id].color, num++))
+    } else {
+      markers[id].setIcon(makeInactiveIcon())
+    }
+  })
+
+  // Remove existing route lines
+  if (routeLine) map.removeLayer(routeLine)
+  detourLines.forEach(l => map.removeLayer(l))
+  detourLines = []
+
+  if (ordered.length === 0) return
+
+  // First stop drive from Munich
+  const firstStop = STOPS[ordered[0]]
+  const driveLine = L.polyline([MUNICH_COORDS, [firstStop.lat, firstStop.lon]], {
+    color: '#F05A28', weight: 2.5, opacity: 0.55, dashArray: '7 5'
+  }).addTo(map)
+  detourLines.push(driveLine)
+
+  // Route between active stops
+  const coords = ordered.map(id => [STOPS[id].lat, STOPS[id].lon])
+  routeLine = L.polyline(coords, {
+    color: '#F05A28', weight: 3.5, opacity: 0.9
+  }).addTo(map)
+
+  // Inactive stop connectors (ghost lines)
+  const inactiveIds = GEOGRAPHIC_ORDER.filter(id => !activeIds.has(id))
+  inactiveIds.forEach(id => {
+    // Find nearest active stops on each side
+    const pos = GEOGRAPHIC_ORDER.indexOf(id)
+    const prevActive = GEOGRAPHIC_ORDER.slice(0, pos).reverse().find(i => activeIds.has(i))
+    const nextActive = GEOGRAPHIC_ORDER.slice(pos + 1).find(i => activeIds.has(i))
+    if (prevActive && nextActive) {
+      L.polyline([[STOPS[prevActive].lat, STOPS[prevActive].lon],[STOPS[id].lat, STOPS[id].lon],[STOPS[nextActive].lat, STOPS[nextActive].lon]], {
+        color: '#D1D5DB', weight: 1.5, opacity: 0.5, dashArray: '4 4'
+      }).addTo(map).bindPopup(`<em>${STOPS[id].name}</em> — not in route`)
+    }
+  })
+
+  // Fit bounds
+  const all = [MUNICH_COORDS, ...ordered.map(id => [STOPS[id].lat, STOPS[id].lon])]
+  map.fitBounds(all, { padding: [50, 50], maxZoom: 12 })
+}
+
+// ─────────────────────────────────────────────
+// ROUTE PANEL RENDERING
+// ─────────────────────────────────────────────
+function getOrderedActive() {
+  return GEOGRAPHIC_ORDER.filter(id => activeIds.has(id))
+}
+
+function getDriveTime(fromId, toId) {
+  return DRIVE_TIMES[`${fromId}→${toId}`] || DRIVE_TIMES[`${toId}→${fromId}`] || 20
+}
+
+function formatMin(min) {
+  if (min < 60) return `${min}min`
+  const h = Math.floor(min / 60), m = min % 60
+  return m ? `${h}h ${m}min` : `${h}h`
+}
+
+function crowdClass(level) {
+  return { low: 'dtag-crowd-low', medium: 'dtag-crowd-medium', high: 'dtag-crowd-high' }[level] || 'dtag-crowd-low'
+}
+
+function updateBudget() {
+  const ordered = getOrderedActive()
+  const totalMin = ordered.reduce((sum, id) => sum + STOPS[id].durationMin, 0)
+  const pct = Math.min((totalMin / BUDGET_MIN) * 100, 100)
+  const fill = document.getElementById('budgetFill')
+  const label = document.getElementById('budgetLabel')
+  const segs = document.getElementById('budgetSegments')
+
+  fill.style.width = pct + '%'
+  fill.className = 'budget-fill' + (pct > 100 ? ' over' : pct > 85 ? ' warn' : '')
+
+  const h = Math.floor(totalMin / 60), m = totalMin % 60
+  label.innerHTML = `<span class="${totalMin > BUDGET_MIN ? 'over' : ''}">${h}h ${m}min</span> / 8h`
+
+  // Mini segment pills
+  segs.innerHTML = ordered.map(id => {
+    const s = STOPS[id]
+    return `<span class="budget-seg active" style="background:${s.color}18;color:${s.color};border-color:${s.color}40">${s.name.split(' ')[0]} · ${formatMin(s.durationMin)}</span>`
+  }).join('')
+}
+
+function renderRoutePanel() {
+  const scroll = document.getElementById('routeScroll')
+  const ordered = getOrderedActive()
+  const detourIds = GEOGRAPHIC_ORDER.filter(id => !activeIds.has(id))
+
+  let html = ''
+
+  // ── ACTIVE STOPS ──
+  html += `<div class="route-section-head">Your route <span class="count">${ordered.length}</span></div>`
+
+  if (ordered.length === 0) {
+    html += `<div style="padding:20px 18px;color:var(--muted);font-size:13px">Add stops from the detour options below.</div>`
+  }
+
+  ordered.forEach((id, i) => {
+    const s = STOPS[id]
+    html += `
+      <div class="stop-row" id="row-${id}">
+        <div class="stop-dot" style="background:${s.color}">${i+1}</div>
+        <div class="stop-row-body">
+          <div class="stop-row-name">${s.name}</div>
+          <div class="stop-row-meta">${s.category} · ${s.area}</div>
+        </div>
+        <div class="stop-row-duration">${formatMin(s.durationMin)}</div>
+        <button class="btn-remove" onclick="removeStop('${id}')" title="Remove">✕</button>
+      </div>`
+
+    // Drive connector to next
+    if (i < ordered.length - 1) {
+      const driveMin = getDriveTime(id, ordered[i+1])
+      html += `
+        <div class="drive-row">
+          <div class="drive-dot-line"></div>
+          <div class="drive-row-text">🚗 ${driveMin} min drive</div>
+        </div>`
+    }
+  })
+
+  // ── DETOUR OPTIONS ──
+  if (detourIds.length > 0) {
+    html += `
+      <div class="detour-divider">
+        <div class="detour-divider-line"></div>
+        <div class="detour-divider-label">+ Add a detour</div>
+        <div class="detour-divider-line"></div>
+      </div>`
+
+    detourIds.forEach(id => {
+      const s = STOPS[id]
+      const totalUsed = getOrderedActive().reduce((sum, i) => sum + STOPS[i].durationMin, 0)
+      const newTotal = totalUsed + s.durationMin
+      const timeWarning = newTotal > BUDGET_MIN
+        ? `<span style="color:var(--red);font-size:10px;font-weight:600"> · day will be full</span>` : ''
+
+      html += `
+        <div class="detour-card" id="card-${id}">
+          <div class="detour-card-head">
+            <div class="detour-name">${s.name}</div>
+            <div class="detour-duration">+${formatMin(s.durationMin)}${timeWarning}</div>
+          </div>
+          <div class="detour-tags">
+            <span class="dtag dtag-cat">${s.category}</span>
+            <span class="dtag ${crowdClass(s.crowdLevel)}">${s.crowdLabel}</span>
+          </div>
+          ${s.detourNote ? `<div class="detour-note">📌 ${s.detourNote.replace('📍 ','')}</div>` : ''}
+          <div class="detour-highlight">${s.highlight}</div>
+          <button class="btn-add" onclick="addStop('${id}')">+ Add to route</button>
+        </div>`
+    })
+  } else {
+    html += `<div class="detour-empty">All available stops are on your route.<br>You're making the most of the day.</div>`
+  }
+
+  scroll.innerHTML = html
+  updateBudget()
+}
+
+// ─────────────────────────────────────────────
+// ACTIONS
+// ─────────────────────────────────────────────
+function addStop(id) {
+  activeIds.add(id)
+  renderRoutePanel()
+  refreshMap()
+  // Scroll to the newly added stop row
+  setTimeout(() => {
+    const el = document.getElementById('row-' + id)
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }, 50)
+}
+
+function removeStop(id) {
+  activeIds.delete(id)
+  renderRoutePanel()
+  refreshMap()
+}
+
+function setVariant(variant) {
+  currentVariant = variant
+  activeIds = new Set(VARIANTS[variant].active)
+  document.querySelectorAll('.variant-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.variant === variant)
+  })
+  renderRoutePanel()
+  refreshMap()
+}
+
+// ─────────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────────
+renderRoutePanel()
+refreshMap()
+</script>
+
+</body>
+</html>

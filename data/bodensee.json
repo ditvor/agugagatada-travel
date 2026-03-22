@@ -1,0 +1,250 @@
+{
+  "id": "bodensee-weekend-2026",
+  "title": "Bodensee — Where Three Countries Meet",
+  "tagline": "Bronze Age villages under water, the world's last airships, and a castle older than Charlemagne",
+  "destination": {
+    "name": "Bodensee (Lake Constance)",
+    "region": "Bavaria / Baden-Württemberg, Germany",
+    "lat": 47.6560,
+    "lon": 9.4788
+  },
+  "origin": {
+    "name": "Munich",
+    "lat": 48.1351,
+    "lon": 11.5820
+  },
+  "drive_time_from_origin_minutes": 110,
+  "duration_days": 2,
+  "generated_at": "2026-03-22",
+  "stats": {
+    "total_stops": 6,
+    "baby_friendly_score": 4,
+    "history_depth_score": 5,
+    "touristic_score": 2,
+    "drive_total_km": 190
+  },
+  "intro": "The Bodensee sits at the junction of Germany, Austria, and Switzerland, and its shores carry 4,000 years of history in an unusually dense stretch of land: Neolithic and Bronze Age villages preserved under the water, the cradle of the modern airship, a monastery island that once produced the finest illuminated manuscripts in Europe, and a city that ended the worst crisis in medieval Christianity and burned a reformer at the stake for good measure. Most visitors come for the views and the wine. You'll come for everything underneath.",
+  "route_polyline": [
+    [48.1351, 11.5820],
+    [48.0012, 11.0234],
+    [47.8701, 10.6245],
+    [47.7265, 10.3145],
+    [47.5462, 9.6817]
+  ],
+  "days": [
+    {
+      "day_number": 1,
+      "title": "Lindau → Friedrichshafen → Unteruhldingen → Meersburg",
+      "theme": "Island town, airships, Bronze Age, oldest castle",
+      "summary": "From Roman harbor to Bronze Age lake villages to a 7th-century castle",
+      "stops": [
+        {
+          "id": "lindau",
+          "sequence": 1,
+          "name": "Lindau",
+          "subtitle": "The island city on the lake",
+          "lat": 47.5462,
+          "lon": 9.6817,
+          "category": "town_center",
+          "visit_duration_minutes": 90,
+          "drive_time_from_prev_minutes": 0,
+          "baby_friendly_score": 5,
+          "highlight": "A medieval free imperial city on an island in the lake, with a Roman harbor entrance guarded by a stone lion",
+          "about": "Lindau is built on a small island connected to the mainland by a bridge and causeway, and it has been an important crossing point since the Romans established a garrison here in the 3rd century AD. The harbor entrance — flanked by a 33-meter lighthouse and a stone Bavarian lion — is one of the most photographed views on the Bodensee, though what most visitors miss is what the lion represents: Lindau was a Free Imperial City from 1275, answerable directly to the Holy Roman Emperor and no one else, a status it held for almost 600 years. The old town is extraordinarily intact: the Peterskirche dates to the 10th century, the Diebsturm (Thieves' Tower) to the 13th, and the stepped-gable Rathaus to 1422. In 1530, the Lindau delegation to the Diet of Augsburg signed the Augsburg Confession alongside the Protestant princes — one of the founding documents of the Reformation.",
+          "hidden_gems": "Almost everyone stays on the main promenade. Walk instead to the northern tip of the island to the Heidenmauer — a stretch of Roman wall that most visitors walk past without realizing it predates the medieval town by a thousand years. For coffee, skip the harbor cafés and go to Café Hoyerberg on the mainland hill above Lindau: the view over the island and the Austrian Alps across the water is better than anything on the island itself, and it is almost entirely local. On a clear day you can see the Pfänder mountain above Bregenz and, beyond it, the Swiss Alps.",
+          "baby_logistics": "Lindau is one of the most stroller-friendly stops on this entire trip — the island is flat, the main streets are paved, and there are benches everywhere. The harbor promenade has a ramp down to the waterfront. Changing facilities in the public toilets near the harbor. Parking is on the mainland; use the Parkhaus Inselbahnhof and walk across."
+        },
+        {
+          "id": "zeppelin-museum",
+          "sequence": 2,
+          "name": "Zeppelin Museum Friedrichshafen",
+          "subtitle": "The world's greatest airship museum",
+          "lat": 47.6554,
+          "lon": 9.4802,
+          "category": "museum",
+          "visit_duration_minutes": 120,
+          "drive_time_from_prev_minutes": 40,
+          "baby_friendly_score": 5,
+          "highlight": "A full-scale recreation of the passenger gondola of the Hindenburg, with original furniture still intact, in the hangar where it was built",
+          "about": "Ferdinand von Zeppelin was born near Konstanz in 1838 and spent thirty years as a cavalry general before retiring at 52 and devoting the rest of his life to building rigid airships. The LZ 1 made its first flight over the Bodensee in 1900, barely achieving 6km/h against the wind. By the 1930s, the LZ 127 Graf Zeppelin had made 590 flights including 144 transatlantic crossings, carried over 13,000 passengers, and circumnavigated the globe. The LZ 129 Hindenburg — 245 meters long, the largest flying object ever built — made 36 crossings of the Atlantic before bursting into flames at Lakehurst, New Jersey in 1937 in front of a live radio broadcast. The disaster ended the airship era within a year. The museum holds the most important collection of Zeppelin artifacts in the world, including a full-scale recreation of the Hindenburg's passenger section: the dining room, the lounge, the observation windows overlooking the ocean. The engineering of these objects is almost incomprehensible — a rigid aluminum skeleton 245 meters long, covered in cotton fabric, filled with hydrogen, carrying 50 passengers in pressurized luxury across the Atlantic in 60 hours.",
+          "hidden_gems": "Most visitors spend all their time in the Zeppelin hall and skip the fine art collection upstairs — a serious mistake. The museum's upper floor has one of the strongest collections of Expressionist and Neue Sachlichkeit art in southern Germany, including major works by Otto Dix and Max Beckmann. The Dornier Museum is a 10-minute walk away and covers the flying boat and military aircraft manufacturer that was also based in Friedrichshafen — together the two museums make Friedrichshafen one of the most important aviation history sites in Europe. Most people know neither exists.",
+          "baby_logistics": "Fully accessible throughout — elevator between floors, flat exhibition spaces, wide corridors for strollers. There is a good café on the ground floor with high chairs. The lakefront promenade directly outside is flat and perfect for a post-museum walk. Baby changing room in the main toilets block."
+        },
+        {
+          "id": "pfahlbaumuseum",
+          "sequence": 3,
+          "name": "Pfahlbaumuseum Unteruhldingen",
+          "subtitle": "Bronze Age villages, rebuilt over the water",
+          "lat": 47.7674,
+          "lon": 9.2637,
+          "category": "museum",
+          "visit_duration_minutes": 90,
+          "drive_time_from_prev_minutes": 25,
+          "baby_friendly_score": 4,
+          "highlight": "Walk through reconstructed Neolithic and Bronze Age pile-dwelling houses built directly over the lake — the same spot where the originals stood 4,000 years ago",
+          "about": "When Lake Constance water levels dropped dramatically in the 1850s, local fishermen began finding extraordinarily well-preserved wooden objects in the lake sediment near Unteruhldingen — tools, textiles, leather, food remains, entire structural timbers from houses — dating back 4,000 to 6,000 years. The anaerobic conditions under the lake had preserved organic material that would have rotted anywhere else on Earth within decades. What emerged was evidence of Neolithic and Bronze Age communities who built their villages on wooden platforms directly over the shallow water: the pile dwellings. The open-air museum at Unteruhldingen reconstructs these settlements with extraordinary accuracy — you walk through Bronze Age homes, see the hearths, the storage vessels, the tools. The lake sediment around the museum contains the actual original site, which was designated a UNESCO World Heritage Site in 2011 jointly with 110 other Alpine pile dwelling sites across Germany, Austria, Switzerland, France, Italy, and Slovenia. This is one of the most important prehistoric archaeological sites in Central Europe, and almost no one outside Germany has heard of it.",
+          "hidden_gems": "The museum boat trip gives you a view of the reconstruction from the water and a proper sense of how these villages related to the lake. It runs on the hour and takes 20 minutes. The underwater archaeology exhibition inside the main building shows the actual objects retrieved from the sediment — the preserved leather shoes, wooden ladles, and fabrics are more affecting than the reconstructed houses because they are real and 4,000 years old. Pick up the small illustrated guide in the shop; the scholarship behind the reconstructions is serious and the guide explains the choices made.",
+          "baby_logistics": "The walkway over the water between the pile dwelling reconstructions is wooden and has railings but is narrow in places — a stroller works but requires care on the turns. A carrier is more comfortable. The indoor exhibition hall is fully accessible. There is a lakeside terrace café with simple food and high chairs. One small changing room near the entrance."
+        },
+        {
+          "id": "meersburg",
+          "sequence": 4,
+          "name": "Meersburg Altes Schloss",
+          "subtitle": "The oldest inhabited castle in Germany",
+          "lat": 47.6941,
+          "lon": 9.2712,
+          "category": "castle",
+          "visit_duration_minutes": 90,
+          "drive_time_from_prev_minutes": 10,
+          "baby_friendly_score": 2,
+          "highlight": "A castle with parts dating to the 7th century, where Germany's greatest female poet spent her final years and died in 1848",
+          "about": "The Altes Schloss in Meersburg is one of the oldest continuously inhabited castles in Germany — parts of the Dagobertsturm (Dagobert's Tower) may date to the Merovingian period in the early 7th century, though the core of what you see today is 11th and 12th century. For nearly 700 years, from 1526 to 1803, it served as the residence of the Prince-Bishops of Konstanz. When Napoleon's reorganization of Germany dissolved the bishopric, the castle passed into private hands. In 1838 it was purchased by Baron Joseph von Laßberg, who invited his sister-in-law to convalesce here. She was Annette von Droste-Hülshoff — considered Germany's greatest female poet and the face that appeared on the 20-Deutschmark note until the euro replaced it. She lived the final decade of her life in the castle's tower rooms overlooking the lake, writing some of her most important work here, including the crime novella Die Judenbuche. She died in the castle in 1848. Her rooms are preserved exactly as she left them. The Neues Schloss directly next door was built in the 18th century as a more comfortable bishop's palace — its baroque interior is a sharp contrast to the austere medieval fortress.",
+          "hidden_gems": "The Meersburg town vineyard (Staatsweingut Meersburg) is the oldest state-owned winery in Germany, running directly down the steep hillside below the castle to the lake. You can buy bottles at the winery shop for well below restaurant prices; the Grauburgunder is particularly good. The view from the Schlossplatz terrace looking west over the lake and vineyard toward the Swiss Alps is one of the finest in the region and is not on any postcard. For dinner, Winzerstube zum Becher in the old town is where locals eat — dark wood, lake fish, and a wine list entirely from the local vineyard.",
+          "baby_logistics": "Meersburg is the most challenging stop on this trip for a stroller. The old town is built on a steep hillside with stone steps between levels. The Altes Schloss itself involves stairs throughout the interior — a baby carrier is necessary here, stroller not practical. The lakefront promenade at the bottom of the hill is completely flat and a good place to settle the baby while one parent visits the castle. Park at the lower Parkplatz and access the lakefront directly."
+        }
+      ]
+    },
+    {
+      "day_number": 2,
+      "title": "Reichenau Island → Konstanz",
+      "theme": "UNESCO monastery island, medieval council, the city that survived the war",
+      "summary": "Ottonian frescoes painted in 1000 AD and the trial that shook medieval Christendom",
+      "stops": [
+        {
+          "id": "reichenau",
+          "sequence": 1,
+          "name": "Reichenau Island",
+          "subtitle": "The manuscript island",
+          "lat": 47.6924,
+          "lon": 9.0622,
+          "category": "monument",
+          "visit_duration_minutes": 90,
+          "drive_time_from_prev_minutes": 30,
+          "baby_friendly_score": 5,
+          "highlight": "Three Romanesque churches on a small island — the oldest contains 1,000-year-old frescoes that are still the finest Ottonian paintings in existence",
+          "about": "Reichenau Island was founded as a Benedictine monastery in 724 AD by Saint Pirmin, an Irish-influenced wandering bishop. Within two centuries it had become one of the most important intellectual centers in Europe. The scriptorium at Reichenau produced illuminated manuscripts of extraordinary quality — the so-called Reichenau School of manuscript painting, working in the late 10th and early 11th centuries, created works that influenced religious art across the continent. Several of these manuscripts, including the Codex Aureus of Echternach, are now in museums and national libraries across Europe. The island has three surviving Romanesque churches. The most important is St. Georg in Oberzell, built in the 890s and containing the most complete cycle of Ottonian frescoes in Germany, painted around 1000 AD and depicting the miracles of Christ with a directness and formal intensity that feels entirely different from later Gothic or Baroque religious art. Standing in St. Georg in front of those 1,000-year-old paintings in an almost empty church is one of the genuinely quiet experiences of medieval history in southern Germany. The island was designated a UNESCO World Heritage Site in 2000.",
+          "hidden_gems": "Almost every visitor goes to Münster St. Maria und Markus (the main church near the causeway entrance) and skips the smaller churches. St. Georg in Oberzell has the frescoes — it is at the far western end of the island, a 15-minute cycle or drive from the causeway. The key is kept in the house opposite and access is free. The island also has the oldest continuously cultivated vegetable gardens in Germany; the local farmers have been supplying markets around the Bodensee since the medieval period. The farm stands along the road sell directly and the produce is exceptional. Buy the Reichenau tomatoes and cucumbers.",
+          "baby_logistics": "The island is completely flat — a cycling island by design, with well-maintained paths running its entire length. A stroller works perfectly everywhere. The churches have stone floors and cool interiors. The Münster has a café nearby with outdoor seating. No dedicated baby facilities in the churches but the island is quiet and there is always space to sit and feed."
+        },
+        {
+          "id": "konstanz",
+          "sequence": 2,
+          "name": "Konstanz",
+          "subtitle": "The city that ended the Great Schism and survived the bombs",
+          "lat": 47.6603,
+          "lon": 9.1750,
+          "category": "town_center",
+          "visit_duration_minutes": 150,
+          "drive_time_from_prev_minutes": 15,
+          "baby_friendly_score": 4,
+          "highlight": "The city that left its lights on during WWII to be mistaken for Switzerland — and emerged as one of the most intact medieval cities in Germany",
+          "about": "Konstanz is the largest city on the Bodensee and sits with its old town literally on the Swiss border — the city's southern edge is Switzerland. This geography saved it in WWII: the city left its lights on at night to be visually indistinguishable from neutral Switzerland, and Allied bombers — under orders not to bomb neutral territory — passed over it. The result is one of the most intact medieval old towns in Germany, essentially untouched while cities like Freiburg and Stuttgart were destroyed. The historical weight is considerable. The Council of Constance (1414–1418) was convened here to resolve the Western Schism — the crisis in which three men simultaneously claimed to be the true Pope, threatening to split the Church irreparably. Over four years, cardinals and princes from across Europe met in Konstanz to negotiate. They ended the schism, elected a single new pope (Martin V), and in 1415 condemned the Czech reformer Jan Hus — who had been promised safe conduct — and burned him at the stake for heresy. The Konzilgebäude on the harbor, where the cardinals deliberated, still stands. The harbor also has the Imperia, a 9-meter rotating bronze statue by Peter Lenk (1993) depicting a courtesan holding miniature figures of the Pope and Emperor as puppets — a deliberately provocative comment on the power games that surrounded the Council.",
+          "hidden_gems": "The spot where Jan Hus was burned — a small plaque on a quiet street in the Paradies neighborhood northwest of the old town — is almost never visited and worth finding. The Münster (Cathedral) is impressive but the view from its tower, looking north over the Rhine and south into Switzerland, rewards the climb. The old town's Niederburg district between the Münster and the Rhine is the most intact medieval residential quarter and where locals actually live — far less commercial than the main tourist center around the harbor.",
+          "baby_logistics": "Most of Konstanz's old town is stroller-friendly — the main streets are paved and reasonably flat. The Niederburg has some cobblestones but is manageable. The harbor area is completely flat with the wide promenade. Baby changing facilities in the Lago shopping center near the train station. Plenty of cafés with outdoor seating along the harbor."
+        }
+      ]
+    }
+  ],
+  "hotels": [
+    {
+      "id": "hotel-wilder-mann",
+      "name": "Hotel Wilder Mann",
+      "area": "Meersburg",
+      "type": "Gasthof",
+      "local_character_score": 5,
+      "price_range": "€95–130/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Historic inn in the Meersburg old town, family-run, regional Swabian kitchen. Has been an inn since the 16th century.",
+      "why_recommended": "Maximum local character, ideal position between Day 1 and Day 2 stops"
+    },
+    {
+      "id": "hotel-sonne-meersburg",
+      "name": "Hotel Sonne Meersburg",
+      "area": "Meersburg",
+      "type": "Boutique Hotel",
+      "local_character_score": 4,
+      "price_range": "€140–190/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Small boutique hotel on the lakefront with lake-view rooms. Genuinely good breakfast with regional products.",
+      "why_recommended": "Best lake view at night, good family rooms, still family-managed"
+    },
+    {
+      "id": "gasthaus-mohren",
+      "name": "Gasthaus zum Mohren",
+      "area": "Radolfzell (near Reichenau)",
+      "type": "Gasthof",
+      "local_character_score": 5,
+      "price_range": "€75–105/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Traditional Gasthof 15 min from Reichenau and Konstanz. Completely off the tourist trail. Excellent regional food.",
+      "why_recommended": "Best positioned for Day 2, very authentic, virtually no tourists"
+    },
+    {
+      "id": "steigenberger-inselhotel",
+      "name": "Steigenberger Inselhotel",
+      "area": "Konstanz",
+      "type": "Luxury Hotel",
+      "local_character_score": 3,
+      "price_range": "€220–320/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "Built in a former Dominican monastery on a small island in the harbor. The cloister courtyard is remarkable. Historic building, chain management.",
+      "why_recommended": "The building itself is extraordinary — a 13th-century monastery. Worth it for the architecture even if the management is corporate."
+    }
+  ],
+  "hikes": [
+    {
+      "id": "reichenau-island-loop",
+      "name": "Reichenau Island Complete Loop",
+      "area": "Reichenau",
+      "distance_km": 8.0,
+      "elevation_gain_m": 20,
+      "estimated_time_minutes": 150,
+      "difficulty": "easy",
+      "pushchair_friendly": true,
+      "baby_carrier_feasible": true,
+      "surface": "paved cycling path and flat tracks",
+      "description": "A completely flat loop around the entire island on well-maintained paths. Passes all three Romanesque churches, the vegetable gardens, and gives lake views in every direction. The island is designed for non-motorized traffic — even on weekends it feels peaceful.",
+      "practical_tip": "Rent a bike at the causeway entrance if you want to do the loop faster. With a stroller, the western half (toward St. Georg) takes about 45 minutes each way."
+    },
+    {
+      "id": "uberlingen-lake-path",
+      "name": "Überlingen Lake Promenade",
+      "area": "Überlingen",
+      "distance_km": 5.0,
+      "elevation_gain_m": 15,
+      "estimated_time_minutes": 90,
+      "difficulty": "easy",
+      "pushchair_friendly": true,
+      "baby_carrier_feasible": true,
+      "surface": "paved lakeside promenade",
+      "description": "Überlingen is one of the most underrated towns on the Bodensee — a compact medieval walled town with a magnificent Gothic minster that most visitors bypass on the way to Meersburg. The lakeside promenade runs for 3km with the lake on one side and the medieval town walls on the other. Best at dusk when the light comes off the water.",
+      "practical_tip": "Park in the Parkhaus Therme (free with thermal bath ticket). The Münster St. Nikolaus has one of the finest Gothic altarpieces in Germany — worth 20 minutes inside."
+    },
+    {
+      "id": "hohentwiel-volcano",
+      "name": "Hohentwiel Castle Ruins",
+      "area": "Singen (Hegau, 20min north of Konstanz)",
+      "distance_km": 3.5,
+      "elevation_gain_m": 170,
+      "estimated_time_minutes": 90,
+      "difficulty": "moderate",
+      "pushchair_friendly": false,
+      "baby_carrier_feasible": true,
+      "surface": "paved path and stone steps",
+      "description": "Hohentwiel is a dormant volcano rising 254 meters above the flat Hegau plain, topped by the largest castle ruins in Germany by area. The fortress was never taken by storm in its history. On a clear day the view takes in the entire Bodensee, the Swiss Alps, and the Black Forest. The volcanic landscape of the Hegau — seven cone-shaped volcanic plugs rising from flat farmland — is unlike anything else in southern Germany.",
+      "practical_tip": "Use a carrier — the path has steps in the upper section. The wine cellar at the base of the hill sells the local Hohentwiel volcanic soil wine, which is a genuine geological curiosity."
+    }
+  ],
+  "practical_notes": [
+    "Lindau parking: use mainland Parkhaus Inselbahnhof — the island parking fills by 10am.",
+    "Zeppelin Museum: book tickets online, especially on weekends. Allow 2 full hours minimum.",
+    "Pfahlbaumuseum: the boat trip runs on the hour — time your visit to catch it.",
+    "Meersburg Altes Schloss: stroller not practical inside — use a carrier. Lakefront below is fully flat.",
+    "Reichenau St. Georg frescoes: church is at the western end of the island, key in the house opposite, free entry.",
+    "Konstanz: cross into Switzerland with your passport — the Swiss border is literally the end of some streets."
+  ]
+}
