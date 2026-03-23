@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Agugagatada — Day trips from Munich</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     .site-nav {
       border-bottom: 1px solid var(--color-border);
@@ -53,15 +54,29 @@
       background: var(--color-surface);
       border: 1px solid var(--color-border);
       border-radius: var(--radius);
-      padding: var(--space-lg);
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: var(--space-sm);
+      gap: 0;
       transition: border-color 150ms ease;
     }
 
     .dest-card:hover {
       border-color: var(--color-accent);
+    }
+
+    .dest-card__map {
+      height: 120px;
+      width: 100%;
+      display: block;
+    }
+
+    .dest-card__body {
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      flex: 1;
     }
 
     .dest-card__name {
@@ -120,93 +135,114 @@
 
         <!-- 1. Eichstätt + Solnhofen — 75 min -->
         <article class="dest-card">
-          <h2 class="dest-card__name">Eichstätt &amp; Solnhofen</h2>
-          <div class="dest-card__tags">
-            <span class="tag">1h 15 min</span>
-            <span class="tag">1 day</span>
+          <div id="map-eichstaett" class="dest-card__map"></div>
+          <div class="dest-card__body">
+            <h2 class="dest-card__name">Eichstätt &amp; Solnhofen</h2>
+            <div class="dest-card__tags">
+              <span class="tag">1h 15 min</span>
+              <span class="tag">1 day</span>
+            </div>
+            <p class="dest-card__intro">
+              Most people have never heard of Eichstätt.
+            </p>
+            <a href="eichstaett.html" class="dest-card__link">See the route</a>
           </div>
-          <p class="dest-card__intro">
-            Most people have never heard of Eichstätt.
-          </p>
-          <a href="eichstaett.html" class="dest-card__link">See the route</a>
         </article>
 
         <!-- 2. Regensburg — 95 min -->
         <article class="dest-card">
-          <h2 class="dest-card__name">Regensburg</h2>
-          <div class="dest-card__tags">
-            <span class="tag">1h 35 min</span>
-            <span class="tag">1 day</span>
+          <div id="map-regensburg" class="dest-card__map"></div>
+          <div class="dest-card__body">
+            <h2 class="dest-card__name">Regensburg</h2>
+            <div class="dest-card__tags">
+              <span class="tag">1h 35 min</span>
+              <span class="tag">1 day</span>
+            </div>
+            <p class="dest-card__intro">
+              Regensburg is one of the great surprises of Germany.
+            </p>
+            <a href="regensburg.html" class="dest-card__link">See the route</a>
           </div>
-          <p class="dest-card__intro">
-            Regensburg is one of the great surprises of Germany.
-          </p>
-          <a href="regensburg.html" class="dest-card__link">See the route</a>
         </article>
 
         <!-- 3. Nuremberg — 100 min -->
         <article class="dest-card">
-          <h2 class="dest-card__name">Nuremberg</h2>
-          <div class="dest-card__tags">
-            <span class="tag">1h 40 min</span>
-            <span class="tag">2 days</span>
+          <div id="map-nuremberg" class="dest-card__map"></div>
+          <div class="dest-card__body">
+            <h2 class="dest-card__name">Nuremberg</h2>
+            <div class="dest-card__tags">
+              <span class="tag">1h 40 min</span>
+              <span class="tag">2 days</span>
+            </div>
+            <p class="dest-card__intro">
+              Nuremberg carries more weight of history per square meter than almost anywhere in Germany.
+            </p>
+            <a href="nuremberg.html" class="dest-card__link">See the route</a>
           </div>
-          <p class="dest-card__intro">
-            Nuremberg carries more weight of history per square meter than almost anywhere in Germany.
-          </p>
-          <a href="nuremberg.html" class="dest-card__link">See the route</a>
         </article>
 
         <!-- 4. Berchtesgaden — 105 min -->
         <article class="dest-card">
-          <h2 class="dest-card__name">Berchtesgaden</h2>
-          <div class="dest-card__tags">
-            <span class="tag">1h 45 min</span>
-            <span class="tag">2 days</span>
+          <div id="map-berchtesgaden" class="dest-card__map"></div>
+          <div class="dest-card__body">
+            <h2 class="dest-card__name">Berchtesgaden</h2>
+            <div class="dest-card__tags">
+              <span class="tag">1h 45 min</span>
+              <span class="tag">2 days</span>
+            </div>
+            <p class="dest-card__intro">
+              Berchtesgaden sits at the bottom of a geological accident — a bowl of alpine rock so steep and dramatic it feels like the landscape is hiding something.
+            </p>
+            <a href="berchtesgaden.html" class="dest-card__link">See the route</a>
           </div>
-          <p class="dest-card__intro">
-            Berchtesgaden sits at the bottom of a geological accident — a bowl of alpine rock so steep and dramatic it feels like the landscape is hiding something.
-          </p>
-          <a href="berchtesgaden.html" class="dest-card__link">See the route</a>
         </article>
 
         <!-- 5. Passau — 110 min -->
         <article class="dest-card">
-          <h2 class="dest-card__name">Passau</h2>
-          <div class="dest-card__tags">
-            <span class="tag">1h 50 min</span>
-            <span class="tag">1 day</span>
+          <div id="map-passau" class="dest-card__map"></div>
+          <div class="dest-card__body">
+            <h2 class="dest-card__name">Passau</h2>
+            <div class="dest-card__tags">
+              <span class="tag">1h 50 min</span>
+              <span class="tag">1 day</span>
+            </div>
+            <p class="dest-card__intro">
+              Passau is built on an impossibly narrow peninsula where three rivers converge — the Danube from the west, the Inn from the south, and the small dark Ilz from the north.
+            </p>
+            <a href="passau.html" class="dest-card__link">See the route</a>
           </div>
-          <p class="dest-card__intro">
-            Passau is built on an impossibly narrow peninsula where three rivers converge — the Danube from the west, the Inn from the south, and the small dark Ilz from the north.
-          </p>
-          <a href="passau.html" class="dest-card__link">See the route</a>
         </article>
 
         <!-- 6. Bodensee — 110 min -->
         <article class="dest-card">
-          <h2 class="dest-card__name">Bodensee</h2>
-          <div class="dest-card__tags">
-            <span class="tag">1h 50 min</span>
-            <span class="tag">2 days</span>
+          <div id="map-bodensee" class="dest-card__map"></div>
+          <div class="dest-card__body">
+            <h2 class="dest-card__name">Bodensee</h2>
+            <div class="dest-card__tags">
+              <span class="tag">1h 50 min</span>
+              <span class="tag">2 days</span>
+            </div>
+            <p class="dest-card__intro">
+              The Bodensee sits at the junction of Germany, Austria, and Switzerland, and its shores carry 4,000 years of history in an unusually dense stretch of land.
+            </p>
+            <a href="bodensee.html" class="dest-card__link">See the route</a>
           </div>
-          <p class="dest-card__intro">
-            The Bodensee sits at the junction of Germany, Austria, and Switzerland, and its shores carry 4,000 years of history in an unusually dense stretch of land.
-          </p>
-          <a href="bodensee.html" class="dest-card__link">See the route</a>
         </article>
 
         <!-- 7. Bamberg — 130 min -->
         <article class="dest-card">
-          <h2 class="dest-card__name">Bamberg</h2>
-          <div class="dest-card__tags">
-            <span class="tag">2h 10 min</span>
-            <span class="tag">1 day</span>
+          <div id="map-bamberg" class="dest-card__map"></div>
+          <div class="dest-card__body">
+            <h2 class="dest-card__name">Bamberg</h2>
+            <div class="dest-card__tags">
+              <span class="tag">2h 10 min</span>
+              <span class="tag">1 day</span>
+            </div>
+            <p class="dest-card__intro">
+              Bamberg is one of the best-kept secrets in Germany, which is extraordinary given that it has a UNESCO World Heritage old town, one of the finest Romanesque cathedrals in Europe, and a beer culture so unique it has no parallel anywhere else on earth.
+            </p>
+            <a href="bamberg.html" class="dest-card__link">See the route</a>
           </div>
-          <p class="dest-card__intro">
-            Bamberg is one of the best-kept secrets in Germany, which is extraordinary given that it has a UNESCO World Heritage old town, one of the finest Romanesque cathedrals in Europe, and a beer culture so unique it has no parallel anywhere else on earth.
-          </p>
-          <a href="bamberg.html" class="dest-card__link">See the route</a>
         </article>
 
       </div>
@@ -218,6 +254,37 @@
       <p class="site-footer__line">Munich-based, hand-curated.</p>
     </div>
   </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const ACCENT = '#1B3A5C';
+    const TILES = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
+    function initMap(containerId, polylineCoords, destLat, destLon) {
+      const map = L.map(containerId, {
+        zoomControl: false, attributionControl: false,
+        dragging: false, touchZoom: false, doubleClickZoom: false,
+        scrollWheelZoom: false, boxZoom: false, keyboard: false
+      });
+      L.tileLayer(TILES, { maxZoom: 19 }).addTo(map);
+      const line = L.polyline(polylineCoords, {
+        color: ACCENT, opacity: 0.5, weight: 2, dashArray: '4 6'
+      }).addTo(map);
+      L.circleMarker([destLat, destLon], {
+        radius: 5, color: ACCENT, fillColor: ACCENT,
+        fillOpacity: 1, weight: 1.5
+      }).addTo(map);
+      map.fitBounds(line.getBounds(), { padding: [20, 20] });
+    }
+
+    initMap('map-eichstaett',   [[48.1351,11.5820],[48.4012,11.4548],[48.7265,11.2743],[48.8922,11.1890]], 48.8922, 11.1890);
+    initMap('map-regensburg',   [[48.1351,11.5820],[48.4012,11.6548],[48.7265,11.8743],[49.0134,12.1016]], 49.0134, 12.1016);
+    initMap('map-nuremberg',    [[48.1351,11.5820],[48.5012,11.3548],[48.9265,11.1743],[49.4521,11.0767]], 49.4521, 11.0767);
+    initMap('map-berchtesgaden',[[48.1351,11.5820],[47.9574,11.8548],[47.8571,12.1208],[47.7643,12.4892],[47.7265,12.8743],[47.6306,13.0019]], 47.6306, 13.0019);
+    initMap('map-passau',       [[48.1351,11.5820],[48.2012,12.2548],[48.3765,12.9743],[48.5748,13.4314]], 48.5748, 13.4314);
+    initMap('map-bodensee',     [[48.1351,11.5820],[48.0012,11.0234],[47.8701,10.6245],[47.7265,10.3145],[47.5462,9.6817]], 47.5462, 9.6817);
+    initMap('map-bamberg',      [[48.1351,11.5820],[48.5012,11.2548],[49.0265,10.9743],[49.5000,10.9000],[49.8988,10.9028]], 49.8988, 10.9028);
+  </script>
 
 </body>
 </html>
