@@ -70,6 +70,28 @@
       margin-top: var(--space-xl);
     }
 
+    /* Hero image */
+    .hero-img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      object-position: center 60%;
+      display: block;
+      border-radius: var(--radius);
+      margin-bottom: var(--space-xl);
+    }
+    .hero-img-credit {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      margin-top: calc(-1 * var(--space-lg));
+      margin-bottom: var(--space-xl);
+      text-align: right;
+    }
+    .hero-img-credit a { color: var(--color-text-secondary); }
+    @media (max-width: 768px) {
+      .hero-img { height: 220px; }
+    }
+
     /* Intro */
     .intro {
       padding-block: var(--space-xl);
@@ -306,6 +328,14 @@
         </div>
         <hr class="hero__rule">
       </header>
+
+      <!-- Hero image -->
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Regensburg_-_Steinerne_Br%C3%BCcke_-_Panorama_II.jpg/1280px-Regensburg_-_Steinerne_Br%C3%BCcke_-_Panorama_II.jpg"
+        alt="Regensburg — Steinerne Brücke panorama from the east"
+        class="hero-img"
+      >
+      <p class="hero-img-credit">Photo: <a href="https://commons.wikimedia.org/wiki/File:Regensburg_-_Steinerne_Br%C3%BCcke_-_Panorama_II.jpg" target="_blank" rel="noopener">Guido Radig</a> / CC BY 3.0</p>
 
       <!-- Intro -->
       <section class="intro">
