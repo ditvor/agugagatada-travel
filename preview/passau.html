@@ -78,11 +78,27 @@
     .hotel-card__rec { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin-top: var(--space-xs); }
 
     /* Before you go */
-    .notes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
-    .notes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-xl); }
-    .notes-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-xl); max-width: 680px; }
-    .notes-block__note { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text); }
-    .notes-block__rule { border: none; border-top: 1px solid var(--color-border); margin-block: var(--space-md); }
+    .notes-section {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-2xl);
+      border-top: 1px solid var(--color-border);
+    }
+    .notes-section__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-lg);
+    }
+    .notes-section__note {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      max-width: 680px;
+      margin-bottom: var(--space-sm);
+    }
+    .notes-section__note:last-child {
+      margin-bottom: 0;
+    }
 
     /* Leaflet label */
     .stop-label { background: none; border: none; box-shadow: none; font-size: 11px; font-weight: 600; color: #1B3A5C; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.05em; padding: 0; }
@@ -381,17 +397,11 @@
       <!-- Before you go -->
       <section class="notes-section">
         <h2 class="notes-section__title">Before you go</h2>
-        <div class="notes-block">
-          <p class="notes-block__note">Cathedral organ recitals: daily noon May–October, Thursday evenings year-round — worth planning around.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Veste Oberhaus shuttle bus (Burgbus): runs from Rathausplatz, seasonal — check schedule before visiting.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Parking: the old town is largely traffic-restricted. Use Parkplatz Römerplatz on the eastern bank and cross the bridge.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Flooding: Passau floods regularly. Check water levels if visiting after heavy rain — the Innkai can be underwater.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Austria is 5km east — bring passports if you want to cross and explore Oberösterreich.</p>
-        </div>
+          <p class="notes-section__note">Cathedral organ recitals: daily noon May–October, Thursday evenings year-round — worth planning around.</p>
+          <p class="notes-section__note">Veste Oberhaus shuttle bus (Burgbus): runs from Rathausplatz, seasonal — check schedule before visiting.</p>
+          <p class="notes-section__note">Parking: the old town is largely traffic-restricted. Use Parkplatz Römerplatz on the eastern bank and cross the bridge.</p>
+          <p class="notes-section__note">Flooding: Passau floods regularly. Check water levels if visiting after heavy rain — the Innkai can be underwater.</p>
+          <p class="notes-section__note">Austria is 5km east — bring passports if you want to cross and explore Oberösterreich.</p>
       </section>
 
     </div><!-- /page-shell -->

@@ -78,11 +78,27 @@
     .hotel-card__rec { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin-top: var(--space-xs); }
 
     /* Before you go */
-    .notes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
-    .notes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-xl); }
-    .notes-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-xl); max-width: 680px; }
-    .notes-block__note { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text); }
-    .notes-block__rule { border: none; border-top: 1px solid var(--color-border); margin-block: var(--space-md); }
+    .notes-section {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-2xl);
+      border-top: 1px solid var(--color-border);
+    }
+    .notes-section__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-lg);
+    }
+    .notes-section__note {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      max-width: 680px;
+      margin-bottom: var(--space-sm);
+    }
+    .notes-section__note:last-child {
+      margin-bottom: 0;
+    }
 
     /* Leaflet label */
     .stop-label { background: none; border: none; box-shadow: none; font-size: 11px; font-weight: 600; color: #1B3A5C; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.05em; padding: 0; }
@@ -379,17 +395,11 @@
       <!-- Before you go -->
       <section class="notes-section">
         <h2 class="notes-section__title">Before you go</h2>
-        <div class="notes-block">
-          <p class="notes-block__note">Arrive at Königssee before 9:30am — the car park fills fast in summer.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Eagle's Nest buses must be booked online. Take the first bus of the day (~9am).</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Salt mine temperature is 12°C inside — bring a warm layer for the baby.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Ramsau roads are narrow. Drive slowly — farm traffic is real.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Changing facilities: Königssee dock, Documentation Center, Salt Mine.</p>
-        </div>
+          <p class="notes-section__note">Arrive at Königssee before 9:30am — the car park fills fast in summer.</p>
+          <p class="notes-section__note">Eagle's Nest buses must be booked online. Take the first bus of the day (~9am).</p>
+          <p class="notes-section__note">Salt mine temperature is 12°C inside — bring a warm layer for the baby.</p>
+          <p class="notes-section__note">Ramsau roads are narrow. Drive slowly — farm traffic is real.</p>
+          <p class="notes-section__note">Changing facilities: Königssee dock, Documentation Center, Salt Mine.</p>
       </section>
 
     </div><!-- /page-shell -->

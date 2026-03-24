@@ -78,11 +78,27 @@
     .hotel-card__rec { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin-top: var(--space-xs); }
 
     /* Before you go */
-    .notes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
-    .notes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-xl); }
-    .notes-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-xl); max-width: 680px; }
-    .notes-block__note { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text); }
-    .notes-block__rule { border: none; border-top: 1px solid var(--color-border); margin-block: var(--space-md); }
+    .notes-section {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-2xl);
+      border-top: 1px solid var(--color-border);
+    }
+    .notes-section__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-lg);
+    }
+    .notes-section__note {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+      max-width: 680px;
+      margin-bottom: var(--space-sm);
+    }
+    .notes-section__note:last-child {
+      margin-bottom: 0;
+    }
 
     /* Leaflet label */
     .stop-label { background: none; border: none; box-shadow: none; font-size: 11px; font-weight: 600; color: #1B3A5C; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.05em; padding: 0; }
@@ -375,17 +391,11 @@
       <!-- Before you go -->
       <section class="notes-section">
         <h2 class="notes-section__title">Before you go</h2>
-        <div class="notes-block">
-          <p class="notes-block__note">Courtroom 600: advance booking essential, sells out weeks ahead — book online.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Kaiserburg: allow 90 minutes minimum, carrier needed inside.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Documentation Center: the outdoor rally grounds are 2–3km of walking — wear comfortable shoes.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Germanisches Nationalmuseum: closed Monday.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Nuremberg Lebkuchen (gingerbread): buy from Lebkuchen-Schmidt on the main market, not from stalls.</p>
-        </div>
+          <p class="notes-section__note">Courtroom 600: advance booking essential, sells out weeks ahead — book online.</p>
+          <p class="notes-section__note">Kaiserburg: allow 90 minutes minimum, carrier needed inside.</p>
+          <p class="notes-section__note">Documentation Center: the outdoor rally grounds are 2–3km of walking — wear comfortable shoes.</p>
+          <p class="notes-section__note">Germanisches Nationalmuseum: closed Monday.</p>
+          <p class="notes-section__note">Nuremberg Lebkuchen (gingerbread): buy from Lebkuchen-Schmidt on the main market, not from stalls.</p>
       </section>
 
     </div><!-- /page-shell -->
