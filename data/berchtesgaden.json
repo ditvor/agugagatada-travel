@@ -11,7 +11,7 @@
   "origin": {
     "name": "Munich",
     "lat": 48.1351,
-    "lon": 11.5820
+    "lon": 11.582
   },
   "drive_time_from_origin_minutes": 105,
   "duration_days": 2,
@@ -25,12 +25,30 @@
   },
   "intro": "Berchtesgaden sits at the bottom of a geological accident — a bowl of alpine rock so steep and dramatic it feels like the landscape is hiding something. And it is: 500 years of salt wealth, a king's fairytale mountain refuge, and the most politically charged hilltop in Europe. This is one of the few places where you can stand inside a working salt mine that predates the Reformation, take a boat across a lake so clean it's used as drinking water, and look out from a building that was once Hitler's retreat — all in the same day. The history here comes in layers, and most visitors only see the top one.",
   "route_polyline": [
-    [48.1351, 11.5820],
-    [47.9574, 11.8548],
-    [47.8571, 12.1208],
-    [47.7643, 12.4892],
-    [47.7265, 12.8743],
-    [47.6306, 13.0019]
+    [
+      48.1351,
+      11.582
+    ],
+    [
+      47.9574,
+      11.8548
+    ],
+    [
+      47.8571,
+      12.1208
+    ],
+    [
+      47.7643,
+      12.4892
+    ],
+    [
+      47.7265,
+      12.8743
+    ],
+    [
+      47.6306,
+      13.0019
+    ]
   ],
   "days": [
     {
@@ -53,7 +71,9 @@
           "highlight": "Electric boat ride to a 12th-century chapel pressed against sheer vertical cliffs",
           "about": "The Königssee is not a typical alpine lake. The walls of the Watzmann massif drop almost vertically into the water, making the lake exceptionally deep (190m) and narrow — more like a Norwegian fjord pressed into Bavaria. Since motorized boats are banned to protect the water quality, the journey to St. Bartholomä is made entirely in silence on electric boats, a rule in place since 1909. The red-domed chapel of St. Bartholomä on the peninsula was built in the 12th century on a site of Christian worship that probably displaced an even older Bavarian cult. The Wittelsbach dukes used the peninsula as a hunting ground for centuries. The captain's echo demonstration is not a gimmick: halfway down the lake, the captain plays a trumpet and the notes bounce off the Falkenwand cliff face across the water. It has been done on every passenger boat since the 19th century.",
           "hidden_gems": "Almost everyone stops at St. Bartholomä and turns back. Continue on foot from St. Bartholomä to the Obersee — a 20-minute flat walk through a meadow. The Obersee is wilder, smaller, and on a calm morning completely deserted. The Röthbach waterfall at its far end falls 470 meters — the highest in Germany — and is visible from the shore. For the best view before boarding, walk 10 minutes south from the boat dock to the Malerwinkel (Painters' Corner), a classic viewpoint that every 19th-century Romantic landscape painter came to. Arrive before 10am for the best light.",
-          "baby_logistics": "The boat ride is one of the easiest excursions in the region with a stroller — flat boarding, benches, covered sections if it rains. Arrive before 9:30am as the car park fills fast. There is a nursing room and changing facilities in the visitor center at the boat dock. The restaurant at St. Bartholomä has high chairs and outdoor terrace seating."
+          "baby_logistics": "The boat ride is one of the easiest excursions in the region with a stroller — flat boarding, benches, covered sections if it rains. Arrive before 9:30am as the car park fills fast. There is a nursing room and changing facilities in the visitor center at the boat dock. The restaurant at St. Bartholomä has high chairs and outdoor terrace seating.",
+          "tier": 1,
+          "skip_if_rushed": false
         },
         {
           "id": "ramsau-hintersee",
@@ -69,7 +89,9 @@
           "highlight": "Zauberwald — a mossy ancient forest over glacier boulders beside a turquoise lake",
           "about": "Ramsau is the village Berchtesgaden wishes it still was. While the main town has grown into a resort, Ramsau has stayed almost exactly as it looked in the 19th century — a scattering of farmhouses, a church, and a fast clear river cutting through the valley. The Church of St. Sebastian sits on a small bridge over the Ramsauer Ache and is one of the most painted scenes in Bavaria. The reason painters came here in such numbers from the 1800s onward is the quality of light — the narrow valley funnels afternoon sun at a low angle that makes the white church walls glow orange against dark spruce forest. Caspar David Friedrich drew the landscape here. The Romantic movement essentially invented the emotional vocabulary through which we still understand mountains — Ramsau was one of the places where that happened.",
           "hidden_gems": "Drive 5 minutes further to Hintersee, a small turquoise lake that most visitors skip because it requires one more turn off the main road. The path around the near end of the lake passes through the Zauberwald (Magic Forest), ancient mossy spruce forest where roots grow over enormous boulders left by a prehistoric rockfall. It genuinely looks like a fairy tale, and on a weekday morning you will often have it entirely to yourself. For lunch, Gasthof Oberwirt in Ramsau has been family-run since 1612. Try the Kaspressknödelsuppe.",
-          "baby_logistics": "The village is extremely easy — flat valley floor, no crowds, quiet roads. The Zauberwald path at Hintersee is stroller-friendly on the flat lakeside section. The section over the boulders requires a carrier. Good spot for a late afternoon feed and a slow walk before dinner."
+          "baby_logistics": "The village is extremely easy — flat valley floor, no crowds, quiet roads. The Zauberwald path at Hintersee is stroller-friendly on the flat lakeside section. The section over the boulders requires a carrier. Good spot for a late afternoon feed and a slow walk before dinner.",
+          "tier": 1,
+          "skip_if_rushed": false
         }
       ]
     },
@@ -93,7 +115,9 @@
           "highlight": "A brass elevator drilled through solid rock, still running, rising to Hitler's mountain retreat",
           "about": "The Obersalzberg mountain was a quiet farming area until Hitler first rented a small house here in the 1920s. He returned repeatedly, eventually bought the property (renamed it the Berghof), and transformed the entire mountain into a heavily fortified compound for Nazi leadership — Bormann, Göring, Speer all had villas here. The Dokumentation Obersalzberg museum is one of the best historical documentation centers in Germany, including access to parts of the original bunker system built in 1943. The Kehlsteinhaus — the 'Eagle's Nest' — sits 1000 meters above the Obersalzberg at 1834m. Built in 14 months as a 50th birthday gift for Hitler from the Nazi Party in 1938, the engineering is extraordinary: a 6.5km road blasted through rock and a 124-meter shaft drilled vertically into the summit for a brass-paneled elevator. Hitler reportedly had a fear of heights and visited only a handful of times. It is now a restaurant and mountain refuge, and the original brass elevator still runs.",
           "hidden_gems": "The Kehlsteinhaus requires a special RVO bus from the Obersalzberg bus station — private cars are not permitted on the upper road. Buy your ticket at the Documentation Center or online in advance; queues for buses can be 45 minutes long in peak summer. Take the first bus of the day (~9am). Most visitors rush through the Documentation Center to reach the Eagle's Nest — spend real time in the bunker section. The scale of what was built underground here is astonishing and the exhibition is unusually candid about local complicity.",
-          "baby_logistics": "The Documentation Center is fully accessible with elevator and flat floors. The Kehlsteinhaus requires the bus then the elevator — stroller is not practical at the summit, use a carrier. Bring an extra layer for the baby even in summer as it can be 10-15°C cooler at 1834m than in the valley. The bus ride is dramatic but perfectly safe."
+          "baby_logistics": "The Documentation Center is fully accessible with elevator and flat floors. The Kehlsteinhaus requires the bus then the elevator — stroller is not practical at the summit, use a carrier. Bring an extra layer for the baby even in summer as it can be 10-15°C cooler at 1834m than in the valley. The bus ride is dramatic but perfectly safe.",
+          "tier": 3,
+          "skip_if_rushed": true
         },
         {
           "id": "salzbergwerk",
@@ -109,7 +133,9 @@
           "highlight": "Sliding down wooden chutes through a mine active since 1517, crossing an underground lake in total darkness",
           "about": "Salt extraction in Berchtesgaden began in 1517 — the mine has been continuously operating for over 500 years. 'White gold' is not a metaphor: salt was the primary source of wealth for the Wittelsbach dynasty and the reason Berchtesgaden developed at all. The mine tunnels run for around 50km inside the mountain and production continues today. The visitor tour is theatrical in a way that works: you change into miners' overalls, slide down long wooden chutes between levels, cross an underground salt lake on a wooden raft in complete darkness, and walk through crystalline formations that look like another planet. The salt here formed 250 million years ago from an ancient inland sea.",
           "hidden_gems": "The mine shop sells Berchtesgadener Salz — salt from this exact mine — in various grades. It is an excellent and genuinely local souvenir that costs almost nothing. The smoked salt is particularly good. If the mine queue is long, the Berchtesgaden Palace (Schloss Berchtesgaden) in the town center is worth the time: a 12th-century Augustinian priory converted into a Wittelsbach royal palace, with original medieval cloisters intact.",
-          "baby_logistics": "The temperature inside the mine is a constant 12°C — bring a warm layer for the baby regardless of the weather outside. The wooden slides are fast; you hold the baby on your lap. The mine provides overalls that fit over a baby carrier. The raft crossing is completely calm. The enclosed, dark, quiet interior often sends babies to sleep."
+          "baby_logistics": "The temperature inside the mine is a constant 12°C — bring a warm layer for the baby regardless of the weather outside. The wooden slides are fast; you hold the baby on your lap. The mine provides overalls that fit over a baby carrier. The raft crossing is completely calm. The enclosed, dark, quiet interior often sends babies to sleep.",
+          "tier": 2,
+          "skip_if_rushed": false
         }
       ]
     }

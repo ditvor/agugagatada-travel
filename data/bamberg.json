@@ -8,7 +8,11 @@
     "lat": 49.8988,
     "lon": 10.9028
   },
-  "origin": { "name": "Munich", "lat": 48.1351, "lon": 11.5820 },
+  "origin": {
+    "name": "Munich",
+    "lat": 48.1351,
+    "lon": 11.582
+  },
   "drive_time_from_origin_minutes": 130,
   "duration_days": 1,
   "generated_at": "2026-03-22",
@@ -21,7 +25,26 @@
   },
   "intro": "Bamberg is one of the best-kept secrets in Germany, which is extraordinary given that it has a UNESCO World Heritage old town, one of the finest Romanesque cathedrals in Europe, and a beer culture so unique it has no parallel anywhere else on earth. The city was built on seven hills — the parallel to Rome was deliberate and was used in medieval correspondence. It survived the Thirty Years' War, survived the Napoleonic reorganization of Germany, survived WWII without significant bombing. What stands today is largely what stood in the 13th, 14th, and 15th centuries. Most visitors who do come are German. International tourists have barely discovered it.",
   "route_polyline": [
-    [48.1351, 11.5820], [48.5012, 11.2548], [49.0265, 10.9743], [49.5, 10.9], [49.8988, 10.9028]
+    [
+      48.1351,
+      11.582
+    ],
+    [
+      48.5012,
+      11.2548
+    ],
+    [
+      49.0265,
+      10.9743
+    ],
+    [
+      49.5,
+      10.9
+    ],
+    [
+      49.8988,
+      10.9028
+    ]
   ],
   "days": [
     {
@@ -44,7 +67,9 @@
           "highlight": "The Bamberger Reiter — a life-size equestrian statue from 1235 that is one of the great mysteries of medieval European art. No one knows who it depicts.",
           "about": "The Bamberg Cathedral was consecrated in 1012 by Emperor Henry II (later canonized), who founded it as a visible symbol of his imperial power. The current building dates mostly from the early 13th century — a transitional Romanesque-Gothic structure with four towers at each corner, sitting at the top of the cathedral hill above the city. Inside are several extraordinary things. The tomb of Pope Clement II, who died in Bamberg in 1047 while on a papal visit — the only papal tomb north of the Alps, still intact. The tomb of Emperor Henry II and his wife Kunigunde, carved by Tilman Riemenschneider in the 1490s and considered one of the masterpieces of German late-Gothic sculpture. And the Bamberger Reiter — a life-sized equestrian statue of an unknown knight, placed high on a column in the interior around 1235. The rider is idealized, serene, commanding. Nobody knows who he is meant to represent. Theories range from Emperor Constantine to King Stephen of Hungary to an ideal of Christian kingship. He has been staring down from that column for 790 years.",
           "hidden_gems": "The crypt beneath the main floor contains the original altar from Henry II's 1012 consecration — the oldest surviving part of the building. The Diocesan Museum (Diözesanmuseum) directly adjacent to the cathedral has vestments from Henry II's imperial coronation, including his star-mantle — a Byzantine silk garment embroidered with the constellations, given by a Byzantine emperor and worn by Henry at his coronation in 1014. It is one of the most remarkable surviving objects from the Ottonian period.",
-          "baby_logistics": "The cathedral interior is flat and wide — fully accessible with a stroller through the nave. The four-tower exterior can be circumnavigated on flat paths. The Diocesan Museum has an elevator. The Domplatz (Cathedral Square) is a good space for a stroller walk with views over the city."
+          "baby_logistics": "The cathedral interior is flat and wide — fully accessible with a stroller through the nave. The four-tower exterior can be circumnavigated on flat paths. The Diocesan Museum has an elevator. The Domplatz (Cathedral Square) is a good space for a stroller walk with views over the city.",
+          "tier": 1,
+          "skip_if_rushed": false
         },
         {
           "id": "altes-rathaus",
@@ -60,7 +85,9 @@
           "highlight": "A Gothic-baroque town hall sitting on an artificial island, accessible only by two bridges — allegedly built there because the bishop refused to give the burghers land for a town hall",
           "about": "The story is probably apocryphal but it has persisted for 600 years: the Bishop of Bamberg refused to grant the city burghers any land for a town hall (since all land within the city technically belonged to the bishop). So the burghers drove piles into the bed of the Regnitz river, built an artificial island, and constructed their town hall there — on no one's land. The current building is a 15th-century Gothic tower with an 18th-century baroque extension, connected to both banks by bridges. The trompe-l'oeil frescoes on the external walls include a painted cherub whose leg actually protrudes in three dimensions from the painted surface — a small sculptural joke that surprises most visitors. The interior contains the Ludwig Collection of Meissen porcelain, which is secondary interest; the building and its position are the main event.",
           "hidden_gems": "The best view of the Altes Rathaus is not from either bridge but from the small path that runs along the eastern (downstream) bank of the island — from here you see both bridge approaches and the complete silhouette of the building over the water. Early morning with mist on the river is extraordinary. The waterside path continues to Klein Venedig (5 min walk), making a natural sequence.",
-          "baby_logistics": "The bridges to the town hall are flat and stroller-accessible. The riverside paths on both banks are paved. The museum interior has stairs — a carrier is needed for upper floors, but the ground floor and exterior are the main draw anyway."
+          "baby_logistics": "The bridges to the town hall are flat and stroller-accessible. The riverside paths on both banks are paved. The museum interior has stairs — a carrier is needed for upper floors, but the ground floor and exterior are the main draw anyway.",
+          "tier": 2,
+          "skip_if_rushed": false
         },
         {
           "id": "klein-venedig",
@@ -76,7 +103,9 @@
           "highlight": "A row of medieval fishermen's houses built directly over the river on wooden piles, with small boats and flower boxes — genuinely unreconstructed",
           "about": "Klein Venedig ('Little Venice') is a row of half-timbered fishermen's houses that back directly onto the Regnitz river, their rear facades built on wooden piles over the water and accessible by small boats and private landing stages. This has been the fishermen's quarter of Bamberg since the medieval period — the Regnitz was rich in carp, pike, and bream, and the fishermen's guild was one of the most powerful in the city. The houses are private residences today, not museums. What you see is genuinely lived-in, not a heritage reconstruction. The flower boxes on the upper-floor windows and the small boats tied to the piles are just how these people keep their houses. From the opposite bank, the row of houses against the water with the cathedral hill rising behind is one of the most reliably beautiful urban views in Germany.",
           "hidden_gems": "The best photographs are taken from the Markusbrücke (Mark's Bridge) at the northern end of the row in the late afternoon light. The E.T.A. Hoffmann House — the Romantic author of Tales of Hoffmann (the basis for Offenbach's opera) lived and worked in Bamberg for eight years. His house is on the Schillerplatz, a 5-minute walk from Klein Venedig, and contains his original study and manuscript collection.",
-          "baby_logistics": "The riverside promenade running the length of Klein Venedig is completely flat, paved, and wide — ideal for a stroller. This is one of the best easy walks in Bamberg with a baby. The riverbank path continues both north and south for longer flat walks."
+          "baby_logistics": "The riverside promenade running the length of Klein Venedig is completely flat, paved, and wide — ideal for a stroller. This is one of the best easy walks in Bamberg with a baby. The riverbank path continues both north and south for longer flat walks.",
+          "tier": 1,
+          "skip_if_rushed": false
         },
         {
           "id": "neue-residenz",
@@ -92,7 +121,9 @@
           "highlight": "The Rose Garden terraced above the city — 4,500 rose bushes planted on the old fortification walls, with the cathedral, the rooftops, and the Franconian plain stretching to the horizon",
           "about": "The Neue Residenz was built between 1695 and 1704 as the official residence of the Prince-Bishops of Bamberg — a baroque palace replacing the more cramped medieval episcopal quarters next to the cathedral. The interior contains the Imperial Hall (Kaisersaal) with ceiling frescoes by Melchior Steidl, the Chinese Cabinet with its lacquered panels, and the main state apartments largely intact with period furniture. The Bavarian State Painting Collection galleries on the upper floor have significant German Baroque paintings. But the main reason to come is the Rose Garden behind the palace: a formal terraced garden laid out on the old fortification walls with 4,500 rose bushes of 150 varieties. The garden is elevated above the city, and the view from the upper terrace — the cathedral towers, the Altes Rathaus in the river, the red rooftops of the old town receding to the forested hills — is the finest urban panorama in Franconia.",
           "hidden_gems": "The Rose Garden is free and open outside of palace opening hours — come in the early morning before the palace opens when it is empty. The Böttingerhaus on the Judenstrasse below the Residenz is one of the finest baroque private houses in Bamberg, built by the court counselor Ignaz Tobias Böttinger in 1707 and recently restored. Almost no visitors know it.",
-          "baby_logistics": "The Rose Garden is accessible with a stroller via the main terrace entrance — flat paths between the rose beds. The palace interior requires stairs for the upper floors; the state apartments on the piano nobile are accessible via the main staircase. The garden café has outdoor seating and high chairs."
+          "baby_logistics": "The Rose Garden is accessible with a stroller via the main terrace entrance — flat paths between the rose beds. The palace interior requires stairs for the upper floors; the state apartments on the piano nobile are accessible via the main staircase. The garden café has outdoor seating and high chairs.",
+          "tier": 2,
+          "skip_if_rushed": false
         },
         {
           "id": "schlenkerla",
@@ -108,7 +139,9 @@
           "highlight": "Rauchbier — smoked beer made with malt dried over burning beechwood, producing a beer that smells of a campfire and tastes of smoked meat. No other city in the world makes it this way.",
           "about": "Rauchbier (smoked beer) is Bamberg's singular contribution to brewing culture. Before the adoption of coke and indirect kilning in the 19th century, all malt was dried over an open fire, giving all beer a smoked character. Everywhere else in Europe, brewers switched to coke kilning and the smoky flavor disappeared. In Bamberg, they kept the fire. The Schlenkerla brewery (formally the Heller brewery) has been producing Rauchbier on this site since at least 1405 and is the most famous producer. The beer is served directly from wooden lagering barrels in the ancient vaulted taproom. The smell when you walk in — smoke, wood, damp stone — is like no other brewery in the world. The Märzen (the classic dark Rauchbier) is the beer to try. Bamberg has 9 active breweries in a city of 77,000 people — the highest brewery density per capita anywhere on earth.",
           "hidden_gems": "The brewery also produces a Weizen (wheat beer) and a seasonal Bock — both smoked — that are available only in the taproom. The cellar under the taproom is where the lagering barrels are kept; ask at the bar if they are doing cellar tours on the day you visit (irregular, informal). The Spezial brewery across town (Obere Königsstrasse) produces a lighter Rauchbier with a more subtle smoke character — worth comparing.",
-          "baby_logistics": "The Schlenkerla taproom is a traditional Gasthaus — family-friendly, with outdoor courtyard seating. High chairs available. The stone floors and low lighting are atmospheric. Non-alcoholic options available. The courtyard is flat and stroller-friendly."
+          "baby_logistics": "The Schlenkerla taproom is a traditional Gasthaus — family-friendly, with outdoor courtyard seating. High chairs available. The stone floors and low lighting are atmospheric. Non-alcoholic options available. The courtyard is flat and stroller-friendly.",
+          "tier": 2,
+          "skip_if_rushed": false
         }
       ]
     }
