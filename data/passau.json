@@ -230,5 +230,39 @@
     "Parking: the old town is largely traffic-restricted. Use Parkplatz Römerplatz on the eastern bank and cross the bridge.",
     "Flooding: Passau floods regularly. Check water levels if visiting after heavy rain — the Innkai can be underwater.",
     "Austria is 5km east — bring passports if you want to cross and explore Oberösterreich."
+  ],
+  "detour_stops": [
+    {
+      "id": "landshut-passau",
+      "name": "Landshut",
+      "tagline": "The tallest brick tower in the world, halfway between Munich and Passau",
+      "position": "en_route",
+      "lat": 48.54,
+      "lon": 12.154,
+      "detour_from_route_minutes": 10,
+      "visit_duration_minutes": 50,
+      "best_time": "any",
+      "category": "history",
+      "baby_friendly_score": 5,
+      "highlight": "The Altstadt runs for 500 metres under Gothic arcades — the finest medieval main street in Bavaria, and almost no foreign tourists have heard of it",
+      "description": "Landshut was the capital of the Duchy of Bavaria-Landshut for 150 years, and the wealth of that period built a town that was never bombed and largely forgotten by tourists. St. Martin's tower at 130.6 metres is the tallest brick structure ever built — completed in 1500, it took 125 years. The Altstadt beneath it is a single long street of Gothic arcades and colour-washed facades. For the drive to Passau it is the obvious halfway stop: 50 minutes from Munich, right on the A92, 10 minutes off the direct route.",
+      "practical": "Free to walk. Church entry free. Stroller-friendly throughout the Altstadt. Car park at Altstadt Parkhaus."
+    },
+    {
+      "id": "straubing",
+      "name": "Straubing",
+      "tagline": "A market town on the Danube with the most important Roman military treasure ever found",
+      "position": "en_route",
+      "lat": 48.8792,
+      "lon": 12.5713,
+      "detour_from_route_minutes": 15,
+      "visit_duration_minutes": 45,
+      "best_time": "any",
+      "category": "history",
+      "baby_friendly_score": 4,
+      "highlight": "The Straubing Treasure — a cache of Roman ceremonial armour found in a field in 1950 — is displayed exactly as excavated, in a town that most guidebooks skip entirely",
+      "description": "Straubing's Gäubodenmuseum holds one of the most extraordinary archaeological discoveries of the 20th century: in 1950 a farmer ploughing a field uncovered a buried cache of decorated Roman military parade armour from the 3rd century AD — visored helmets with embossed faces, decorated horse armour, arm guards. The hoard is on display in its original condition, without the reconstruction common in larger museums. The old town itself (Theresienplatz, a long baroque square) is quiet and intact. For the drive to Passau it falls naturally at the two-thirds point.",
+      "practical": "Gäubodenmuseum €4, closed Mondays. Town centre is flat and stroller-friendly. Parking at the Stadtplatz."
+    }
   ]
 }

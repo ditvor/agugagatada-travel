@@ -273,5 +273,39 @@
     "Meersburg Altes Schloss: stroller not practical inside — use a carrier. Lakefront below is fully flat.",
     "Reichenau St. Georg frescoes: church is at the western end of the island, key in the house opposite, free entry.",
     "Konstanz: cross into Switzerland with your passport — the Swiss border is literally the end of some streets."
+  ],
+  "detour_stops": [
+    {
+      "id": "wieskirche",
+      "name": "Wieskirche",
+      "tagline": "A UNESCO rococo church standing alone in a meadow — the most ornate interior in Bavaria",
+      "position": "en_route",
+      "lat": 47.6807,
+      "lon": 10.8928,
+      "detour_from_route_minutes": 35,
+      "visit_duration_minutes": 30,
+      "best_time": "morning",
+      "category": "history",
+      "baby_friendly_score": 4,
+      "highlight": "From the outside it looks like a plain white farmhouse church — the moment you step inside is one of the great architectural surprises in Germany",
+      "description": "The Wieskirche (Church of the Scourged Saviour) stands in a meadow near Steingaden in the foothills of the Alps. It was built between 1745 and 1754 by the brothers Dominikus and Johann Baptist Zimmermann, and the interior is a masterwork of the German Rococo — every surface decorated with frescoes, gilded stucco, and trompe l'oeil architecture. The ceiling fresco spans nearly the entire vault. UNESCO inscribed it in 1983. It sees visitors but not the Neuschwanstein crowds — most people pass it on the way to the castle rather than treating it as a destination in its own right. It deserves to be a destination.",
+      "practical": "Free entry. Open daily. Small parking area at the church (pay in summer, free otherwise). Stroller-accessible — main aisle is wide, pews are fixed to the sides."
+    },
+    {
+      "id": "neuschwanstein-fuessen",
+      "name": "Neuschwanstein + Füssen",
+      "tagline": "Ludwig II's unfinished fantasy castle above the Allgäu — take the scenic B17 route instead of the autobahn",
+      "position": "en_route",
+      "lat": 47.5576,
+      "lon": 10.7498,
+      "detour_from_route_minutes": 45,
+      "visit_duration_minutes": 150,
+      "best_time": "morning",
+      "category": "history",
+      "baby_friendly_score": 3,
+      "highlight": "Ludwig II died before completing it — only 14 of the planned 200 rooms were finished — which makes it stranger and more interesting than the photographs suggest",
+      "description": "Neuschwanstein is the world's most reproduced castle image, but the photographs prepare you for neither the setting nor the story. Ludwig II commissioned it in 1869 as a private retreat and personal fantasy — he was obsessed with Wagner's operas, and the interior rooms are painted as scenes from the Ring Cycle. He spent fewer than 200 days there before being deposed and drowning in Lake Starnberg under unclear circumstances. The castle was opened to paying visitors six weeks after his death to pay his debts. The Marienbrücke footbridge above the castle gorge provides the iconic view. Via Füssen, this route adds ~45 minutes to the drive to Bodensee and converts a motorway journey into a scenic day.",
+      "practical": "Timed entry tickets mandatory — book online weeks in advance at www.hohenschwangau.de. €16 adults, under 18 free. Horse carriage to the castle: €7. Park in Hohenschwangau village (P1, €8/day). Carrier recommended over stroller for the steep castle approach path."
+    }
   ]
 }

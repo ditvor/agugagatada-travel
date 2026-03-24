@@ -230,5 +230,39 @@
     "Reichssaal guided tours: book at the tourist office on Rathausplatz, run hourly.",
     "Walhalla boat: seasonal (April–October), departs from the stone bridge area.",
     "Roman museum: small but excellent, rarely crowded, allow 45 minutes."
+  ],
+  "detour_stops": [
+    {
+      "id": "weltenburg-abbey",
+      "name": "Weltenburg Abbey + Danube Gorge",
+      "tagline": "A boat ride through a limestone gorge to Europe's oldest monastery brewery",
+      "position": "near_destination",
+      "lat": 48.9025,
+      "lon": 11.9763,
+      "detour_from_route_minutes": 20,
+      "visit_duration_minutes": 90,
+      "best_time": "morning",
+      "category": "nature",
+      "baby_friendly_score": 4,
+      "highlight": "The boat winds through vertical limestone walls 100 feet high — you arrive at the monastery from the water",
+      "description": "A small electric boat departs from Kelheim and winds through the Danube Gorge — the narrowest and most dramatic section of the river in Germany — to deposit you at the gates of Weltenburg Abbey. The abbey has been brewing dark Baroque beer since 1050 AD, making it the oldest monastery brewery in Europe. You can sit in the courtyard, drink the dark beer, and look up at cliffs rising straight from the water. The gorge itself is part of the Altmühltal Nature Park and sees almost no tourist infrastructure — it feels genuinely remote despite being 20 minutes from Regensburg.",
+      "practical": "Boat runs April–October, daily from 9am. €7 per adult, free for babies. Stroller folds and fits on the boat. Park at the Kelheim Schiffslände (free parking). Return boat runs every 45 min."
+    },
+    {
+      "id": "landshut",
+      "name": "Landshut",
+      "tagline": "The tallest brick tower in the world, in a medieval main street that nobody talks about",
+      "position": "en_route",
+      "lat": 48.54,
+      "lon": 12.154,
+      "detour_from_route_minutes": 10,
+      "visit_duration_minutes": 50,
+      "best_time": "any",
+      "category": "history",
+      "baby_friendly_score": 5,
+      "highlight": "St. Martin's tower stands 130 metres high — the tallest brick structure ever built — and the arcaded Altstadt beneath it is one of the finest medieval streets in Bavaria",
+      "description": "Landshut was the capital of the Duchy of Bavaria-Landshut for 150 years, and the wealth of that period built a town that was never bombed, never significantly rebuilt, and largely forgotten by tourists. The Altstadt is a single long street lined with Gothic arcades and colour-washed facades. St. Martin's Church at the top was begun in 1385 and took over a century to complete; its brick tower at 130.6 metres is the tallest of its kind in the world. The town hosts the Landshut Wedding every four years — a medieval pageant re-enacting a 1475 royal wedding, with 2,000 people in historically accurate costume.",
+      "practical": "Free to walk the Altstadt. St. Martin's Church entry free. Tower climb has steps — stroller stays at base. Altstadt car park (Altstadt Parkhaus) is 3 min walk to the main street."
+    }
   ]
 }

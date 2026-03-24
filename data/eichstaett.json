@@ -186,5 +186,39 @@
     "All fossils found in working quarries belong to the quarry owner — visitor finds from designated areas are kept.",
     "Eichstätt has almost no tourist infrastructure: limited ATMs, limited opening hours. Buy food and snacks early.",
     "The Altmühl Valley is spectacular in late spring (May) and autumn (October) — avoid August heat."
+  ],
+  "detour_stops": [
+    {
+      "id": "ingolstadt-eichstaett",
+      "name": "Ingolstadt",
+      "tagline": "A fortress city on the Danube that sits directly on the route to Eichstätt",
+      "position": "en_route",
+      "lat": 48.7665,
+      "lon": 11.4257,
+      "detour_from_route_minutes": 15,
+      "visit_duration_minutes": 50,
+      "best_time": "any",
+      "category": "history",
+      "baby_friendly_score": 5,
+      "highlight": "The Liebfrauenmünster is one of the finest late-Gothic churches in Germany — its square gives it the visual weight it deserves, and the town around it is flat, arcaded, and entirely walkable with a stroller",
+      "description": "Whether you take the A9 or the B13 to Eichstätt, Ingolstadt falls at the 40–45 minute mark. It is the natural first stop before heading into the Altmühltal. The old town is compact — the Liebfrauenmünster, the Neues Schloss, and the medieval Kreuztor gate take 45 minutes at a comfortable pace. The proximity to Eichstätt also means you can frame the day historically: Ingolstadt was a major Baroque ducal city; Eichstätt is a Roman legionary town turned Baroque bishop's seat — two different expressions of the same regional power concentrated 30 km apart.",
+      "practical": "Old town free. Stroller-friendly on the Altstadt streets. Parking at Schrannenstrasse."
+    },
+    {
+      "id": "pfuenz-roman-fort",
+      "name": "Pfünz Roman Fort (Vetoniana)",
+      "tagline": "A reconstructed Roman auxiliary fort on the limes, 5 minutes from the Solnhofen quarries",
+      "position": "near_destination",
+      "lat": 48.8622,
+      "lon": 11.2583,
+      "detour_from_route_minutes": 10,
+      "visit_duration_minutes": 25,
+      "best_time": "any",
+      "category": "history",
+      "baby_friendly_score": 5,
+      "highlight": "You can walk through the reconstructed Roman gate tower and along the partially rebuilt fort walls — free, always open, and almost always empty",
+      "description": "Pfünz (Roman name: Vetoniana) was a Roman auxiliary fort garrisoning around 500 soldiers on the Raetian Limes — the northern frontier wall of the Roman Empire — until the 3rd century AD. The walls have been partially rebuilt to their original height, the gate towers reconstructed, and the interior footprint clearly marked. After spending the morning at Eichstätt's Jura Museum and learning that the Altmühltal was Roman military territory for three centuries, walking through an actual Roman fort gate a few minutes from Solnhofen closes the loop. The fort is free, always accessible, and sees almost no visitors.",
+      "practical": "Free, no opening hours. Parking at the fort entrance. Gravel paths throughout — stroller-accessible. 10 minutes by car from Solnhofen, off the B2."
+    }
   ]
 }
