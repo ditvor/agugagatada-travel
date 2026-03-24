@@ -12,15 +12,15 @@
     .site-nav__inner { display: flex; align-items: center; gap: var(--space-lg); }
     .site-nav__home { font-size: var(--text-md); font-weight: 500; color: var(--color-text); letter-spacing: -0.01em; text-decoration: none; }
     .site-nav__home:hover { text-decoration: none; }
-    .site-nav__back { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .site-nav__back { font-size: var(--text-sm); color: var(--color-text); }
     .site-nav__back:hover { color: var(--color-accent); text-decoration: none; }
     .site-footer { border-top: 1px solid var(--color-border); padding-block: var(--space-xl); text-align: center; }
-    .site-footer__line { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .site-footer__line { font-size: var(--text-sm); color: var(--color-text); }
 
     /* Hero */
     .hero { padding-top: var(--space-2xl); padding-bottom: var(--space-xl); }
     .hero__title { font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
-    .hero__tagline { font-size: var(--text-md); color: var(--color-text-secondary); max-width: 600px; margin-top: var(--space-sm); line-height: 1.5; }
+    .hero__tagline { font-size: var(--text-md); color: var(--color-text); max-width: 600px; margin-top: var(--space-sm); line-height: 1.5; }
     .hero__tags { display: flex; gap: var(--space-sm); margin-top: var(--space-md); }
     .hero__rule { border: none; border-top: 1px solid var(--color-border); margin-top: var(--space-xl); }
 
@@ -37,7 +37,7 @@
     .stop { padding-bottom: var(--space-lg); }
     .stop__header { margin-bottom: var(--space-sm); }
     .stop__name { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; margin-top: var(--space-xs); }
-    .stop__subtitle { font-size: var(--text-base); color: var(--color-text-secondary); margin-top: 2px; }
+    .stop__subtitle { font-size: var(--text-base); color: var(--color-text); margin-top: 2px; }
     .stop__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-sm); }
     .stop__highlight { font-style: italic; font-family: Georgia, serif; font-size: var(--text-base); color: var(--color-text); border-left: 3px solid var(--color-accent); padding-left: var(--space-md); margin-block: var(--space-md); line-height: 1.6; }
     .stop__expand-row { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-top: var(--space-sm); }
@@ -48,14 +48,14 @@
     .hikes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
     .hikes-section__header { margin-bottom: var(--space-xl); }
     .hikes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
-    .hikes-section__sub { font-size: var(--text-sm); color: var(--color-text-secondary); margin-top: var(--space-xs); }
+    .hikes-section__sub { font-size: var(--text-sm); color: var(--color-text); margin-top: var(--space-xs); }
     .hike-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
     .hike-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
-    .hike-card__area { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hike-card__area { font-size: var(--text-sm); color: var(--color-text); }
     .hike-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
     .hike-card__desc { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); }
-    .hike-card__tip { font-size: var(--text-sm); color: var(--color-text-secondary); font-style: italic; line-height: 1.6; }
-    .hike-card__tip-label { font-style: normal; font-weight: 500; color: var(--color-text-secondary); }
+    .hike-card__tip { font-size: var(--text-sm); color: var(--color-text); font-style: italic; line-height: 1.6; }
+    .hike-card__tip-label { font-style: normal; font-weight: 500; color: var(--color-text); }
 
     /* Hotel card */
     .hotels-section { padding-bottom: var(--space-2xl); }
@@ -63,16 +63,32 @@
     .hotels-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
     .hotel-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-lg); display: flex; flex-direction: column; gap: var(--space-sm); }
     .hotel-card__name { font-size: var(--text-md); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
-    .hotel-card__meta { font-size: var(--text-sm); color: var(--color-text-secondary); }
+    .hotel-card__meta { font-size: var(--text-sm); color: var(--color-text); }
     .hotel-card__tags { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
     .hotel-card__rec { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); margin-top: var(--space-xs); }
 
     /* Before you go */
-    .notes-section { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
-    .notes-section__title { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; margin-bottom: var(--space-xl); }
-    .notes-block { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-xl); max-width: 680px; }
-    .notes-block__note { font-size: var(--text-sm); line-height: 1.8; color: var(--color-text); }
-    .notes-block__rule { border: none; border-top: 1px solid var(--color-border); margin-block: var(--space-md); }
+    .notes-section {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-2xl);
+      border-top: 1px solid var(--color-border);
+    }
+    .notes-section__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-lg);
+    }
+    .notes-section__note {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      color: var(--color-text);
+      max-width: 680px;
+      margin-bottom: var(--space-sm);
+    }
+    .notes-section__note:last-child {
+      margin-bottom: 0;
+    }
 
     /* Leaflet label */
     .stop-label { background: none; border: none; box-shadow: none; font-size: 11px; font-weight: 600; color: #1B3A5C; font-family: system-ui, -apple-system, sans-serif; letter-spacing: 0.05em; padding: 0; }
@@ -354,17 +370,11 @@
       <!-- Before you go -->
       <section class="notes-section">
         <h2 class="notes-section__title">Before you go</h2>
-        <div class="notes-block">
-          <p class="notes-block__note">Bamberg is best visited midweek — weekend visitors have started to discover it.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Rauchbier is an acquired taste for many — try a small glass first before committing.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">The cathedral Domschatz (treasury): excellent medieval goldwork, rarely crowded.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">E.T.A. Hoffmann House: small, excellent, allow 45 minutes.</p>
-          <hr class="notes-block__rule">
-          <p class="notes-block__note">Parking: use the Parkhaus Geyerswörth on the island — central and flat access to the old town.</p>
-        </div>
+          <p class="notes-section__note">Bamberg is best visited midweek — weekend visitors have started to discover it.</p>
+          <p class="notes-section__note">Rauchbier is an acquired taste for many — try a small glass first before committing.</p>
+          <p class="notes-section__note">The cathedral Domschatz (treasury): excellent medieval goldwork, rarely crowded.</p>
+          <p class="notes-section__note">E.T.A. Hoffmann House: small, excellent, allow 45 minutes.</p>
+          <p class="notes-section__note">Parking: use the Parkhaus Geyerswörth on the island — central and flat access to the old town.</p>
       </section>
 
     </div><!-- /page-shell -->
