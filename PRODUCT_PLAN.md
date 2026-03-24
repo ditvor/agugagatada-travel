@@ -268,46 +268,15 @@ Requirements:
 
 ---
 
-## Feature 7 — Detour engine
+## Feature 7 — Detours
 
-**Priority: Medium. Builds on Trip Mode.**
+**Priority: High. Planning-time discovery, not crisis management.**
 
-The detour engine answers: *given where I am right now, what's worth a 15-minute deviation?*
+See **`DETOUR_PLAN.md`** for the full plan, curated detour research, data model, and implementation prompts.
 
-Detours come in two types:
+**Summary:** A "Worth a detour" section on each destination page, positioned after the intro and before the main stops. Shows 2–3 hand-curated stops that are either en route or near the destination — the kind of thing you'd add to your day if you knew about it. Accompanied by a non-interactive route overview strip map showing the full drive with detour markers.
 
-### Type 1 — Along-route detours
-
-Things you pass on the way to the destination that are worth a brief stop. These need to be added manually to the JSON (3–5 per destination).
-
-**New JSON field**: `detour_stops` array at the destination level:
-```json
-"detour_stops": [
-  {
-    "id": "weltenburg-abbey",
-    "name": "Weltenburg Abbey",
-    "type": "spontaneous",
-    "lat": 48.9025,
-    "lon": 11.9763,
-    "detour_minutes": 25,
-    "description": "...",
-    "baby_friendly": true,
-    "trigger_condition": "driving_past"
-  }
-]
-```
-
-**In Trip Mode**: When geolocation detects you're within 10 km of a detour stop: "You're passing near [X] — 12 min detour. Worth it? [Skip] [Take it]"
-
-### Type 2 — Emergency stops
-
-Baby crying, needs to stop NOW. This requires knowing where family-friendly rest points are along the route.
-
-**For MVP**: Pre-populated list of 2–3 emergency rest points per route (a known café, a roadside park, a Rastanlage with changing tables). Added manually to JSON.
-
-**Longer term**: Live Overpass API query for `amenity=cafe` + `changing_table=yes` within 5 km of current position.
-
-**New JSON field**: `emergency_stops` array per destination — same structure as detour_stops but type = "emergency", with `has_changing_table`, `stroller_accessible`, `indoor`.
+This is a planning feature, not a Trip Mode feature. The principle: tell people their options before they leave, not while they're driving.
 
 ---
 
