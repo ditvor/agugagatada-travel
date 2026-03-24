@@ -181,3 +181,38 @@ img {
 .expand-btn:hover {
   text-decoration: underline;
 }
+
+
+/* ─────────────────────────────────────────
+   Mobile responsive
+   ───────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  :root {
+    --text-2xl: 32px;
+    --text-xl:  24px;
+  }
+
+  .page-shell {
+    padding-inline: var(--space-md);
+  }
+
+  .two-col {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .two-col__map {
+    position: static;
+    height: 300px;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .day-switcher {
+    flex-wrap: wrap;
+  }
+}
