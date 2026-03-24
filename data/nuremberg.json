@@ -224,5 +224,39 @@
     "Documentation Center: the outdoor rally grounds are 2–3km of walking — wear comfortable shoes.",
     "Germanisches Nationalmuseum: close Monday (like most German museums).",
     "Nuremberg Lebkuchen (gingerbread): buy from Lebkuchen-Schmidt on the main market, not from stalls."
+  ],
+  "detour_stops": [
+    {
+      "id": "ingolstadt",
+      "name": "Ingolstadt",
+      "tagline": "A fortress city on the Danube with one of the finest late-Gothic churches in Germany",
+      "position": "en_route",
+      "lat": 48.7665,
+      "lon": 11.4257,
+      "detour_from_route_minutes": 15,
+      "visit_duration_minutes": 60,
+      "best_time": "any",
+      "category": "history",
+      "baby_friendly_score": 5,
+      "highlight": "The Liebfrauenmünster — built as the mausoleum of the Wittelsbach dukes — fills an entire city square with white Gothic stone, and almost no one outside Germany has heard of it",
+      "description": "Ingolstadt sits directly on the A9 and most people drive past without stopping. The old town repays 45 minutes of walking. The Liebfrauenmünster (Minster of Our Lady) was begun in 1425 as the funerary church of the Bavarian Wittelsbach dukes and is one of the finest examples of late-Gothic brick architecture in southern Germany — its west facade faces a wide square that gives it the visual impact it deserves. The Neues Schloss (New Palace) next to it housed the dukes and now holds a Bavarian Army Museum. Mary Shelley set Frankenstein here — Victor Frankenstein studies at Ingolstadt University — which is a footnote worth knowing.",
+      "practical": "Old town is free. Minster entry free. Audi Museum €7 (separate, 10 min drive to the BMW campus). Altstadt parking at Schrannenstrasse car park. Mostly flat streets, stroller-friendly."
+    },
+    {
+      "id": "weissenburg-in-bayern",
+      "name": "Weissenburg in Bayern",
+      "tagline": "A Roman frontier town with the largest Roman baths north of the Alps — still almost undiscovered",
+      "position": "en_route",
+      "lat": 49.0331,
+      "lon": 10.972,
+      "detour_from_route_minutes": 15,
+      "visit_duration_minutes": 45,
+      "best_time": "any",
+      "category": "history",
+      "baby_friendly_score": 4,
+      "highlight": "The Ellinger Tor gate and nearly-complete medieval town wall stand exactly as built in the 14th century — and beneath the square lie the largest Roman baths discovered north of the Alps",
+      "description": "Weissenburg sits on the Raetian Limes — the Roman Empire's northern frontier wall — and the evidence is still underfoot. The Roman baths (Römerthermen) excavated beneath the town centre are the largest found north of the Alps, with a well-preserved caldarium, tepidarium, and frigidarium. Above ground, the medieval walled town is among the best-preserved in Bavaria: the Ellinger Tor gate and the town wall circuit are nearly complete. The town sees almost no foreign tourists. Pairing it with Nuremberg's Documentation Center makes for an unintentional but coherent arc: Rome's frontier, then Germany's darkest chapter, 2,000 years apart.",
+      "practical": "Roman baths museum €4, closed Mondays. Town wall walk is free and stroller-accessible on the exterior path. Park at the central Stadtplatz car park."
+    }
   ]
 }

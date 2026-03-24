@@ -240,5 +240,39 @@
     "Salt mine temperature is 12°C inside — bring a warm layer for the baby.",
     "Ramsau roads are narrow. Drive slowly — farm traffic is real.",
     "Changing facilities: Königssee dock, Documentation Center, Salt Mine."
+  ],
+  "detour_stops": [
+    {
+      "id": "chiemsee-herrenchiemsee",
+      "name": "Chiemsee + Herrenchiemsee Palace",
+      "tagline": "Ludwig II's copy of Versailles on an island in Bavaria's largest lake, reached by boat",
+      "position": "en_route",
+      "lat": 47.8564,
+      "lon": 12.3956,
+      "detour_from_route_minutes": 15,
+      "visit_duration_minutes": 120,
+      "best_time": "morning",
+      "category": "history",
+      "baby_friendly_score": 4,
+      "highlight": "The Hall of Mirrors at Herrenchiemsee is longer than the original at Versailles — and you arrive by boat across Bavaria's largest lake",
+      "description": "Ludwig II of Bavaria commissioned three castles before he died in 1886; Herrenchiemsee was the most ambitious and the least finished. He wanted to outdo Versailles, and in the Hall of Mirrors he succeeded — the gallery is 98 metres long, slightly longer than the French original, lit by 1,848 candles in the chandeliers. He spent just nine nights there before his death. The island itself — the Herreninsel, the larger of the two Chiemsee islands — is car-free and quiet. The boat crossing from Prien takes 10 minutes and the lakeshore walk from the landing to the palace is flat and beautiful. Unlike Neuschwanstein, there are rarely long queues.",
+      "practical": "Boat from Prien harbour: €8 return per adult, free under 6. Palace entry: €10 adults, children free. Boats run April–October. Stroller fits on boat. Park at Prien harbour (€6/day)."
+    },
+    {
+      "id": "bad-reichenhall-alte-saline",
+      "name": "Bad Reichenhall — Alte Saline",
+      "tagline": "The 1834 royal salt works that preceded the Berchtesgaden mine, designed by Leo von Klenze",
+      "position": "near_destination",
+      "lat": 47.725,
+      "lon": 12.876,
+      "detour_from_route_minutes": 20,
+      "visit_duration_minutes": 45,
+      "best_time": "morning",
+      "category": "history",
+      "baby_friendly_score": 4,
+      "highlight": "A Romanesque revival turbine hall the size of a cathedral, built in 1834 to pump brine from the same salt veins that run under Berchtesgaden — almost no one knows it exists",
+      "description": "The Berchtesgaden salt trade began in Bad Reichenhall, not Berchtesgaden. The Alte Saline (Old Saline) was built in 1834 by Leo von Klenze — the architect who designed Munich's Glyptothek and the Walhalla — as a royal salt works for King Ludwig I. Its main pump hall is built in a Romanesque revival style with brick arches 15 metres high, designed to look like a medieval monastery. The original wooden pump wheel (1834, still intact) draws brine from wells that reach 100 metres underground. The museum is architecturally more dramatic than the Berchtesgaden mine and sees a fraction of the visitors.",
+      "practical": "Saline tours €8 per adult, under 6 free. Tours run daily except Sunday in winter. Level interior, stroller-accessible. 20 min north of Berchtesgaden on the B20."
+    }
   ]
 }

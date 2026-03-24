@@ -121,6 +121,39 @@
 
       <!-- Two-column: map + stops -->
 
+      <!-- Detours section -->
+      <section class="detours-section">
+        <h2 class="detours-section__heading">Worth a detour</h2>
+        <p class="section-sub">Stops worth building into this route</p>
+        <div id="route-map" style="height:200px;border-radius:var(--radius);overflow:hidden;margin-bottom:var(--space-lg)"></div>
+        <div class="card-grid">
+        <article class="detour-card" data-detour-id="chiemsee-herrenchiemsee">
+          <div class="detour-card__tags">
+            <span class="tag">En route</span>
+          </div>
+          <h3 class="detour-card__name">Chiemsee + Herrenchiemsee Palace</h3>
+          <div class="detour-card__time-tags">
+            <span class="tag">+15 min drive</span>
+            <span class="tag">120 min visit</span>
+          </div>
+          <blockquote class="stop__highlight">The Hall of Mirrors at Herrenchiemsee is longer than the original at Versailles — and you arrive by boat across Bavaria&#x27;s largest lake</blockquote>
+          <p class="detour-card__practical">Boat from Prien harbour: €8 return per adult, free under 6. Palace entry: €10 adults, children free. Boats run April–October. Stroller fits on boat. Park at Prien harbour (€6/day).</p>
+        </article>
+        <article class="detour-card" data-detour-id="bad-reichenhall-alte-saline">
+          <div class="detour-card__tags">
+            <span class="tag">Near destination</span>
+          </div>
+          <h3 class="detour-card__name">Bad Reichenhall — Alte Saline</h3>
+          <div class="detour-card__time-tags">
+            <span class="tag">+20 min drive</span>
+            <span class="tag">45 min visit</span>
+          </div>
+          <blockquote class="stop__highlight">A Romanesque revival turbine hall the size of a cathedral, built in 1834 to pump brine from the same salt veins that run under Berchtesgaden — almost no one knows it exists</blockquote>
+          <p class="detour-card__practical">Saline tours €8 per adult, under 6 free. Tours run daily except Sunday in winter. Level interior, stroller-accessible. 20 min north of Berchtesgaden on the B20.</p>
+        </article>
+        </div>
+      </section>
+
       <!-- Time-mode selector -->
       <div class="time-selector" id="time-selector" data-drive="105" style="margin-bottom:var(--space-xl)">
         <div style="display:flex;flex-wrap:wrap;gap:var(--space-xs);align-items:center">
@@ -507,6 +540,53 @@
       });
 
       applyMode(3); // initialise with full-day estimate showing
+    })();
+
+    // ── Route overview map ───────────────────────────────────────────
+    (function () {
+      const ACCENT = '#1B3A5C';
+      const TILES  = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
+      const rmap = L.map('route-map', {
+        zoomControl: false, attributionControl: false,
+        dragging: false, touchZoom: false, doubleClickZoom: false,
+        scrollWheelZoom: false, boxZoom: false, keyboard: false
+      });
+      L.tileLayer(TILES, { maxZoom: 19 }).addTo(rmap);
+
+      const routeLine = L.polyline([[48.1351, 11.582], [47.9574, 11.8548], [47.8571, 12.1208], [47.7643, 12.4892], [47.7265, 12.8743], [47.6306, 13.0019]], {
+        color: ACCENT, opacity: 0.45, weight: 2, dashArray: '5 7'
+      }).addTo(rmap);
+
+      const detourDefs = [
+    { id: "chiemsee-herrenchiemsee", lat: 47.8564, lon: 12.3956, anchor: [47.7643, 12.4892] },
+    { id: "bad-reichenhall-alte-saline", lat: 47.725, lon: 12.876, anchor: [47.7265, 12.8743] }
+      ];
+
+      const detourMarkers = {};
+      detourDefs.forEach(function (d) {
+        const m = L.circleMarker([d.lat, d.lon], {
+          radius: 7, color: ACCENT, weight: 2,
+          fillColor: 'transparent', fillOpacity: 1
+        }).addTo(rmap);
+        L.polyline([d.anchor, [d.lat, d.lon]], {
+          color: ACCENT, opacity: 0.35, weight: 1.5, dashArray: '3 5'
+        }).addTo(rmap);
+        detourMarkers[d.id] = m;
+      });
+
+      const allLatLngs = [[48.1351, 11.582], [47.9574, 11.8548], [47.8571, 12.1208], [47.7643, 12.4892], [47.7265, 12.8743], [47.6306, 13.0019]].concat(detourDefs.map(function (d) { return [d.lat, d.lon]; }));
+      rmap.fitBounds(L.latLngBounds(allLatLngs), { padding: [24, 24] });
+
+      document.querySelectorAll('.detour-card[data-detour-id]').forEach(function (card) {
+        const id = card.dataset.detourId;
+        card.addEventListener('mouseenter', function () {
+          if (detourMarkers[id]) detourMarkers[id].setStyle({ fillColor: ACCENT, radius: 10 });
+        });
+        card.addEventListener('mouseleave', function () {
+          if (detourMarkers[id]) detourMarkers[id].setStyle({ fillColor: 'transparent', radius: 7 });
+        });
+      });
     })();
   </script>
 
