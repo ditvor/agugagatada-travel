@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rothenburg ob der Tauber — Agugagatada</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    /* Shell */
+    .site-nav {
+      border-bottom: 1px solid var(--color-border);
+      padding-block: var(--space-md);
+    }
+    .site-nav__inner {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+    }
+    .site-nav__home {
+      font-size: var(--text-md);
+      font-weight: 500;
+      color: var(--color-text);
+      letter-spacing: -0.01em;
+      text-decoration: none;
+    }
+    .site-nav__home:hover { text-decoration: none; }
+    .site-nav__back {
+      font-size: var(--text-sm);
+      color: var(--color-text);
+    }
+    .site-nav__back:hover { color: var(--color-accent); text-decoration: none; }
+
+    .site-footer {
+      border-top: 1px solid var(--color-border);
+      padding-block: var(--space-xl);
+      text-align: center;
+    }
+    .site-footer__line {
+      font-size: var(--text-sm);
+      color: var(--color-text);
+    }
+
+    /* Hero */
+    .hero {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-xl);
+    }
+    .hero__title {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+    .hero__tagline {
+      font-size: var(--text-md);
+      color: var(--color-text);
+      max-width: 600px;
+      margin-top: var(--space-sm);
+      line-height: 1.5;
+    }
+    .hero__tags {
+      display: flex;
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .hero__rule {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin-top: var(--space-xl);
+    }
+
+    /* Intro */
+    .intro {
+      padding-block: var(--space-xl);
+    }
+    .intro__text {
+      font-size: var(--text-md);
+      line-height: 1.7;
+      max-width: 680px;
+      color: var(--color-text);
+    }
+
+    /* Two-col section */
+    .route-section {
+      padding-bottom: var(--space-2xl);
+    }
+
+    /* Map */
+    #map {
+      height: 560px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+
+    /* Stops column */
+    .stops-col {
+      padding-top: var(--space-xs);
+    }
+
+    /* Single stop */
+    .stop {
+      padding-bottom: var(--space-lg);
+    }
+    .stop__header {
+      margin-bottom: var(--space-sm);
+    }
+    .stop__name {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      margin-top: var(--space-xs);
+    }
+    .stop__subtitle {
+      font-size: var(--text-base);
+      color: var(--color-text);
+      margin-top: 2px;
+    }
+    .stop__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-top: var(--space-sm);
+    }
+    .stop__highlight {
+      font-style: italic;
+      font-family: Georgia, serif;
+      font-size: var(--text-base);
+      color: var(--color-text);
+      border-left: 3px solid var(--color-accent);
+      padding-left: var(--space-md);
+      margin-block: var(--space-md);
+      line-height: 1.6;
+    }
+    .stop__expand-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-md);
+      margin-top: var(--space-sm);
+    }
+    .stop__expand-content {
+      display: none;
+      font-size: var(--text-base);
+      line-height: 1.7;
+      color: var(--color-text);
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--color-border);
+    }
+    .stop__expand-content.is-open {
+      display: block;
+    }
+
+    /* Hikes section */
+    .hikes-section {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-2xl);
+    }
+    .hikes-section__header {
+      margin-bottom: var(--space-xl);
+    }
+    .hikes-section__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .hikes-section__sub {
+      font-size: var(--text-sm);
+      color: var(--color-text);
+      margin-top: var(--space-xs);
+    }
+
+    /* Hike card */
+    .hike-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .hike-card__name {
+      font-size: var(--text-md);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .hike-card__area {
+      font-size: var(--text-sm);
+      color: var(--color-text);
+    }
+    .hike-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .hike-card__desc {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      color: var(--color-text);
+    }
+    .hike-card__tip {
+      font-size: var(--text-sm);
+      color: var(--color-text);
+      font-style: italic;
+      line-height: 1.6;
+    }
+    .hike-card__tip-label {
+      font-style: normal;
+      font-weight: 500;
+      color: var(--color-text);
+    }
+
+    /* Hotels section */
+    .hotels-section {
+      padding-bottom: var(--space-2xl);
+    }
+    .hotels-section__header {
+      margin-bottom: var(--space-xl);
+    }
+    .hotels-section__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    /* Hotel card */
+    .hotel-card {
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: var(--space-lg);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    .hotel-card__name {
+      font-size: var(--text-md);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .hotel-card__meta {
+      font-size: var(--text-sm);
+      color: var(--color-text);
+    }
+    .hotel-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+    .hotel-card__rec {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      color: var(--color-text);
+      margin-top: var(--space-xs);
+    }
+
+    /* Before you go */
+    .notes-section {
+      padding-top: var(--space-2xl);
+      padding-bottom: var(--space-2xl);
+      border-top: 1px solid var(--color-border);
+    }
+    .notes-section__title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: var(--space-lg);
+    }
+    .notes-section__note {
+      font-size: var(--text-sm);
+      line-height: 1.6;
+      color: var(--color-text);
+      max-width: 680px;
+      margin-bottom: var(--space-sm);
+    }
+    .notes-section__note:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="page-shell">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__home">Agugagatada</a>
+        <a href="index.html" class="site-nav__back">All destinations</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content">
+    <div class="page-shell">
+
+      <!-- Hero -->
+      <header class="hero">
+        <h1 class="hero__title">Rothenburg ob der Tauber</h1>
+        <p class="hero__tagline">Germany's most intact medieval walled town, a carved altarpiece by the greatest medieval sculptor, and a legend about a man who drank a gallon of wine to save his neighbours from an army</p>
+        <div class="hero__tags">
+          <span class="tag">2h 30 min from Munich</span>
+          <span class="tag">1–2 days</span>
+        </div>
+        <hr class="hero__rule">
+      </header>
+
+      <!-- Intro -->
+      <section class="intro">
+        <p class="intro__text">Rothenburg ob der Tauber is the most intact medieval walled town in Germany — and it knows it. Tour buses arrive before 11am and the market square fills fast. But come early or stay overnight, and what you find underneath the tourism is genuine: 42 towers of 14th-century defensive masonry still standing, a carved lime-wood altarpiece by Germany's greatest medieval sculptor, and a legend about a man who drank a gallon of wine to save his town council from execution. The history earns the crowds. The strategy is just to outmaneuver them.</p>
+      </section>
+
+      <!-- Two-column: map + stops -->
+      <section class="route-section">
+        <div class="two-col">
+
+          <!-- Map -->
+          <div class="two-col__map">
+            <div id="map"></div>
+          </div>
+
+          <!-- Stops -->
+          <div class="stops-col">
+
+            <!-- Stop 01: Stadtmauer -->
+            <article class="stop" data-stop-id="stadtmauer" data-tier="1" data-duration="90">
+              <div class="stop__header">
+                <span class="stop-number">01</span>
+                <h2 class="stop__name">Stadtmauer — The City Walls</h2>
+                <p class="stop__subtitle">42 towers, 4 kilometres, covered walkway still intact after 700 years</p>
+                <div class="stop__tags">
+                  <span class="tag">90 min</span>
+                  <span class="tag">Monument</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">Walk the covered rampart walkway at dawn before the first tour buses arrive — the half-timbered roofscape below and the Tauber valley beyond are yours alone</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="wall-about">About this place</button>
+                <button class="expand-btn" data-target="wall-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="wall-baby">Visiting with a baby</button>
+              </div>
+              <div id="wall-about" class="stop__expand-content">Rothenburg's walls form a nearly complete circuit of about 4 kilometres, with 42 towers surviving from the original defensive ring. Construction began in the 13th century as the town grew wealthy from wool and cloth trade, with major expansion in the 14th century when Rothenburg was one of the 20 largest cities in the Holy Roman Empire. What makes these walls unusual is that they are not museum pieces — they are the actual walls, largely unrestored, with the original covered walkway still in place along most of the circuit. In March 1945, Allied bombing destroyed about 600 metres of wall and six towers. The reconstruction was funded by international donors and matched the original so precisely that the joins are difficult to find. The towers are spaced to provide overlapping fields of fire; the Klingentor to the north has an internal garrison chapel still intact. The covered walkway concentrates the morning light in a particular way — long shadows, the rooftops of half-timbered houses below, the Tauber valley visible through the merlons. Come between 7am and 8:30am and significant sections will be entirely empty.</div>
+              <div id="wall-gems" class="stop__expand-content">The Rödertor (Röder Gate) in the east is the most photogenic tower — it sits at a right angle to the main wall and can be photographed from the wall walk above with the town behind it. The Stöberleinsturm in the south is one of the oldest sections; different construction phases are visible in the stonework. The walls are accessible 24 hours, year-round, with no ticket. The best short carrier walk — 15 minutes of particularly dramatic wall — runs from the Burgtor (west gate) to the Klingentor (north gate), with the best views over the Tauber Valley.</div>
+              <div id="wall-baby" class="stop__expand-content">Strollers are not viable on the walls — the walkway has steps at each tower entrance, irregular surfaces, and no ramp access. A baby carrier (backpack-style or front carry) is essential and very comfortable here. The circuit can be done in sections — you can descend at any tower gate if you need to stop early. The Burgtor to Klingentor section is the recommended short version at about 15 minutes of walking.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 02: Plönlein -->
+            <article class="stop" data-stop-id="plonlein" data-tier="1" data-duration="30">
+              <div class="stop__header">
+                <span class="stop-number">02</span>
+                <h2 class="stop__name">Plönlein</h2>
+                <p class="stop__subtitle">The forked lane with two towers — photographed since the 19th century, still genuinely medieval</p>
+                <div class="stop__tags">
+                  <span class="tag">30 min</span>
+                  <span class="tag">Monument</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">A crooked half-timbered house where the road forks, framed by the Siebersturm on the left and the Kobolzeller Tor on the right — medieval Germany compressed into one street corner</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="plonlein-about">About this place</button>
+                <button class="expand-btn" data-target="plonlein-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="plonlein-baby">Visiting with a baby</button>
+              </div>
+              <div id="plonlein-about" class="stop__expand-content">Plönlein is not a building or a museum but a moment in the street — a small triangular space where the lane splits in two directions, each guarded by a different medieval gate tower. On the left, the Siebersturm (Sieve-Makers' Tower, 1385) leads toward the hospital quarter of the old town. On the right, the Kobolzeller Tor (1360) leads down through the walls toward the Tauber Valley below. In the centre, a crooked yellow half-timbered house leans at the improbable angles that 700 years of timber settling produces. The composition is so precisely medieval-German that it has appeared on posters, postcards, and chocolate boxes since the 19th century. It was not staged — this is what happened when two streets converged at two gate towers in the 14th century and no one tidied it up afterward.</div>
+              <div id="plonlein-gems" class="stop__expand-content">Walk through the Kobolzeller Tor and down the path into the Tauber Valley — the views back up to the Plönlein from below, with both towers and the town walls rising above, are far more impressive than the view from the lane itself. The Kobolzeller Kirche at the bottom of the descent is a small Gothic chapel from 1330, usually open, almost always empty. From the valley floor looking upward, the scale of the walls and the height of the town above become clear in a way that the street-level view never reveals.</div>
+              <div id="plonlein-baby" class="stop__expand-content">The lane itself is cobblestoned but manageable with a carrier. The path down into the valley through the Kobolzeller Tor is steep and stepped — carrier only. For the best photograph, arrive before 9am when the lane is clear of day-trippers. A stroller can be wheeled to the viewpoint at the top of the lane but the descent into the valley requires a carrier.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 03: St. Jakobskirche -->
+            <article class="stop" data-stop-id="jakobskirche" data-tier="1" data-duration="60">
+              <div class="stop__header">
+                <span class="stop-number">03</span>
+                <h2 class="stop__name">St. Jakobskirche — Heilig-Blut-Altar</h2>
+                <p class="stop__subtitle">174 years of construction, one altarpiece, Germany's greatest medieval wood carver</p>
+                <div class="stop__tags">
+                  <span class="tag">60 min</span>
+                  <span class="tag">Church</span>
+                  <span class="tag">€2.50 entry</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">Tilman Riemenschneider's Holy Blood Altar — carved from unpainted lime wood in 1499, with Judas placed provocatively at the visual centre of the Last Supper</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="jakob-about">About this place</button>
+                <button class="expand-btn" data-target="jakob-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="jakob-baby">Visiting with a baby</button>
+              </div>
+              <div id="jakob-about" class="stop__expand-content">Construction of St. Jakobskirche began in 1311 and was not completed until 1485 — 174 years of building across three distinct phases. The result is a Gothic basilica of unusual complexity, with a western choir built as a bridge over Klingengasse (the road passes beneath it), and a nave and eastern choir from different centuries. The church was a major pilgrimage destination throughout the medieval period: it holds a relic claimed to be the Blood of Christ, housed in a 13th-century rock-crystal cross, which drew pilgrims on the Jakobsweg (the road to Santiago de Compostela in Spain). In 1499 the town council commissioned Tilman Riemenschneider — the greatest German wood sculptor of the late medieval period — to create a new altar to frame this relic. What he produced is the Heilig-Blut-Altar: carved entirely from lime wood and deliberately left unpainted. The central panel shows the Last Supper. The compositional choice is theologically daring: Judas, the betrayer, stands at the physical and visual centre of the scene. Christ is to one side. The arrangement makes the moment of betrayal the fulcrum of the work. Despite the Protestant Reformation converting St. Jakob's to Lutheranism in 1544, this Catholic relic and its altar survived — the Holy Blood relic remains the only such relic on public display in a Lutheran church in Germany.</div>
+              <div id="jakob-gems" class="stop__expand-content">Riemenschneider carved another major altar — the Cross Altar (1505) — in the village of Detwang, just 2 km south along the Tauber Valley. Seeing both altars on the same visit, separated by a 30-minute riverside walk, is one of the quietly great art-historical experiences in Franconia. The astronomical clock in the western choir dates from 1373 and still functions. The view through the western choir window over the rooftops of the lower town is extraordinary.</div>
+              <div id="jakob-baby" class="stop__expand-content">The main nave is flat stone, wide, and accessible with a stroller. The western choir containing the altar requires climbing the staircase built into the bridge structure — a carrier is needed for this section. Overall very family-friendly; it is an active Lutheran parish that treats visitors as guests. Entry €2.50, children free. Open daily 9am–5pm (shorter hours in winter).</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 04: Marktplatz + Clock -->
+            <article class="stop" data-stop-id="marktplatz-clock" data-tier="1" data-duration="45">
+              <div class="stop__header">
+                <span class="stop-number">04</span>
+                <h2 class="stop__name">Marktplatz + Ratstrinkstube Clock</h2>
+                <p class="stop__subtitle">The imperial Town Hall, the town square, and the hourly mechanical legend</p>
+                <div class="stop__tags">
+                  <span class="tag">45 min</span>
+                  <span class="tag">Town centre</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">On the hour, 10am to 10pm, two shuttered windows open on the Ratstrinkstube facade and mechanical figures re-enact the 1631 legend — the man who drank 3.25 litres of wine to save the town council from execution</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="market-about">About this place</button>
+                <button class="expand-btn" data-target="market-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="market-baby">Visiting with a baby</button>
+              </div>
+              <div id="market-about" class="stop__expand-content">The Marktplatz is the centre of Rothenburg's civic life and the fulcrum of its most famous story. The Town Hall (Rathaus) occupies one side — a composite building with a Gothic section from 1250 and a Renaissance wing added in 1578, with an imperial hall used for receiving delegations during the Free Imperial City period. On the Ratstrinkstube (Council Tavern) wing, high on the facade, is the mechanical clock that stages the Meistertrunk legend hourly. The story: in October 1631, Count Tilly's Catholic imperial army besieged and occupied Rothenburg during the Thirty Years' War. Facing the town's destruction and the execution of its Protestant council, former Mayor Georg Nusch allegedly accepted the general's challenge — drink a 3.25-litre tankard of wine in one continuous draught, and Tilly would spare the town. He succeeded. The story first appears in a chronicle written more than a century after the event and is almost certainly embellished; historians note that Tilly left Rothenburg largely intact for practical military reasons rather than a drinking contest. But this legend has been Rothenburg's self-understanding for 400 years, and the mechanical clock staging it has run on the hour since the 19th century.</div>
+              <div id="market-gems" class="stop__expand-content">Climb the Rathaus tower — 220 steps, steep and narrow, but the view over the entire walled town and the Tauber Valley is the finest in Rothenburg (entry €2, open April–October). The Schrannenplatz behind the Rathaus is quieter than the main square and hosts the weekly market. In December, the Christmas market occupies both squares — genuinely one of Germany's best and less commercialised than Munich's.</div>
+              <div id="market-baby" class="stop__expand-content">The Marktplatz is the most baby-friendly space in Rothenburg — wide, flat, open, with benches and outdoor café seating on all sides. The Rathaus tower climb is not suitable with a baby (very narrow spiral stair). Public toilets are just off the Schrannenplatz behind the Rathaus. The clock show is 1–2 minutes, free, and works best when you position yourself directly in front of the Ratstrinkstube facade on the north side of the square.</div>
+            </article>
+
+            <div class="drive-connector"></div>
+
+            <!-- Stop 05: Topplerschlösschen -->
+            <article class="stop" data-stop-id="topplerschlosschen" data-tier="2" data-duration="60">
+              <div class="stop__header">
+                <span class="stop-number">05</span>
+                <h2 class="stop__name">Topplerschlösschen</h2>
+                <p class="stop__subtitle">The smallest castle in Germany — built by Rothenburg's most powerful mayor in 1388</p>
+                <div class="stop__tags">
+                  <span class="tag">60 min</span>
+                  <span class="tag">Monument</span>
+                </div>
+              </div>
+              <blockquote class="stop__highlight">A single fortified tower beside a medieval mill pond in the Tauber Valley — the walk down from the walled town to reach it is one of the best approaches to any building in Franconia</blockquote>
+              <div class="stop__expand-row">
+                <button class="expand-btn" data-target="toppler-about">About this place</button>
+                <button class="expand-btn" data-target="toppler-gems">Hidden gems</button>
+                <button class="expand-btn" data-target="toppler-baby">Visiting with a baby</button>
+              </div>
+              <div id="toppler-about" class="stop__expand-content">Heinrich Toppler served as Rothenburg's mayor from 1373 to 1408 — the longest tenure in the town's history and the period of its greatest prosperity. By 1400 Rothenburg controlled a territory of over 400 square kilometres. Toppler was the architect of this power, negotiating with emperors and managing the finances that built the defensive infrastructure visible in the walls above. In 1388 he built his Weiherhaus (pond house) in the Tauber Valley: a 2-storey stone base with two overhanging half-timbered upper storeys, set beside a mill pond that was both defensive and practical. The architecture is peculiar — the overhanging upper floors and steeply pitched roof give it the quality of a building from a medieval illustration. Toppler himself came to a bad end: in 1408, having supported the wrong claimant in a dynastic dispute, he was imprisoned by the town's own authorities and died in the town jail. The wealth and power he built, the walls and towers still visible from the valley below — none of it saved him.</div>
+              <div id="toppler-gems" class="stop__expand-content">The valley path south from the Topplerschlösschen continues 2 km to Detwang and its Riemenschneider Cross Altar in St. Peter's Church (carved 1505, five years after the Holy Blood Altar in St. Jakob's). The double Riemenschneider visit — one in the town, one in the valley, joined by a riverside walk — is one of the quietly great art-historical walks in Germany, and almost no one does it.</div>
+              <div id="toppler-baby" class="stop__expand-content">The walk down from Kobolzeller Tor to the Topplerschlösschen takes about 20 minutes on a paved but steep path — carrier essential, no strollers. The Tauber Valley floor is flat and pleasant once you are down. The castle exterior is always accessible; interior opening is irregular (check at the tourist office on the Marktplatz). Allow extra energy for the climb back up into the walled town.</div>
+            </article>
+
+          </div><!-- /stops-col -->
+        </div><!-- /two-col -->
+      </section>
+
+      <!-- Detours section -->
+      <section class="detours-section">
+        <h2 class="detours-section__heading">Worth a detour</h2>
+        <p class="section-sub">Stops worth building into this route</p>
+        <div id="route-map" style="height:200px;border-radius:var(--radius);overflow:hidden;margin-bottom:var(--space-lg)"></div>
+        <div class="card-grid">
+
+          <article class="detour-card" data-detour-id="dinkelsbuhl">
+            <div class="detour-card__tags">
+              <span class="tag">Near destination</span>
+            </div>
+            <h3 class="detour-card__name">Dinkelsbühl</h3>
+            <div class="detour-card__time-tags">
+              <span class="tag">30 min south</span>
+              <span class="tag">3 hr visit</span>
+            </div>
+            <blockquote class="stop__highlight">Completely intact 15th-century walls with four original gate towers, a late-Gothic church with a 20-metre nave, and almost no international tour buses</blockquote>
+            <p class="detour-card__practical">Free to walk the town. St. Georg's Church: free entry. Parking at Europaparkplatz (large, free). 30-minute drive south on the B25 — worth combining with a Rothenburg overnight.</p>
+          </article>
+
+          <article class="detour-card" data-detour-id="feuchtwangen">
+            <div class="detour-card__tags">
+              <span class="tag">En route</span>
+            </div>
+            <h3 class="detour-card__name">Feuchtwangen</h3>
+            <div class="detour-card__time-tags">
+              <span class="tag">+10 min drive</span>
+              <span class="tag">45 min visit</span>
+            </div>
+            <blockquote class="stop__highlight">A perfectly-preserved Romanesque cloister from around 1150, founded by Charlemagne&#x27;s monks — used every summer as an open-air theatre stage</blockquote>
+            <p class="detour-card__practical">Cloister entry free (donation). Open during daylight hours. Free parking at the Marktplatz car park. 20 km from Rothenburg on the B25 — a natural stop on the drive.</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Hikes -->
+      <section class="hikes-section">
+        <div class="hikes-section__header">
+          <h2 class="hikes-section__title">On foot</h2>
+          <p class="hikes-section__sub">Walks and hikes from this base</p>
+        </div>
+        <div class="card-grid">
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Tauber Valley Loop</h3>
+            <p class="hike-card__area">Below the city walls</p>
+            <div class="hike-card__tags">
+              <span class="tag">3.4 km</span>
+              <span class="tag">+40 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag">Carrier</span>
+            </div>
+            <p class="hike-card__desc">A circular walk from the Burgtor down into the Tauber Valley, along the river past old mills and the Topplerschlösschen, crossing the medieval Tauberbrücke and climbing back through the vineyards on the east side. The views back up to the town walls from the valley floor are the best available — this is how the walls were meant to be seen.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Start at the Burgtor. Follow the river south to the Tauberbrücke, cross, climb back through the vineyard path to Kobolzeller Tor or Spitaltor. About 75 minutes at a relaxed pace.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Detwang Village Walk</h3>
+            <p class="hike-card__area">Tauber Valley south of Rothenburg</p>
+            <div class="hike-card__tags">
+              <span class="tag">4 km</span>
+              <span class="tag">+20 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag">Carrier</span>
+            </div>
+            <p class="hike-card__desc">A flat walk south along the Tauber to the village of Detwang (documented since 968 AD). St. Peter's Church there contains Riemenschneider's Cross Altar (1505) — carved five years after the Holy Blood Altar in St. Jakob's. Seeing both altars on the same day, separated by a riverside walk, is one of the great art-historical excursions in Franconia.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Leave from Kobolzeller Tor, follow the river south. Almost entirely flat. Detwang church is signposted and usually open during the day.</p>
+          </article>
+
+          <article class="hike-card">
+            <h3 class="hike-card__name">Frankenhöhe Ridge Walk</h3>
+            <p class="hike-card__area">Frankenhöhe hills, 10 km north via B25</p>
+            <div class="hike-card__tags">
+              <span class="tag">8 km</span>
+              <span class="tag">+120 m</span>
+              <span class="tag">Easy</span>
+              <span class="tag">Carrier</span>
+            </div>
+            <p class="hike-card__desc">A section of the Panoramaweg Taubertal (133 km long-distance trail) along the Frankenhöhe ridge — the watershed between the Tauber and Regnitz river systems. Open farmland views across northern Franconia, mixed beech forest, and distant views of Colmberg Castle on its ridge. A proper half-day walk for families wanting more than a valley stroll.</p>
+            <p class="hike-card__tip"><span class="hike-card__tip-label">Tip — </span>Drive 10 km north on the B25 to Gebsattel. Join the Panoramaweg heading south. Well-marked trail; return the same way or arrange a pick-up in Rothenburg.</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Hotels -->
+      <section class="hotels-section">
+        <div class="hotels-section__header">
+          <h2 class="hotels-section__title">Where to stay</h2>
+        </div>
+        <div class="card-grid">
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Romantik Hotel Markusturm</h3>
+            <p class="hotel-card__meta">Boutique Hotel — Old town, near Rödergasse</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€130–190/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Babysitting</span>
+            </div>
+            <p class="hotel-card__rec">Best combination of historical authenticity and genuine baby amenities — the only old-town hotel with on-call babysitting and a quiet garden</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Eisenhut</h3>
+            <p class="hotel-card__meta">Historic Hotel — Old town, Herrngasse</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€100–160/night</span>
+              <span class="tag">Crib available</span>
+            </div>
+            <p class="hotel-card__rec">Four interconnected 15th-century patrician houses on Rothenburg's main merchant street — the most impressive building, good garden for children</p>
+          </article>
+
+          <article class="hotel-card">
+            <h3 class="hotel-card__name">Hotel Rappen</h3>
+            <p class="hotel-card__meta">3-Star Hotel — Old town, near Marktplatz</p>
+            <div class="hotel-card__tags">
+              <span class="tag">€75–100/night</span>
+              <span class="tag">Crib available</span>
+              <span class="tag">Parking</span>
+            </div>
+            <p class="hotel-card__rec">Best value for families who prioritise practical amenities — and one of very few old-town options with accessible parking</p>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- Before you go -->
+      <section class="notes-section">
+        <h2 class="notes-section__title">Before you go</h2>
+        <p class="notes-section__note">Crowds: arrive before 9am or after 5pm — tour buses fill the Marktplatz from 11am to 3pm and the town becomes genuinely uncomfortable.</p>
+        <p class="notes-section__note">Carrier, not stroller: the entire old town is medieval cobblestone; the wall walk and Tauber Valley paths are inaccessible by stroller entirely.</p>
+        <p class="notes-section__note">Best parking: P3 (Taubertal Parkplatz) below the south wall — walk up through the vineyard into the old town from below, as medieval visitors did.</p>
+        <p class="notes-section__note">Meistertrunk clock: runs on the hour, 10am–10pm, from the Ratstrinkstube windows on the north side of the Marktplatz.</p>
+        <p class="notes-section__note">St. Jakobskirche: entry €2.50, open daily 9am–5pm (shorter in winter). The western choir with the altar can have queues at midday — visit early or late.</p>
+        <p class="notes-section__note">Topplerschlösschen interior: irregularly open — check at the tourist office on arrival. The valley walk is worthwhile regardless.</p>
+      </section>
+
+    </div><!-- /page-shell -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell">
+      <p class="site-footer__line">Munich-based, hand-curated.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ── Map setup ──────────────────────────────────────────────────────────
+    const map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Drive polyline Munich → Rothenburg (dashed, muted)
+    const driveLine = [
+      [48.1351, 11.5820], [48.3705, 10.8978], [49.2994, 10.5727], [49.3763, 10.1799]
+    ];
+    L.polyline(driveLine, {
+      color: '#1B3A5C', opacity: 0.4, weight: 2, dashArray: '5 7'
+    }).addTo(map);
+
+    // Stop coordinates
+    const stops = [
+      { id: 'stadtmauer',          lat: 49.3808, lon: 10.1811 },
+      { id: 'plonlein',            lat: 49.3731, lon: 10.1812 },
+      { id: 'jakobskirche',        lat: 49.3773, lon: 10.1806 },
+      { id: 'marktplatz-clock',    lat: 49.3769, lon: 10.1815 },
+      { id: 'topplerschlosschen',  lat: 49.3684, lon: 10.1862 }
+    ];
+
+    // Local route polyline (solid)
+    L.polyline(stops.map(s => [s.lat, s.lon]), {
+      color: '#1B3A5C', opacity: 0.85, weight: 2
+    }).addTo(map);
+
+    // Markers
+    const GREY   = '#AAAAAA';
+    const ACCENT = '#1B3A5C';
+    const markerMap = {};
+
+    stops.forEach((s, i) => {
+      const m = L.circleMarker([s.lat, s.lon], {
+        radius: 7, fillColor: GREY, color: '#FFFFFF',
+        weight: 2, fillOpacity: 1
+      }).addTo(map);
+
+      m.bindTooltip(String(i + 1).padStart(2, '0'), {
+        permanent: true, direction: 'right',
+        className: 'stop-label', offset: [8, 0]
+      });
+
+      markerMap[s.id] = m;
+    });
+
+    // Fit map to all stops + Munich origin
+    const allPoints = [...driveLine, ...stops.map(s => [s.lat, s.lon])];
+    map.fitBounds(L.latLngBounds(allPoints), { padding: [40, 40] });
+
+    // ── Expand / collapse ──────────────────────────────────────────────────
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const panel = document.getElementById(btn.dataset.target);
+        const open  = panel.classList.toggle('is-open');
+        btn.style.textDecoration = open ? 'underline' : 'none';
+      });
+    });
+
+    // ── Scroll-linked map highlighting ────────────────────────────────────
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.dataset.stopId;
+        Object.entries(markerMap).forEach(([mid, m]) => {
+          const active = mid === id;
+          m.setStyle({ fillColor: active ? ACCENT : GREY, radius: active ? 10 : 7 });
+          if (active) map.panTo(m.getLatLng(), { animate: true, duration: 0.4 });
+        });
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stop[data-stop-id]').forEach(el => observer.observe(el));
+
+    // Activate first stop on load
+    const firstMarker = markerMap[stops[0].id];
+    if (firstMarker) firstMarker.setStyle({ fillColor: ACCENT, radius: 10 });
+
+    // ── Route overview map ────────────────────────────────────────────────
+    (function () {
+      const ACCENT = '#1B3A5C';
+      const TILES  = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
+      const rmap = L.map('route-map', {
+        zoomControl: false, attributionControl: false,
+        dragging: false, touchZoom: false, doubleClickZoom: false,
+        scrollWheelZoom: false, boxZoom: false, keyboard: false
+      });
+      L.tileLayer(TILES, { maxZoom: 19 }).addTo(rmap);
+
+      const routeLine = L.polyline(
+        [[48.1351, 11.582], [48.3705, 10.8978], [49.2994, 10.5727], [49.3763, 10.1799]],
+        { color: ACCENT, opacity: 0.45, weight: 2, dashArray: '5 7' }
+      ).addTo(rmap);
+
+      const detourDefs = [
+        { id: 'dinkelsbuhl',  lat: 49.0736, lon: 10.3199, anchor: [49.3763, 10.1799] },
+        { id: 'feuchtwangen', lat: 49.1677, lon: 10.3272, anchor: [49.2994, 10.5727] }
+      ];
+
+      const detourMarkers = {};
+      detourDefs.forEach(function (d) {
+        const m = L.circleMarker([d.lat, d.lon], {
+          radius: 7, color: ACCENT, weight: 2,
+          fillColor: 'transparent', fillOpacity: 1
+        }).addTo(rmap);
+        L.polyline([d.anchor, [d.lat, d.lon]], {
+          color: ACCENT, opacity: 0.35, weight: 1.5, dashArray: '3 5'
+        }).addTo(rmap);
+        detourMarkers[d.id] = m;
+      });
+
+      const allLatLngs = [[48.1351, 11.582], [48.3705, 10.8978], [49.2994, 10.5727], [49.3763, 10.1799]]
+        .concat(detourDefs.map(function (d) { return [d.lat, d.lon]; }));
+      rmap.fitBounds(L.latLngBounds(allLatLngs), { padding: [24, 24] });
+
+      document.querySelectorAll('.detour-card[data-detour-id]').forEach(function (card) {
+        const id = card.dataset.detourId;
+        card.addEventListener('mouseenter', function () {
+          if (detourMarkers[id]) detourMarkers[id].setStyle({ fillColor: ACCENT, radius: 10 });
+        });
+        card.addEventListener('mouseleave', function () {
+          if (detourMarkers[id]) detourMarkers[id].setStyle({ fillColor: 'transparent', radius: 7 });
+        });
+      });
+    })();
+  </script>
+
+  <style>
+    .stop-label {
+      background: none;
+      border: none;
+      box-shadow: none;
+      font-size: 11px;
+      font-weight: 600;
+      color: #1B3A5C;
+      font-family: system-ui, -apple-system, sans-serif;
+      letter-spacing: 0.05em;
+      padding: 0;
+    }
+    .stop-label::before { display: none; }
+  </style>
+
+</body>
+</html>

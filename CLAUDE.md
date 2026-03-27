@@ -41,7 +41,8 @@ Route generation uses Claude in two distinct phases:
 | Mapbox | Geocoding, Directions, Isochrone, Static Maps |
 | Overpass (OpenStreetMap) | Free POI discovery — castles, museums, historic sites |
 | Wikipedia/Wikivoyage | Historical context injected into Claude prompts |
-| Komoot | Hiking routes with difficulty + pushchair-feasibility |
+| OpenStreetMap Overpass API | Hiking routes (route=hiking relations) with difficulty (sac_scale), distance, elevation |
+| OpenTopoData | Elevation profiles for hiking routes — EU-DEM dataset, free |
 | Booking.com Affiliate | Hotel recommendations filtered for families |
 | Open-Meteo | Free weather data for the destination |
 
@@ -55,7 +56,7 @@ User input: "Lindau" + dates
     → Mapbox drive-time matrix between POIs
     → Claude Phase 1: curate + structure JSON route
     → Claude Phase 2: stream narrative per stop
-    → Parallel: Komoot hikes + Booking.com hotels
+    → Parallel: Overpass hiking routes + Booking.com hotels
     → Persist trip to PostgreSQL
     → Stream results to frontend via SSE
 ```
@@ -85,7 +86,7 @@ agugagatada_travel/
 │   │   ├── mapbox.ts
 │   │   ├── overpass.ts
 │   │   ├── wikipedia.ts
-│   │   ├── komoot.ts
+│   │   ├── opentopodata.ts
 │   │   └── booking.ts
 │   ├── queue/
 │   │   └── jobs.ts             # BullMQ job definitions
@@ -120,7 +121,7 @@ agugagatada_travel/
 
 ### Prompt Scripts
 
-All full prompt templates are in **`PROMPTS.md`**. The prompts used are:
+The prompts used are (implement in `lib/ai/prompts.ts`):
 
 | Prompt | Model | Purpose |
 |---|---|---|
@@ -177,15 +178,15 @@ REDIS_URL=redis://...
 BOOKING_AFFILIATE_ID=
 BOOKING_API_KEY=
 
-# Komoot (if API key needed)
-KOMOOT_API_KEY=
+# Outdooractive (optional commercial alternative for hiking content)
+# OUTDOORACTIVE_API_KEY=
 ```
 
 ---
 
 ## Phase Reference
 
-See `PLAN.md` for the full phased breakdown. The phases are designed so each delivers a working, demonstrable product:
+Five phases, each delivering a working, demonstrable product:
 
 - **Phase 1** — Skeleton + Mapbox geocoding
 - **Phase 2** — Overpass + Wikipedia data pipeline
