@@ -1,0 +1,257 @@
+{
+  "id": "rothenburg-daytrip",
+  "title": "Rothenburg ob der Tauber — The Town That Froze in 1631",
+  "tagline": "Germany's most intact medieval walled town, a carved altarpiece by the greatest medieval sculptor, and a legend about a man who drank a gallon of wine to save his neighbours from an army",
+  "destination": {
+    "name": "Rothenburg ob der Tauber",
+    "region": "Bavaria (Franconia), Germany",
+    "lat": 49.3763,
+    "lon": 10.1799
+  },
+  "origin": {
+    "name": "Munich",
+    "lat": 48.1351,
+    "lon": 11.582
+  },
+  "drive_time_from_origin_minutes": 150,
+  "duration_days": 1,
+  "generated_at": "2026-03-27",
+  "stats": {
+    "total_stops": 5,
+    "baby_friendly_score": 4,
+    "history_depth_score": 5,
+    "touristic_score": 4,
+    "drive_total_km": 255
+  },
+  "intro": "Rothenburg ob der Tauber is the most intact medieval walled town in Germany — and it knows it. Tour buses arrive before 11am and the market square fills fast. But come early or stay overnight, and what you find underneath the tourism is genuine: 42 towers of 14th-century defensive masonry still standing, a carved lime-wood altarpiece by Germany's greatest medieval sculptor, and a legend about a man who drank a gallon of wine to save his town from a Catholic general's army. The history earns the crowds. The strategy is just to outmaneuver them.",
+  "route_polyline": [
+    [48.1351, 11.582],
+    [48.3705, 10.8978],
+    [49.2994, 10.5727],
+    [49.3763, 10.1799]
+  ],
+  "days": [
+    {
+      "day_number": 1,
+      "title": "Walls + Plönlein + Riemenschneider + Meistertrunk",
+      "theme": "Medieval fortifications, the finest wood carving in Franconia, and the town's founding legend",
+      "summary": "Walk the ramparts at dawn, find the iconic forked lane, see Germany's greatest medieval altar, then watch the clock re-enact the legend on the hour",
+      "stops": [
+        {
+          "id": "stadtmauer",
+          "sequence": 1,
+          "name": "Stadtmauer — The City Walls",
+          "subtitle": "42 towers, 4 kilometres, covered walkway still intact after 700 years",
+          "lat": 49.3808,
+          "lon": 10.1811,
+          "category": "monument",
+          "visit_duration_minutes": 90,
+          "drive_time_from_prev_minutes": 0,
+          "baby_friendly_score": 3,
+          "highlight": "Walk the covered rampart walkway at dawn before the first tour buses arrive — the half-timbered roofscape below and the Tauber valley beyond are yours alone",
+          "about": "Rothenburg's walls form a nearly complete circuit of about 4 kilometres, with 42 towers surviving from the original defensive ring. Construction began in the 13th century as the town grew wealthy from wool and cloth trade, with major expansion in the 14th century when Rothenburg was one of the 20 largest cities in the Holy Roman Empire. What makes these walls unusual is that they are not museum pieces — they are the actual walls, largely unrestored, with the original covered walkway still in place along most of the circuit. In March 1945, Allied bombing destroyed about 600 metres of wall and six towers. The reconstruction was funded by international donors and matched the original so precisely that the joins are difficult to find. The towers are spaced to provide overlapping fields of fire; the Klingentor to the north has an internal garrison chapel still intact. The covered walkway concentrates the morning light in a particular way — long shadows, the rooftops of half-timbered houses below, the Tauber valley visible through the merlons. Come between 7am and 8:30am and significant sections will be entirely empty.",
+          "hidden_gems": "The Rödertor (Röder Gate) in the east is the most photogenic tower — it sits at a right angle to the main wall and can be photographed from the wall walk above with the town behind it. The Stöberleinsturm in the south is one of the oldest sections; the different construction phases are visible in the stonework. The walls are accessible 24 hours, year-round, with no ticket. The best short carrier walk — 15 minutes of particularly dramatic wall — runs from the Burgtor (west gate) to the Klingentor (north gate), with the best views over the Tauber Valley.",
+          "baby_logistics": "Strollers are not viable on the walls — the walkway has steps at each tower entrance, irregular surfaces, and no ramp access. A baby carrier (backpack-style or front carry) is essential and very comfortable here. The circuit can be done in sections — you can descend at any tower gate if you need to stop early. The Burgtor to Klingentor section is the recommended short version.",
+          "tier": 1,
+          "skip_if_rushed": false
+        },
+        {
+          "id": "plonlein",
+          "sequence": 2,
+          "name": "Plönlein",
+          "subtitle": "The forked lane with two towers — photographed since the 19th century, still genuinely medieval",
+          "lat": 49.3731,
+          "lon": 10.1812,
+          "category": "monument",
+          "visit_duration_minutes": 30,
+          "drive_time_from_prev_minutes": 5,
+          "baby_friendly_score": 4,
+          "highlight": "A crooked half-timbered house where the road forks, framed by the Siebersturm on the left and the Kobolzeller Tor on the right — medieval Germany compressed into one street corner",
+          "about": "Plönlein is not a building or a museum but a moment in the street — a small triangular space where the lane splits in two directions, each guarded by a different medieval gate tower. On the left, the Siebersturm (Sieve-Makers' Tower, 1385) leads toward the hospital quarter of the old town. On the right, the Kobolzeller Tor (1360) leads down through the walls toward the Tauber Valley below. In the centre, a crooked yellow half-timbered house leans at the improbable angles that 700 years of timber settling produces. The composition is so precisely medieval-German that it has appeared on posters, postcards, and chocolate boxes since the 19th century. It was not staged — this is what happened when two streets converged at two gate towers in the 14th century and no one tidied it up afterward.",
+          "hidden_gems": "Walk through the Kobolzeller Tor and down the path into the Tauber Valley — the views back up to the Plönlein from below, with both towers and the town walls rising above, are far more impressive than the view from the lane itself. The Kobolzeller Kirche at the bottom of the descent is a small Gothic chapel from 1330, usually open, almost always empty. From the valley floor looking upward, the scale of the walls and the height of the town above become clear in a way that the street-level view never reveals.",
+          "baby_logistics": "The lane itself is cobblestoned but manageable with a carrier. The path down into the valley through the Kobolzeller Tor is steep and stepped — carrier only. For the best photograph, arrive before 9am when the lane is clear of day-trippers. A stroller can be wheeled to the viewpoint but the descent into the valley requires a carrier.",
+          "tier": 1,
+          "skip_if_rushed": false
+        },
+        {
+          "id": "jakobskirche",
+          "sequence": 3,
+          "name": "St. Jakobskirche — Heilig-Blut-Altar",
+          "subtitle": "174 years of construction, one altarpiece, Germany's greatest medieval wood carver",
+          "lat": 49.3773,
+          "lon": 10.1806,
+          "category": "church",
+          "visit_duration_minutes": 60,
+          "drive_time_from_prev_minutes": 5,
+          "baby_friendly_score": 4,
+          "highlight": "Tilman Riemenschneider's Holy Blood Altar — carved from unpainted lime wood in 1499, with Judas placed provocatively at the visual center of the Last Supper",
+          "about": "Construction of St. Jakobskirche began in 1311 and was not completed until 1485 — 174 years of building across three distinct phases. The result is a Gothic basilica of unusual complexity, with a western choir built as a bridge over Klingengasse (the road passes beneath it), and a nave and eastern choir from different centuries. The church was a major pilgrimage destination throughout the medieval period: it holds a relic claimed to be the Blood of Christ, housed in a 13th-century rock-crystal cross, which drew pilgrims on the Jakobsweg (the road to Santiago de Compostela). In 1499 the town council commissioned Tilman Riemenschneider — the greatest German wood sculptor of the late medieval period — to create a new altar to frame this relic. What he produced is the Heilig-Blut-Altar: carved entirely from lime wood and deliberately left unpainted (Riemenschneider's characteristic choice — the texture and grain of the wood are the surface). The central panel shows the Last Supper. The compositional choice is theologically daring: Judas, the betrayer, stands at the physical and visual center of the scene. Christ is to one side. The arrangement makes the moment of betrayal the fulcrum of the work. Despite the Protestant Reformation converting St. Jakob's to Lutheranism in 1544, this Catholic relic and its altar survived — the Holy Blood relic remains the only such relic on public display in a Lutheran church in Germany.",
+          "hidden_gems": "Riemenschneider carved another major altar — the Cross Altar (1505) — in the village of Detwang, just 2 km south along the Tauber Valley. Seeing both altars on the same visit, separated by a 30-minute riverside walk, is one of the quietly great art-historical experiences in Franconia. The astronomical clock in the western choir dates from 1373 and still functions. The view through the western choir window over the rooftops of the lower town is extraordinary.",
+          "baby_logistics": "The main nave is flat stone, wide, and accessible with a stroller. The western choir containing the altar requires climbing the staircase built into the bridge structure — a carrier is needed for this section. Overall very family-friendly; it is an active Lutheran parish that treats visitors as guests. Entry €2.50, children free. Open daily 9am–5pm (shorter hours in winter).",
+          "tier": 1,
+          "skip_if_rushed": false
+        },
+        {
+          "id": "marktplatz-clock",
+          "sequence": 4,
+          "name": "Marktplatz + Ratstrinkstube Clock",
+          "subtitle": "The imperial Town Hall, the town square, and the hourly mechanical legend",
+          "lat": 49.3769,
+          "lon": 10.1815,
+          "category": "town_center",
+          "visit_duration_minutes": 45,
+          "drive_time_from_prev_minutes": 5,
+          "baby_friendly_score": 5,
+          "highlight": "On the hour, 10am to 10pm, two shuttered windows open on the Ratstrinkstube facade and mechanical figures re-enact the 1631 legend — the man who drank 3.25 litres of wine to save the town council from execution",
+          "about": "The Marktplatz is the centre of Rothenburg's civic life and the fulcrum of its most famous story. The Town Hall (Rathaus) occupies one side — a composite building with a Gothic section from 1250 and a Renaissance wing added in 1578, with an imperial hall used for receiving delegations during the Free Imperial City period. On the Ratstrinkstube (Council Tavern) wing, high on the facade, is the mechanical clock that stages the Meistertrunk legend hourly. The story: in October 1631, Count Tilly's Catholic imperial army besieged and occupied Rothenburg during the Thirty Years' War. Facing the town's destruction and the execution of its Protestant council, former Mayor Georg Nusch allegedly accepted the general's challenge — drink a 3.25-litre tankard of wine in one continuous draught without stopping, and Tilly would spare the town. He succeeded. The story first appears in a chronicle written more than a century after the event and is almost certainly embellished; historians note that Tilly left the town largely intact for practical military reasons. But this legend has been Rothenburg's self-understanding for 400 years, and the mechanical clock staging it has run hourly since the 19th century. The Marktplatz is ringed by patrician houses and the Gothic tower of the Rathaus — the best space in town for a stroller, with outdoor cafés and a central position for everything else.",
+          "hidden_gems": "Climb the Rathaus tower — 220 steps, steep and narrow, but the view from the top over the entire walled town and the Tauber Valley is the finest in Rothenburg (entry €2, open April–October). The Schrannenplatz behind the Rathaus is quieter than the main square and hosts the weekly market. The Christmas market in December occupies both squares — genuinely one of Germany's best, and less commercialised than Munich's.",
+          "baby_logistics": "The Marktplatz is the most baby-friendly space in Rothenburg — wide, flat, open, with benches and outdoor café seating on all sides. The Rathaus tower climb is not suitable with a baby (very narrow spiral stair, no room for a carrier). Public toilets are just off the Schrannenplatz behind the Rathaus. The clock show is 1–2 minutes, free, and works best when you can position yourself directly in front of the Ratstrinkstube facade.",
+          "tier": 1,
+          "skip_if_rushed": false
+        },
+        {
+          "id": "topplerschlosschen",
+          "sequence": 5,
+          "name": "Topplerschlösschen",
+          "subtitle": "The smallest castle in Germany — built by the town's most powerful mayor in 1388, at the height of Rothenburg's power",
+          "lat": 49.3684,
+          "lon": 10.1862,
+          "category": "monument",
+          "visit_duration_minutes": 60,
+          "drive_time_from_prev_minutes": 10,
+          "baby_friendly_score": 3,
+          "highlight": "A single fortified tower beside a medieval mill pond in the Tauber Valley — the walk down from the walled town to reach it is one of the best approaches to any building in Franconia",
+          "about": "Heinrich Toppler served as Rothenburg's mayor from 1373 to 1408 — the longest tenure in the town's history and the period of its greatest prosperity. By 1400 Rothenburg controlled a territory of over 400 square kilometres. Toppler was the architect of this power, negotiating with emperors and managing the finances that built the defensive infrastructure visible in the walls above. In 1388 he built his Weiherhaus (pond house) in the Tauber Valley: a 2-storey stone base with two overhanging half-timbered upper storeys, set beside a mill pond that was both defensive and practical. The architecture is peculiar — the overhanging upper floors and steeply pitched roof give it the quality of a building from a medieval illustration, which is probably why it is so frequently photographed. Toppler himself came to a bad end: in 1408, having supported the wrong claimant in a dynastic dispute, he was imprisoned by the town's own authorities and died in the town jail. The wealth and power he built, the walls and towers still visible from the valley below — none of it saved him in the end.",
+          "hidden_gems": "The valley path south from the Topplerschlösschen continues 2 km to Detwang and its Riemenschneider Cross Altar in St. Peter's Church — carved in 1505, five years after the Holy Blood Altar in St. Jakob's. The double Riemenschneider visit (one in the town, one in the valley below, joined by a riverside walk) is one of the quietly great art-historical walks in Germany, and almost no one does it. The return climb from the valley back into the walled town through the vineyard path is steep but rewards with views of the walls rising from the hillside.",
+          "baby_logistics": "The walk down from the Kobolzeller Tor to the Topplerschlösschen takes about 20 minutes on a paved but steep path — carrier essential, no strollers. The Tauber Valley floor is flat and pleasant once you are down. The castle exterior is always accessible; interior opening is irregular (check at the tourist office). Allow extra energy for the climb back up.",
+          "tier": 2,
+          "skip_if_rushed": true
+        }
+      ]
+    }
+  ],
+  "hotels": [
+    {
+      "id": "romantik-markusturm",
+      "name": "Romantik Hotel Markusturm",
+      "area": "Rothenburg old town, near Rödergasse",
+      "type": "Boutique Hotel",
+      "local_character_score": 5,
+      "price_range": "€130–190/night",
+      "has_crib": true,
+      "has_parking": false,
+      "description": "A 13th-century building converted into a carefully tended boutique hotel. Stone vaults in the cellar restaurant, antique furnishings, and a quiet garden. The on-call babysitting service is unusual for a hotel this size and character.",
+      "why_recommended": "Best combination of historical authenticity and genuine baby amenities — the only old-town hotel with on-call babysitting"
+    },
+    {
+      "id": "hotel-eisenhut",
+      "name": "Hotel Eisenhut",
+      "area": "Rothenburg old town, Herrngasse",
+      "type": "Historic Hotel",
+      "local_character_score": 5,
+      "price_range": "€100–160/night",
+      "has_crib": true,
+      "has_parking": false,
+      "description": "Four interconnected 15th and 16th-century patrician houses on Herrngasse, Rothenburg's main merchant street. The architecture is genuine; the garden with an outdoor play area is a rare luxury in the walled town.",
+      "why_recommended": "Most impressive building, central position, good garden for children — a hotel that earns its historic designation"
+    },
+    {
+      "id": "hotel-rappen",
+      "name": "Hotel Rappen",
+      "area": "Rothenburg old town, near Marktplatz",
+      "type": "3-Star Hotel",
+      "local_character_score": 3,
+      "price_range": "€75–100/night",
+      "has_crib": true,
+      "has_parking": true,
+      "description": "A clean, well-run 3-star hotel close to the Marktplatz. No grand historic claims but reliable amenities, good breakfast, and one of the few old-town options with accessible parking.",
+      "why_recommended": "Best value for families who prioritise practical amenities — and one of very few options with parking"
+    }
+  ],
+  "hikes": [
+    {
+      "id": "tauber-valley-loop",
+      "name": "Tauber Valley Loop",
+      "area": "Below the city walls",
+      "distance_km": 3.4,
+      "elevation_gain_m": 40,
+      "estimated_time_minutes": 75,
+      "difficulty": "easy",
+      "pushchair_friendly": false,
+      "baby_carrier_feasible": true,
+      "surface": "gravel path and meadow track",
+      "description": "A circular walk from the Burgtor (west gate) down into the Tauber Valley, along the river past old mills and the Topplerschlösschen, crossing the medieval stone Tauberbrücke and climbing back up through the vineyards on the east side of the valley. The views back up to the town walls from the valley floor are the best available — this is still the approach route that medieval visitors used, and how the walls were meant to be seen from below.",
+      "practical_tip": "Start at the Burgtor. Descend through the Burggraben gate and follow the river south. Cross the Tauberbrücke medieval bridge and climb back up through the vineyard path to re-enter at Kobolzeller Tor or Spitaltor. About 75 minutes at a relaxed pace."
+    },
+    {
+      "id": "detwang-walk",
+      "name": "Detwang Village Walk",
+      "area": "Tauber Valley south of Rothenburg",
+      "distance_km": 4.0,
+      "elevation_gain_m": 20,
+      "estimated_time_minutes": 90,
+      "difficulty": "easy",
+      "pushchair_friendly": false,
+      "baby_carrier_feasible": true,
+      "surface": "riverside path and paved lane",
+      "description": "A flat walk south along the Tauber river to the village of Detwang, documented since 968 AD. St. Peter's Church there contains Tilman Riemenschneider's Cross Altar (1505) — carved just five years after the Holy Blood Altar in St. Jakobskirche. Seeing both altars on the same visit, separated by a 30-minute riverside walk, is one of the quiet pleasures of Rothenburg. The village has a small beer garden in summer.",
+      "practical_tip": "Leave from Kobolzeller Tor, descend into the valley, follow the river south. Almost entirely flat. Detwang church is signposted and usually open during the day. Return the same way or loop back via the higher vineyard path."
+    },
+    {
+      "id": "frankenhöhe-ridge",
+      "name": "Frankenhöhe Ridge Walk",
+      "area": "Frankenhöhe hills, 10 km north via B25",
+      "distance_km": 8.0,
+      "elevation_gain_m": 120,
+      "estimated_time_minutes": 180,
+      "difficulty": "easy",
+      "pushchair_friendly": false,
+      "baby_carrier_feasible": true,
+      "surface": "forest track and open field path",
+      "description": "A section of the Panoramaweg Taubertal (the 133-km long-distance trail) along the Frankenhöhe ridge — the watershed between the Tauber and Regnitz river systems. Open farmland views across northern Franconia, mixed beech forest, and distant views of Colmberg Castle (a medieval fortress intact on a ridge above the valley). A proper half-day option for families wanting more than a valley stroll.",
+      "practical_tip": "Drive 10 km north on the B25 to Gebsattel and park in the village. Join the Panoramaweg Taubertal heading south. The trail is well-marked. Return to Gebsattel the same way, or arrange a car pick-up in Rothenburg."
+    }
+  ],
+  "practical_notes": [
+    "Crowds: arrive before 9am or after 5pm — tour buses fill the Marktplatz from 11am to 3pm and the town becomes genuinely uncomfortable.",
+    "Carrier, not stroller: the entire old town is medieval cobblestone, the wall walk and Tauber Valley paths are inaccessible by stroller entirely.",
+    "Best parking: P3 (Taubertal Parkplatz) below the south wall — walk up through the vineyard into the old town from below, as medieval visitors did.",
+    "Meistertrunk clock: runs on the hour, 10am–10pm, from the Ratstrinkstube windows on the north side of the Marktplatz.",
+    "St. Jakobskirche: entry €2.50, open daily 9am–5pm (shorter in winter). The western choir with the altar can queue at midday — visit early or late.",
+    "Topplerschlösschen interior: irregularly open — check at the tourist office on the Marktplatz on arrival."
+  ],
+  "detour_stops": [
+    {
+      "id": "dinkelsbuhl",
+      "name": "Dinkelsbühl",
+      "tagline": "The quieter Rothenburg — equally medieval, a quarter of the crowds",
+      "position": "near_destination",
+      "lat": 49.0736,
+      "lon": 10.3199,
+      "detour_from_route_minutes": 0,
+      "visit_duration_minutes": 180,
+      "best_time": "any",
+      "category": "history",
+      "baby_friendly_score": 4,
+      "highlight": "Completely intact 15th-century walls with four original gate towers, a late-Gothic church with a 20-metre nave, and almost no international tour buses",
+      "description": "Dinkelsbühl shares Rothenburg's medieval credentials — intact walls, Gothic church, half-timbered houses — but receives a fraction of the visitors. The walls (2.5 km circuit, four gates, built 1380–1440) are among the best-preserved in Germany. St. Georg's Church (1448–1499) has a nave so high it feels like a small cathedral. The Kinderzeche festival in July re-enacts a 17th-century legend of children who saved the town from Swedish troops during the Thirty Years' War — a large outdoor pageant. Worth combining with a Rothenburg visit if staying overnight in the region.",
+      "practical": "Free to walk the town. St. Georg's Church: free entry. Parking at Europaparkplatz (large, free). 30-minute drive south on the B25 from Rothenburg."
+    },
+    {
+      "id": "feuchtwangen",
+      "name": "Feuchtwangen",
+      "tagline": "A Romanesque monastery cloister founded by Charlemagne — a quiet stop on the road from Munich",
+      "position": "en_route",
+      "lat": 49.1677,
+      "lon": 10.3272,
+      "detour_from_route_minutes": 10,
+      "visit_duration_minutes": 45,
+      "best_time": "any",
+      "category": "history",
+      "baby_friendly_score": 5,
+      "highlight": "A perfectly-preserved Romanesque cloister from around 1150, built by Charlemagne's monks — used every summer as an open-air theatre stage",
+      "description": "Feuchtwangen is a small market town 20 km from Rothenburg on the direct road from Munich (via the A6 and B25). Its collegiate church was founded by Charlemagne around 800 AD, and the surviving Romanesque cloister from around 1150 is one of the finest examples of early Romanesque architecture in Franconia. The cloister arcade, the carved capitals, and the atmosphere of the enclosed garden are disproportionately impressive for a town of 12,000 people. It takes 20–30 minutes to see properly and makes a natural stretch-legs stop on the drive.",
+      "practical": "Cloister entry free (donation box). Open during daylight hours. Free parking at the Marktplatz car park. 10-minute detour off the main route; 20 km from Rothenburg on the B25."
+    }
+  ]
+}

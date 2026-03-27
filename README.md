@@ -6,21 +6,34 @@ Enter a destination, get a curated itinerary with historical narrative, hidden g
 
 ## What's here
 
-| File | Purpose |
+| File/Dir | Purpose |
 |---|---|
 | `CLAUDE.md` | Architecture, tech stack, coding conventions |
-| `PLAN.md` | 5-phase implementation plan with task checklists |
-| `PROMPTS.md` | Full AI prompt scripts for all generation steps |
-| `data/` | Structured trip JSON files (Berchtesgaden, Bodensee) |
-| `preview/` | HTML previews — Komoot-style trip pages + Route Composer UI |
+| `data/` | Structured trip JSON files (7 destinations) |
+| `preview/` | Static HTML previews — Komoot-style trip pages |
+
+## Destinations
+
+Eight day-trip itineraries from Munich, all with stops, hikes, hotels, and detour recommendations:
+
+| Destination | Drive from Munich | Theme |
+|---|---|---|
+| Bamberg | ~2h | UNESCO old town, smoky beer, prince-bishops |
+| Berchtesgaden | ~2h | Alpine drama, Eagle's Nest, salt mines |
+| Bodensee | ~2h | Three-country lake, island monastery, apple country |
+| Eichstätt | ~1h 30m | Baroque bishop's seat, dinosaur fossils, Altmühltal |
+| Nuremberg | ~1h | Imperial city, medieval crime museum, Albrecht Dürer |
+| Passau | ~2h 15m | Three-river city, organ capital, fortress on a cliff |
+| Regensburg | ~1h 30m | Rome on the Danube, Holy Roman Empire parliament, Walhalla |
+| Rothenburg ob der Tauber | ~2h 30m | Germany's most intact medieval walled town, Riemenschneider altar, Meistertrunk legend |
 
 ## Previews
 
 Open any file in `preview/` directly in a browser — no build step needed.
 
-- `berchtesgaden.html` — full trip plan, interactive map
-- `bodensee.html` — full trip plan, interactive map
-- `route-composer.html` — interactive route builder with detour cards
+- `index.html` — destination cards landing page
+- `bamberg.html`, `berchtesgaden.html`, `bodensee.html` … — full trip pages with interactive maps
+- `route-composer.html` — interactive route builder mockup
 
 ## Stack (planned)
 
