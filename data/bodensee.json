@@ -16,6 +16,7 @@
   "drive_time_from_origin_minutes": 110,
   "duration_days": 2,
   "generated_at": "2026-03-22",
+  "updated_at": "2026-03-22",
   "stats": {
     "total_stops": 6,
     "baby_friendly_score": 4,
