@@ -81,30 +81,122 @@ Each `data/*.json` file has this shape:
 
 ```json
 {
-  "destination": "Name",
-  "drive_time": "1h 35 min",
-  "duration": "1 day",
-  "coordinates": { "lat": 49.01, "lon": 12.10 },
-  "route_polyline": [[48.13, 11.58], ...],
-  "stops": [
+  "id": "destination-daytrip",
+  "title": "Destination — Long editorial title",
+  "tagline": "One-sentence hook for the destination",
+  "destination": {
+    "name": "Destination Name",
+    "region": "Bavaria, Germany",
+    "lat": 49.01,
+    "lon": 12.10
+  },
+  "origin": {
+    "name": "Munich",
+    "lat": 48.1351,
+    "lon": 11.582
+  },
+  "drive_time_from_origin_minutes": 95,
+  "duration_days": 1,
+  "generated_at": "YYYY-MM-DD",
+  "stats": {
+    "total_stops": 5,
+    "baby_friendly_score": 4,
+    "history_depth_score": 5,
+    "touristic_score": 2,
+    "drive_total_km": 150
+  },
+  "intro": "Editorial overview paragraph.",
+  "route_polyline": [[48.13, 11.58], [49.01, 12.10]],
+  "days": [
     {
-      "id": 1,
-      "name": "Stop Name",
-      "subtitle": "One-line description",
-      "lat": 49.01, "lon": 12.10,
-      "tags": ["tag"],
-      "highlight": "Blockquote sentence.",
-      "about": "Paragraph.",
-      "hidden_gems": "Paragraph.",
-      "baby_notes": "Paragraph."
+      "day_number": 1,
+      "title": "Day title",
+      "theme": "Short theme phrase",
+      "summary": "One-sentence summary",
+      "stops": [
+        {
+          "id": "stop-slug",
+          "sequence": 1,
+          "name": "Stop Name",
+          "subtitle": "One-line description",
+          "lat": 49.01,
+          "lon": 12.10,
+          "category": "church|museum|monument|town_center|nature|hike",
+          "visit_duration_minutes": 60,
+          "drive_time_from_prev_minutes": 10,
+          "baby_friendly_score": 5,
+          "highlight": "Blockquote sentence.",
+          "about": "Editorial paragraph.",
+          "hidden_gems": "Paragraph.",
+          "baby_logistics": "Stroller/carrier notes.",
+          "tier": 1,
+          "skip_if_rushed": false
+        }
+      ]
     }
   ],
-  "detours": [ { "name": "", "distance_from_destination": "", "why": "", "best_for": "" } ],
-  "hikes": [ { "name": "", "difficulty": "easy|moderate|hard", "distance_km": 0, "elevation_gain_m": 0, "duration": "", "description": "", "baby_carrier_feasible": true, "pushchair_friendly": false, "trailhead": "" } ],
-  "hotels": [ { "name": "", "price_range": "", "vibe": "", "why_families": "", "location_note": "", "booking_search": "" } ],
-  "practical_notes": [ { "heading": "", "body": "" } ]
+  "hotels": [
+    {
+      "id": "hotel-slug",
+      "name": "Hotel Name",
+      "area": "Neighborhood or description",
+      "type": "Boutique Hotel|Gasthof|Historic Hotel",
+      "local_character_score": 4,
+      "price_range": "€80–120/night",
+      "has_crib": true,
+      "has_parking": false,
+      "description": "Editorial paragraph.",
+      "why_recommended": "One-line recommendation reason."
+    }
+  ],
+  "hikes": [
+    {
+      "id": "hike-slug",
+      "name": "Hike Name",
+      "area": "Area description",
+      "distance_km": 6.0,
+      "elevation_gain_m": 80,
+      "estimated_time_minutes": 90,
+      "difficulty": "easy|moderate|hard",
+      "pushchair_friendly": true,
+      "baby_carrier_feasible": true,
+      "surface": "paved|gravel|trail",
+      "description": "Editorial paragraph.",
+      "practical_tip": "Trailhead and logistics."
+    }
+  ],
+  "practical_notes": [
+    "Plain string tip — no heading/body nesting."
+  ],
+  "detour_stops": [
+    {
+      "id": "detour-slug",
+      "name": "Detour Name",
+      "tagline": "One-sentence hook",
+      "position": "en_route|nearby",
+      "lat": 48.77,
+      "lon": 11.43,
+      "detour_from_route_minutes": 15,
+      "visit_duration_minutes": 60,
+      "best_time": "any|morning|afternoon",
+      "category": "history|nature|museum",
+      "baby_friendly_score": 4,
+      "highlight": "Blockquote sentence.",
+      "description": "Editorial paragraph.",
+      "practical": "Parking, prices, access notes."
+    }
+  ]
 }
 ```
+
+**Key differences from the old flat schema:**
+- `destination` is now an object `{name, region, lat, lon}`, not a string
+- `stops` are nested under `days[].stops`, not at the top level
+- Stop fields: `baby_logistics` (not `baby_notes`), `hidden_gems`, `tier`, `skip_if_rushed`, `visit_duration_minutes`, `drive_time_from_prev_minutes`, `baby_friendly_score`, `category`, `sequence`
+- Hotel fields: `id`, `area`, `type`, `local_character_score`, `has_crib`, `has_parking`, `why_recommended` (not `vibe`/`why_families`/`booking_search`)
+- Hike fields: `id`, `area`, `estimated_time_minutes`, `surface`, `practical_tip` (not `duration`/`trailhead`)
+- `practical_notes` is a flat array of strings (not `[{heading, body}]`)
+- `detour_stops` (not `detours`) has richer fields: `position`, `detour_from_route_minutes`, `best_time`, `baby_friendly_score`, `highlight`, `practical`
 
 ---
 
@@ -131,7 +223,6 @@ Each destination page uses Leaflet with:
 ## Coding conventions
 
 - No JavaScript frameworks. No npm. No build step.
-- All page-specific styles go in an inline `<style>` block at the top of each HTML file. Shared styles only go in `style.css`.
-- Keep the inline `<style>` block identical across all destination pages — don't diverge styles per-page.
+- Destination page styles live in `style.css`. Do not add inline `<style>` blocks to destination pages.
+- `index.html`, `shell.html`, and `route-composer.html` have their own separate inline styles — leave those alone.
 - Each destination page is self-contained: copy–paste the template, fill in the data.
-- The trailing `<style>` block at the bottom of each page (after `</script>`) is for Leaflet tooltip overrides only — do not add other styles there.
