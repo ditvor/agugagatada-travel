@@ -12,12 +12,12 @@ A static travel guide — hand-curated day trips from Munich for a family with a
 
 | Layer | Choice |
 |---|---|
-| Pages | Vanilla HTML files in `preview/` |
-| Styling | CSS custom properties in `preview/style.css` |
+| Pages | Vanilla HTML files in `docs/` |
+| Styling | CSS custom properties in `docs/style.css` |
 | Maps | [Leaflet.js](https://leafletjs.com/) loaded from CDN, OpenStreetMap/CartoDB tiles |
 | Data | JSON files in `data/` — one per destination |
 
-No build step. Open any file in `preview/` directly in a browser.
+No build step. Open any file in `docs/` directly in a browser.
 
 ---
 
@@ -29,7 +29,7 @@ agugagatada_travel/
 │   ├── bamberg.json
 │   ├── berchtesgaden.json
 │   └── ...
-└── preview/                 # Static HTML pages
+└── docs/                 # Static HTML pages
     ├── index.html           # Destination cards landing page
     ├── style.css            # Shared design tokens + components
     ├── bamberg.html
@@ -57,7 +57,7 @@ Every destination page follows the same section order:
 
 ## CSS conventions
 
-Design tokens are defined in `preview/style.css` as CSS custom properties:
+Design tokens are defined in `docs/style.css` as CSS custom properties:
 
 | Token | Usage |
 |---|---|
@@ -203,9 +203,9 @@ Each `data/*.json` file has this shape:
 ## Adding a new destination
 
 1. Create `data/{destination}.json` following the schema above.
-2. Copy an existing `preview/*.html` page and update all content.
-3. Add a card to `preview/index.html`: one `<article class="dest-card">` and one `initMap(...)` call.
-4. Update the subtitle count in `preview/index.html` (`"N drives worth the detour"`).
+2. Copy an existing `docs/*.html` page and update all content.
+3. Add a card to `docs/index.html`: one `<article class="dest-card">` and one `initMap(...)` call.
+4. Update the subtitle count in `docs/index.html` (`"N drives worth the detour"`).
 
 ---
 

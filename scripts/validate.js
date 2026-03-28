@@ -3,9 +3,9 @@
  * Two checks:
  *   1. Schema validation — every data/*.json validates against data/schema.json
  *   2. Consistency check — JSON ↔ HTML ↔ index.html coverage
- *        • every data/*.json has a matching preview/<slug>.html
- *        • every destination preview/*.html has a matching data/<slug>.json
- *        • every destination is linked from preview/index.html (dest-card__link)
+ *        • every data/*.json has a matching docs/<slug>.html
+ *        • every destination docs/*.html has a matching data/<slug>.json
+ *        • every destination is linked from docs/index.html (dest-card__link)
  * No npm dependencies — uses only Node built-ins.
  * Run: node scripts/validate.js
  */
@@ -140,7 +140,7 @@ function validate(data, schema, rootSchema, path) {
 const root = path.resolve(__dirname, '..');
 const schemaPath = path.join(root, 'data', 'schema.json');
 const dataDir = path.join(root, 'data');
-const previewDir = path.join(root, 'preview');
+const previewDir = path.join(root, 'docs');
 
 if (!fs.existsSync(schemaPath)) {
   console.error('ERROR: data/schema.json not found');
@@ -225,7 +225,7 @@ while ((match = indexLinkPattern.exec(indexHtml)) !== null) {
 // JSON → HTML
 for (const slug of [...jsonSlugs].sort()) {
   if (!htmlSlugs.has(slug)) {
-    console.log(`FAIL  data/${slug}.json has no matching preview/${slug}.html`);
+    console.log(`FAIL  data/${slug}.json has no matching docs/${slug}.html`);
     consistencyErrors++;
     totalErrors++;
   }
@@ -234,7 +234,7 @@ for (const slug of [...jsonSlugs].sort()) {
 // HTML → JSON
 for (const slug of [...htmlSlugs].sort()) {
   if (!jsonSlugs.has(slug)) {
-    console.log(`FAIL  preview/${slug}.html has no matching data/${slug}.json`);
+    console.log(`FAIL  docs/${slug}.html has no matching data/${slug}.json`);
     consistencyErrors++;
     totalErrors++;
   }
@@ -243,7 +243,7 @@ for (const slug of [...htmlSlugs].sort()) {
 // JSON → index.html
 for (const slug of [...jsonSlugs].sort()) {
   if (!indexSlugs.has(slug)) {
-    console.log(`FAIL  data/${slug}.json is not linked from preview/index.html`);
+    console.log(`FAIL  data/${slug}.json is not linked from docs/index.html`);
     consistencyErrors++;
     totalErrors++;
   }
@@ -252,7 +252,7 @@ for (const slug of [...jsonSlugs].sort()) {
 // index.html → JSON (catch stale links)
 for (const slug of [...indexSlugs].sort()) {
   if (!jsonSlugs.has(slug)) {
-    console.log(`FAIL  preview/index.html links to "${slug}.html" but data/${slug}.json does not exist`);
+    console.log(`FAIL  docs/index.html links to "${slug}.html" but data/${slug}.json does not exist`);
     consistencyErrors++;
     totalErrors++;
   }
