@@ -22,18 +22,17 @@ Eight itineraries, each with a walking route, historical narrative, hidden gems,
 | File/Dir | Purpose |
 |---|---|
 | `data/` | Structured trip data as JSON — one file per destination |
-| `preview/` | Static HTML pages — open in any browser, no build step |
+| `docs/` | Static HTML pages — served by GitHub Pages, open in any browser |
+| `scripts/` | Dev tooling — `validate.js` checks JSON schema + file consistency |
 
 ## Running it
 
-Open `preview/index.html` in a browser. That's it.
+Open `docs/index.html` in a browser. That's it.
+
+Hosted at [agugagatada.travel](https://agugagatada.travel) via GitHub Pages (served from `docs/` on `main`).
 
 All maps use [Leaflet](https://leafletjs.com/) with OpenStreetMap tiles — no API keys needed.
 
 ## Stack
 
 Vanilla HTML · CSS custom properties · Leaflet.js · JSON data files
-
-## Domain
-
-[agugagatada.travel](https://agugagatada.travel)
