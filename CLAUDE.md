@@ -1,195 +1,137 @@
 # Agugagatada Travel — Claude Code Guide
 
-## Project Overview
+## What this project is
 
-**Agugagatada Travel** is an AI-powered travel route planner for curious families. The user enters a destination and receives a curated itinerary with historical context, hidden gems, hotel recommendations, and hike suggestions — all baby-friendly aware.
+A static travel guide — hand-curated day trips from Munich for a family with a young baby. No backend, no API keys, no build step. Everything runs in the browser.
 
-**Target user:** Family based in Munich with a young baby. Interests: history, scientific museums, old castles, non-touristy places.
-
----
-
-## Tech Stack
-
-| Layer | Choice | Why |
-|---|---|---|
-| Frontend | Next.js 14 (App Router) + TypeScript | Server components + streaming SSE support |
-| Styling | Tailwind CSS + shadcn/ui | Fast iteration, accessible components |
-| Maps | Mapbox GL JS | Custom styling, route polylines, free tier |
-| State | Zustand | Lightweight trip state across panels |
-| API layer | tRPC | End-to-end type safety, streaming support |
-| Database | PostgreSQL + PostGIS + Prisma | Geospatial queries (radius search, route snapping) |
-| Cache / Queue | Redis + BullMQ | Cache Claude responses, async job queue for generation |
-| AI | Anthropic Claude API | Route curation + streaming narrative content |
-| Deployment | Vercel (frontend) + Railway/Render (Postgres + Redis) | |
+**Target user:** Family based in Munich with a young baby. Interests: history, castles, science museums, non-touristy places.
 
 ---
 
-## Architecture
+## Stack
 
-### Two-Phase Claude Generation
-
-Route generation uses Claude in two distinct phases:
-
-1. **Structured Phase** — Claude receives assembled context (POIs from Overpass, drive times from Mapbox, Wikipedia summaries) and returns a **JSON route** via tool use. This defines stop ordering, timing, baby-friendly scores.
-
-2. **Narrative Phase** — Claude streams rich human-readable content for each stop: historical overview, hidden gems, local tips. Streams directly to the frontend via SSE.
-
-### External APIs
-
-| API | Purpose |
+| Layer | Choice |
 |---|---|
-| Mapbox | Geocoding, Directions, Isochrone, Static Maps |
-| Overpass (OpenStreetMap) | Free POI discovery — castles, museums, historic sites |
-| Wikipedia/Wikivoyage | Historical context injected into Claude prompts |
-| OpenStreetMap Overpass API | Hiking routes (route=hiking relations) with difficulty (sac_scale), distance, elevation |
-| OpenTopoData | Elevation profiles for hiking routes — EU-DEM dataset, free |
-| Booking.com Affiliate | Hotel recommendations filtered for families |
-| Open-Meteo | Free weather data for the destination |
+| Pages | Vanilla HTML files in `preview/` |
+| Styling | CSS custom properties in `preview/style.css` |
+| Maps | [Leaflet.js](https://leafletjs.com/) loaded from CDN, OpenStreetMap/CartoDB tiles |
+| Data | JSON files in `data/` — one per destination |
 
-### Data Flow
-
-```
-User input: "Lindau" + dates
-    → Mapbox geocode
-    → Overpass POI query (30-50km radius)
-    → Wikipedia summaries for top POIs
-    → Mapbox drive-time matrix between POIs
-    → Claude Phase 1: curate + structure JSON route
-    → Claude Phase 2: stream narrative per stop
-    → Parallel: Overpass hiking routes + Booking.com hotels
-    → Persist trip to PostgreSQL
-    → Stream results to frontend via SSE
-```
+No build step. Open any file in `preview/` directly in a browser.
 
 ---
 
-## Project Structure
+## Project structure
 
 ```
 agugagatada_travel/
-├── app/                        # Next.js App Router
-│   ├── (home)/                 # Landing page
-│   ├── trip/[id]/              # Trip detail page
-│   └── api/
-│       ├── trpc/[trpc]/        # tRPC entry point
-│       └── generate/           # SSE streaming endpoint
-├── components/
-│   ├── map/                    # Mapbox GL components
-│   ├── trip/                   # Trip cards, stop details
-│   └── ui/                     # shadcn/ui base components
-├── lib/
-│   ├── ai/
-│   │   ├── orchestrator.ts     # Two-phase Claude logic
-│   │   ├── prompts.ts          # System + generation prompts
-│   │   └── tools.ts            # Claude tool definitions
-│   ├── apis/
-│   │   ├── mapbox.ts
-│   │   ├── overpass.ts
-│   │   ├── wikipedia.ts
-│   │   ├── opentopodata.ts
-│   │   └── booking.ts
-│   ├── queue/
-│   │   └── jobs.ts             # BullMQ job definitions
-│   └── cache/
-│       └── redis.ts
-├── prisma/
-│   └── schema.prisma
-├── server/
-│   └── trpc/                   # tRPC routers
-├── store/                      # Zustand stores
-└── types/                      # Shared TypeScript types
+├── data/                    # One JSON file per destination
+│   ├── bamberg.json
+│   ├── berchtesgaden.json
+│   └── ...
+└── preview/                 # Static HTML pages
+    ├── index.html           # Destination cards landing page
+    ├── style.css            # Shared design tokens + components
+    ├── bamberg.html
+    ├── berchtesgaden.html
+    └── ...
 ```
 
 ---
 
-## Database Schema (Key Tables)
+## Page structure
 
-- **users** — id, home_city, preferences (JSONB with interests, baby_age_months, languages)
-- **trips** — id, user_id, destination_name, destination_coords (PostGIS POINT), share_token, status
-- **stops** — id, trip_id, sequence_order, name, coords, category, baby_friendly_score, narrative_content, hidden_gems_content
-- **pois** — id, osm_id, name, coords, category, wikipedia_summary, raw_tags — cached Overpass/Wikipedia data
-- **hike_routes** — id, trip_id, difficulty, pushchair_friendly, baby_carrier_feasible
-- **hotels** — id, trip_id, name, has_crib, has_parking, local_character_score
+Every destination page follows the same section order:
 
----
-
-## Claude API Usage
-
-### Model Selection
-- **claude-sonnet-4-6** — narrative generation (streaming, long-form)
-- **claude-haiku-4-5** — fast tasks: POI curation, categorization, scoring
-
-### Prompt Scripts
-
-The prompts used are (implement in `lib/ai/prompts.ts`):
-
-| Prompt | Model | Purpose |
-|---|---|---|
-| `SYSTEM_PROMPT` | all calls | User profile, tone, baby-friendly rules |
-| `POI_CURATION` | haiku | 50 raw POIs → 10 curated stops |
-| `ROUTE_STRUCTURE_TOOL` | sonnet | Structured JSON route via tool use |
-| `STOP_NARRATIVE` | sonnet (streaming) | Per-stop historical narrative + local tips |
-| `TRIP_INTRODUCTION` | sonnet (streaming) | Opening paragraph for the trip page |
-| `HOTEL_SCORING` | haiku | Local character score for Booking.com hotels |
-| `HIKE_RECOMMENDATION` | sonnet | 3 hikes selected + annotated for family |
-| `DAILY_SUMMARY` | haiku | One-line day summaries for multi-day trips |
-
-Implementation: `lib/ai/prompts.ts` exports each as a typed function that accepts variables and returns the filled string.
-
-### Response Caching
-Claude responses are cached in Redis keyed by `{destination_hash}:{user_profile_hash}` with a 7-day TTL. Never regenerate what's already been generated for the same destination + profile combination.
-
-### Cost Controls
-- Use haiku for POI curation (50+ POIs → top 8-12)
-- Cache aggressively — popular destinations regenerate expensively
-- Rate limit: 5 route generations per user per day
+1. `<nav>` — site name
+2. **Hero** — destination title, tagline, drive time + duration tags
+3. **Intro** — 2–3 paragraph editorial overview
+4. **Route section** — two-column layout: sticky Leaflet map (left) + scrollable stops (right)
+5. **Detours section** — 1–2 nearby places worth a side trip
+6. **Hikes section** — 3 hike cards with difficulty, distance, elevation
+7. **Hotels section** — 3 hotel cards with price range and family notes
+8. **Notes section** — practical "before you go" tips
+9. `<footer>`
 
 ---
 
-## Coding Conventions
+## CSS conventions
 
-- All API clients go in `lib/apis/` as singleton modules
-- All Claude prompts are centralized in `lib/ai/prompts.ts` — never inline prompts in components
-- All geospatial operations use PostGIS; never do radius math in application code
-- External API responses are always cached in Redis before use
-- TypeScript strict mode — no `any`, no `as unknown as`
-- Server components by default; only use `"use client"` when necessary (map, interactive forms)
-- Environment variables validated at startup via `zod` in `lib/env.ts`
+Design tokens are defined in `preview/style.css` as CSS custom properties:
+
+| Token | Usage |
+|---|---|
+| `--color-bg` | Page background |
+| `--color-surface` | Card backgrounds |
+| `--color-text` | Primary text |
+| `--color-text-secondary` | Captions, metadata |
+| `--color-accent` | `#1B3A5C` — links, markers, polylines |
+| `--color-border` | Card and section borders |
+| `--space-xs/sm/md/lg/xl/2xl` | Spacing scale |
+| `--text-sm/md/lg/xl/2xl` | Type scale |
+| `--radius` | Border radius |
+
+BEM-like class naming: `.stop`, `.stop__header`, `.stop__name`, `.hike-card`, `.hotel-card`, `.detour-card`, `.tag`, `.tag--accent`, `.expand-btn`, `.drive-connector`, `.stop-number`.
 
 ---
 
-## Environment Variables
+## Data format
 
-```env
-# Anthropic
-ANTHROPIC_API_KEY=
+Each `data/*.json` file has this shape:
 
-# Mapbox
-NEXT_PUBLIC_MAPBOX_TOKEN=
-MAPBOX_SECRET_TOKEN=
-
-# Database
-DATABASE_URL=postgresql://...
-
-# Redis
-REDIS_URL=redis://...
-
-# Booking.com
-BOOKING_AFFILIATE_ID=
-BOOKING_API_KEY=
-
-# Outdooractive (optional commercial alternative for hiking content)
-# OUTDOORACTIVE_API_KEY=
+```json
+{
+  "destination": "Name",
+  "drive_time": "1h 35 min",
+  "duration": "1 day",
+  "coordinates": { "lat": 49.01, "lon": 12.10 },
+  "route_polyline": [[48.13, 11.58], ...],
+  "stops": [
+    {
+      "id": 1,
+      "name": "Stop Name",
+      "subtitle": "One-line description",
+      "lat": 49.01, "lon": 12.10,
+      "tags": ["tag"],
+      "highlight": "Blockquote sentence.",
+      "about": "Paragraph.",
+      "hidden_gems": "Paragraph.",
+      "baby_notes": "Paragraph."
+    }
+  ],
+  "detours": [ { "name": "", "distance_from_destination": "", "why": "", "best_for": "" } ],
+  "hikes": [ { "name": "", "difficulty": "easy|moderate|hard", "distance_km": 0, "elevation_gain_m": 0, "duration": "", "description": "", "baby_carrier_feasible": true, "pushchair_friendly": false, "trailhead": "" } ],
+  "hotels": [ { "name": "", "price_range": "", "vibe": "", "why_families": "", "location_note": "", "booking_search": "" } ],
+  "practical_notes": [ { "heading": "", "body": "" } ]
+}
 ```
 
 ---
 
-## Phase Reference
+## Adding a new destination
 
-Five phases, each delivering a working, demonstrable product:
+1. Create `data/{destination}.json` following the schema above.
+2. Copy an existing `preview/*.html` page and update all content.
+3. Add a card to `preview/index.html`: one `<article class="dest-card">` and one `initMap(...)` call.
+4. Update the subtitle count in `preview/index.html` (`"N drives worth the detour"`).
 
-- **Phase 1** — Skeleton + Mapbox geocoding
-- **Phase 2** — Overpass + Wikipedia data pipeline
-- **Phase 3** — Claude AI integration (core feature)
-- **Phase 4** — Hotels, hikes, UI polish
-- **Phase 5** — Multi-day trips, user accounts, production hardening
+---
+
+## Map implementation
+
+Each destination page uses Leaflet with:
+- A dashed polyline from Munich to the destination (`color: #1B3A5C, dashArray: '4 6'`)
+- CircleMarkers for each stop (radius 7, filled `#1B3A5C`)
+- Permanent tooltip labels (`stop-label` CSS class) showing the stop number
+- `IntersectionObserver` to pan the map to the active stop as the user scrolls
+- A separate route-overview IIFE map in the hero area with detour hover effects
+
+---
+
+## Coding conventions
+
+- No JavaScript frameworks. No npm. No build step.
+- All page-specific styles go in an inline `<style>` block at the top of each HTML file. Shared styles only go in `style.css`.
+- Keep the inline `<style>` block identical across all destination pages — don't diverge styles per-page.
+- Each destination page is self-contained: copy–paste the template, fill in the data.
+- The trailing `<style>` block at the bottom of each page (after `</script>`) is for Leaflet tooltip overrides only — do not add other styles there.
