@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background -->
+  <rect width="32" height="32" rx="5" fill="#1B3A5C"/>
+  <!-- A / mountain silhouette: outer triangle minus inner cutout -->
+  <path d="M16 4 L30 28 H23.5 L16 15.5 L8.5 28 H2 Z" fill="#F7F5F2"/>
+  <!-- Crossbar of the A -->
+  <rect x="11" y="19" width="10" height="2.5" fill="#1B3A5C" rx="0.5"/>
+</svg>
