@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regensburg — On Foot · Agugagatada</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="page-shell">
+      <div class="site-nav__inner">
+        <a href="index.html" class="site-nav__home">Agugagatada</a>
+        <a href="regensburg.html" class="site-nav__back">← Regensburg</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="content">
+    <div class="page-shell">
+
+      <!-- Hero -->
+      <header class="hero">
+        <p class="hero__parent">Part of the <a href="regensburg.html">Regensburg day trip</a></p>
+        <h1 class="hero__title">Regensburg — On Foot</h1>
+        <p class="hero__tagline">Limestone gorges, a canyon brewery, castle ruins above a forgotten village, and the quietest river walk in Bavaria</p>
+        <div class="hero__tags">
+          <span class="tag">1h 35 min from Munich</span>
+          <span class="tag">5 walks & hikes</span>
+          <span class="tag">All carrier-friendly</span>
+        </div>
+        <hr class="hero__rule">
+      </header>
+
+      <!-- Intro -->
+      <section class="intro">
+        <p class="intro__text">The landscape around Regensburg is as old as the city. The Danube cuts through a limestone plateau that the Romans already knew — gorges, forested hills, a river that has been shaping stone for 10,000 years. Within 30 minutes of the city center, and along the drive up from Munich, there are hikes that most visitors never find. All five below are feasible with a baby carrier. None requires more than 2–3 hours.</p>
+      </section>
+
+      <!-- Overview map -->
+      <div id="hike-overview-map"></div>
+
+      <!-- Filter tabs (visual) -->
+      <div class="hike-filter-tabs">
+        <button class="hike-filter-tab is-active">All</button>
+        <button class="hike-filter-tab">En route</button>
+        <button class="hike-filter-tab">Near Regensburg</button>
+        <button class="hike-filter-tab">With Hütte</button>
+      </div>
+
+      <!-- Hike cards -->
+      <section class="hikes-page-section">
+
+        <!-- 1: Donaudurchbruch -->
+        <article class="hike-card-full">
+          <div class="hike-card-full__badges">
+            <span class="tag">Near Regensburg</span>
+            <span class="tag tag--accent">Hütte</span>
+          </div>
+          <h3 class="hike-card-full__name">Donaudurchbruch Gorge Trail</h3>
+          <p class="hike-card-full__area">Kelheim · 25 min from Regensburg</p>
+          <div class="hike-card-full__stats">
+            <span class="tag">4 km</span>
+            <span class="tag">~60 m gain</span>
+            <span class="tag">1.5–2 h</span>
+            <span class="tag">Easy</span>
+            <span class="tag tag--accent">Carrier</span>
+          </div>
+          <p class="hike-card-full__hutte">Hütte · Weltenburg Abbey Klosterschänke</p>
+          <blockquote class="stop__highlight">The gorge walls rise 70 meters above the water — vertical limestone, the Danube threading through at the bottom, almost nothing visible beyond the canyon</blockquote>
+          <p class="hike-card-full__desc">The Donaudurchbruch is the narrowest and most dramatic section of the Danube in Germany, where the river forces itself through a limestone gorge before reaching Kelheim. A small electric boat threads through from the town landing to Weltenburg Abbey. The south-bank trail follows the same route on foot — 4 km of narrow path pressed against cliff walls, wildflowers in the rock crevices, the river dark below. At the end: Weltenburg Abbey, founded around 620 AD, the oldest monastery brewery in Europe. The Weltenburger dark beer has been brewed continuously here for over a thousand years. Take the boat one direction, walk the other — the gorge looks entirely different from the trail.</p>
+          <p class="hike-card-full__tip"><span class="hike-card-full__tip-label">Tip — </span>Take the boat in from Kelheim Schiffslände (April–October, daily from 9am, €7 adult, babies free), walk the south-bank trail back. Beer in the monastery courtyard first, then the 90 min walk. Park free at the Schiffslände. The courtyard fills up midday on summer weekends — go in the morning or late afternoon.</p>
+          <div class="hike-mini-map" id="hike-map-1"></div>
+        </article>
+
+        <!-- 2: Essing + Randeck -->
+        <article class="hike-card-full">
+          <div class="hike-card-full__badges">
+            <span class="tag">En route</span>
+          </div>
+          <h3 class="hike-card-full__name">Essing + Randeck Castle Ruins</h3>
+          <p class="hike-card-full__area">Essing · A9 exit Altmühltal · 40 min from Munich, 55 min from Regensburg</p>
+          <div class="hike-card-full__stats">
+            <span class="tag">4 km</span>
+            <span class="tag">~150 m gain</span>
+            <span class="tag">2 h</span>
+            <span class="tag">Moderate</span>
+            <span class="tag tag--accent">Carrier</span>
+          </div>
+          <blockquote class="stop__highlight">Cross the longest wooden footbridge in Europe into a village of 800 people, then climb above the valley to a 12th-century castle ruin that almost nobody visits</blockquote>
+          <p class="hike-card-full__desc">Essing is a village in a narrow Altmühltal valley, unremarked in any guidebook. Getting there requires crossing the Hängebrücke — at 193 meters, the longest wooden footbridge in Europe — over the Ludwig-Danube-Main Canal, a 19th-century engineering project that was made obsolete before it was finished. The bridge wobbles pleasantly. From the village, a forest trail climbs steeply through limestone and beech to the Randeck Castle ruins: a 12th-century stronghold that watched the valley below, now a shell of walls and a single intact tower on a limestone promontory. The view from the top takes in the entire Altmühl valley — the canal threading the floor, the village below, wooded hills in every direction. Stop on the way up or back from Regensburg; it adds 45 minutes to the drive.</p>
+          <p class="hike-card-full__tip"><span class="hike-card-full__tip-label">Tip — </span>Exit A9 at Altmühltal / Riedenburg, follow signs to Essing. Park at the small free car park near the Hängebrücke. Cross the bridge, take the forest trail uphill (signed Randeck). Carrier essential for the steeper section — the path has loose rock and roots. Gasthof Zur Post in Essing for lunch on the way back.</p>
+          <div class="hike-mini-map" id="hike-map-2"></div>
+        </article>
+
+        <!-- 3: Befreiungshalle -->
+        <article class="hike-card-full">
+          <div class="hike-card-full__badges">
+            <span class="tag">Near Regensburg</span>
+          </div>
+          <h3 class="hike-card-full__name">Befreiungshalle Forest Loop</h3>
+          <p class="hike-card-full__area">Kelheim · 25 min from Regensburg</p>
+          <div class="hike-card-full__stats">
+            <span class="tag">5 km</span>
+            <span class="tag">~100 m gain</span>
+            <span class="tag">1.5 h</span>
+            <span class="tag">Easy</span>
+            <span class="tag tag--accent">Carrier</span>
+          </div>
+          <blockquote class="stop__highlight">A vast neoclassical rotunda on a forested hill — Ludwig I's less-visited monument, with the whole Altmühltal valley spread below the north side</blockquote>
+          <p class="hike-card-full__desc">The Befreiungshalle (Liberation Hall) is the lesser-known of Ludwig I's two monumental follies near Regensburg — fewer visitors than the Walhalla, more architecturally strange. Built 1842–1863 to commemorate the defeat of Napoleon, it sits on a hill above Kelheim: a round neoclassical rotunda, 34 marble goddesses of victory on the interior walls, a coffered dome overhead. From outside it looks like a Roman temple dropped into the Bavarian countryside. The forest loop around the hill is a proper walk — beech woodland, limestone outcrops, views over the Altmühl valley from the north side. Combine with the Donaudurchbruch boat trip: the Kelheim boat landing is 10 minutes' walk from the Befreiungshalle parking.</p>
+          <p class="hike-card-full__tip"><span class="hike-card-full__tip-label">Tip — </span>Park at the Befreiungshalle (follow signs from Kelheim town). Hall entry €4.50, open 9am–6pm April–September, 10am–4pm October–March. Take the forest path northeast from the parking area — the loop returns to the same point. The north side of the hill has the open valley views and is almost always empty.</p>
+          <div class="hike-mini-map" id="hike-map-3"></div>
+        </article>
+
+        <!-- 4: Walhalla Forest -->
+        <article class="hike-card-full">
+          <div class="hike-card-full__badges">
+            <span class="tag">Near Regensburg</span>
+          </div>
+          <h3 class="hike-card-full__name">Walhalla — Forest Approach</h3>
+          <p class="hike-card-full__area">Donaustauf · 15 min from Regensburg</p>
+          <div class="hike-card-full__stats">
+            <span class="tag">3 km</span>
+            <span class="tag">~100 m gain</span>
+            <span class="tag">1 h + visit</span>
+            <span class="tag">Easy–Moderate</span>
+            <span class="tag tag--accent">Carrier</span>
+          </div>
+          <blockquote class="stop__highlight">Park in the village, climb through oak and beech forest, and arrive at the colonnade through the trees — the approach Ludwig I designed the building for</blockquote>
+          <p class="hike-card-full__desc">Most visitors drive to the Walhalla car park and walk straight up the 358 marble steps. The better approach starts in Donaustauf village below: a forest path climbs gradually through oak and beech for 1.5 km, the trees opening as the path steepens, until the columns of the Walhalla appear above the canopy. The reveal — a full-scale Greek temple on a cliff above the Danube, suddenly visible through German forest — is the moment Ludwig I designed the whole building for. The 358 marble steps become the descent, which is much easier going down with a carrier. The view from the top terrace over the bend of the Danube is, on a clear day, one of the finest in Bavaria.</p>
+          <p class="hike-card-full__tip"><span class="hike-card-full__tip-label">Tip — </span>Park free in Donaustauf village and follow signs for Walhalla Fußweg. Forest path is 1.5 km, about 40 min up. The path has tree roots in sections — carrier works well, stroller does not. Early morning before 9am the colonnade is often completely empty. Small café at the base (Walhalla Alm) for coffee before the drive back.</p>
+          <div class="hike-mini-map" id="hike-map-4"></div>
+        </article>
+
+        <!-- 5: Stadtamhof -->
+        <article class="hike-card-full">
+          <div class="hike-card-full__badges">
+            <span class="tag">In Regensburg</span>
+          </div>
+          <h3 class="hike-card-full__name">Stadtamhof — Danube Walk</h3>
+          <p class="hike-card-full__area">North bank · from the Stone Bridge</p>
+          <div class="hike-card-full__stats">
+            <span class="tag">5 km</span>
+            <span class="tag">~10 m gain</span>
+            <span class="tag">1.5 h</span>
+            <span class="tag">Easy</span>
+            <span class="tag tag--accent">Carrier</span>
+            <span class="tag tag--accent">Stroller OK</span>
+          </div>
+          <blockquote class="stop__highlight">The north bank that most visitors skip — the cathedral skyline seen from outside the city, open river and farmland within 15 minutes of the Stone Bridge</blockquote>
+          <p class="hike-card-full__desc">Cross the Steinerne Brücke to the Stadtamhof quarter — the neighborhood on the Danube's north bank that most visitors walk through without stopping — and keep walking west. The path is flat, almost entirely paved, and gives a perspective on Regensburg the old town doesn't offer: cathedral towers and medieval roofline seen from across the water, the Stone Bridge receding behind you. Within 15 minutes the path reaches open countryside. Walk east instead and you reach the confluence of the Regen and Danube rivers — where the two rivers meet in a triangle of gravel banks and old willows. Quiet on weekdays; peaceful on weekends once you're past the first bend. The only hike on this list where a stroller works as well as a carrier.</p>
+          <p class="hike-card-full__tip"><span class="hike-card-full__tip-label">Tip — </span>Start from the north end of the Stone Bridge (Stadtamhof side). Walk west for the open countryside; east for the river confluence. The Kneitinger Keller (5 min walk from the bridge on the north bank) is one of the few traditional Regensburg Gasthöfe that still serve lunch — good stop at the end of a morning in the old town.</p>
+          <div class="hike-mini-map" id="hike-map-5"></div>
+        </article>
+
+      </section>
+
+      <!-- Before you go -->
+      <section class="notes-section">
+        <h2 class="notes-section__title">Before you go</h2>
+        <p class="notes-section__note">Donaudurchbruch boat: April–October, daily from 9am, returns every 45 min. Arrive early on summer weekends — the queue fills fast.</p>
+        <p class="notes-section__note">Essing stop: adds about 45 min to the Munich–Regensburg drive if you include the hike. Exit A9 signed Altmühltal / Riedenburg. Parking at the Hängebrücke is free.</p>
+        <p class="notes-section__note">Befreiungshalle: €4.50 entry, hall open daily. The forest path outside is free and accessible year-round.</p>
+        <p class="notes-section__note">Carrier: all five hikes work with a baby carrier. Essing (Randeck ascent) and Walhalla Forest require one — both have roots and uneven surfaces. Stadtamhof is the only one where a stroller is fully comfortable.</p>
+        <p class="notes-section__note">Season: the Donaudurchbruch boat runs April–October only. The other hikes are year-round; the Randeck trail can be slippery after rain.</p>
+      </section>
+
+    </div><!-- /page-shell -->
+  </main>
+
+  <footer class="site-footer">
+    <div class="page-shell">
+      <p class="site-footer__line">Munich-based, hand-curated.</p>
+      <p class="site-footer__line site-footer__line--updated">Updated April 2026.</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/1.7.0/gpx.min.js"></script>
+  <script>
+    var ACCENT = '#1B3A5C';
+    var TILES  = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
+    // ── Overview map ──────────────────────────────────────────────────────────
+    (function () {
+      var omap = L.map('hike-overview-map', {
+        zoomControl: true, scrollWheelZoom: false, attributionControl: false
+      });
+      L.tileLayer(TILES, { maxZoom: 19 }).addTo(omap);
+
+      // Drive route Munich → Regensburg
+      L.polyline([
+        [48.1351, 11.5820], [48.4012, 11.6548], [48.7265, 11.8743], [49.0134, 12.1016]
+      ], { color: ACCENT, opacity: 0.3, weight: 2, dashArray: '5 7' }).addTo(omap);
+
+      // Origin / destination labels
+      L.circleMarker([48.1351, 11.5820], {
+        radius: 5, fillColor: '#AAAAAA', color: '#FFF', weight: 2, fillOpacity: 1
+      }).addTo(omap).bindTooltip('Munich', { direction: 'right' });
+
+      L.circleMarker([49.0134, 12.1016], {
+        radius: 5, fillColor: '#AAAAAA', color: '#FFF', weight: 2, fillOpacity: 1
+      }).addTo(omap).bindTooltip('Regensburg', { direction: 'right' });
+
+      // 5 trailhead markers
+      var trailheads = [
+        { n: '1', lat: 48.9169, lon: 11.8673 },
+        { n: '2', lat: 48.9406, lon: 11.7906 },
+        { n: '3', lat: 48.9221, lon: 11.9118 },
+        { n: '4', lat: 49.0296, lon: 12.2112 },
+        { n: '5', lat: 49.0187, lon: 12.0952 }
+      ];
+
+      trailheads.forEach(function (h) {
+        L.circleMarker([h.lat, h.lon], {
+          radius: 8, fillColor: ACCENT, color: '#FFF', weight: 2, fillOpacity: 1
+        }).addTo(omap).bindTooltip(h.n, {
+          permanent: true, direction: 'right', className: 'stop-label', offset: [10, 0]
+        });
+      });
+
+      var allPts = [[48.1351, 11.5820], [49.0134, 12.1016]]
+        .concat(trailheads.map(function (h) { return [h.lat, h.lon]; }));
+      omap.fitBounds(L.latLngBounds(allPts), { padding: [32, 48] });
+    })();
+
+    // ── Per-hike mini maps ────────────────────────────────────────────────────
+    var hikeConfig = [
+      { id: 'hike-map-1', gpx: 'gpx/hike1_donaudurchbruch_south_bank.gpx',   lat: 48.9169, lon: 11.8673 },
+      { id: 'hike-map-2', gpx: 'gpx/hike2_essing_rundweg1.gpx',              lat: 48.9406, lon: 11.7906 },
+      { id: 'hike-map-3', gpx: 'gpx/hike3_befreiungshalle_loop_kelheim4.gpx',lat: 48.9221, lon: 11.9118 },
+      { id: 'hike-map-4', gpx: 'gpx/hike4_walhalla_donaustauf_o15.gpx',      lat: 49.0296, lon: 12.2112 },
+      { id: 'hike-map-5', gpx: 'gpx/hike5_stadtamhof_danube_walk.gpx',       lat: 49.0187, lon: 12.0952 }
+    ];
+
+    hikeConfig.forEach(function (cfg) {
+      var m = L.map(cfg.id, {
+        zoomControl: false,
+        scrollWheelZoom: false,
+        attributionControl: false
+      });
+
+      L.tileLayer(TILES, { maxZoom: 19 }).addTo(m);
+
+      // Trailhead pin
+      L.circleMarker([cfg.lat, cfg.lon], {
+        radius: 7, fillColor: ACCENT, color: '#FFF', weight: 2, fillOpacity: 1
+      }).addTo(m);
+
+      // GPX track
+      new L.GPX(cfg.gpx, {
+        async: true,
+        marker_options: {
+          startIconUrl: null,
+          endIconUrl: null,
+          shadowUrl: null
+        },
+        polyline_options: {
+          color: ACCENT,
+          opacity: 0.85,
+          weight: 3
+        }
+      }).on('loaded', function (e) {
+        m.fitBounds(e.target.getBounds(), { padding: [24, 24] });
+      }).addTo(m);
+    });
+  </script>
+
+</body>
+</html>

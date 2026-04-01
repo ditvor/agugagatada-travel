@@ -427,3 +427,142 @@ img {
   padding: 0;
 }
 .stop-label::before { display: none; }
+
+
+/* ─────────────────────────────────────────
+   Hike guide page
+   ───────────────────────────────────────── */
+
+.hero__parent {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.hero__parent a {
+  color: var(--color-text-secondary);
+  text-decoration: underline;
+}
+
+.hero__parent a:hover { color: var(--color-accent); }
+
+#hike-overview-map {
+  height: 260px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-xl);
+}
+
+.hike-filter-tabs {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.hike-filter-tab {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--color-border);
+  padding: 2px 8px;
+  border-radius: 2px;
+  color: var(--color-text-secondary);
+  background: none;
+  cursor: default;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.hike-filter-tab.is-active {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.hikes-page-section { padding-bottom: var(--space-2xl); }
+
+.hike-card-full {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-width: 760px;
+  margin-bottom: var(--space-lg);
+}
+
+.hike-card-full:last-child { margin-bottom: 0; }
+
+.hike-card-full__badges { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.hike-card-full__name { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+.hike-card-full__area { font-size: var(--text-sm); color: var(--color-text-secondary); }
+.hike-card-full__stats { display: flex; flex-wrap: wrap; gap: var(--space-xs); margin-top: var(--space-xs); }
+.hike-card-full__hutte { font-size: var(--text-sm); color: var(--color-accent); font-weight: 500; }
+.hike-card-full__desc { font-size: var(--text-base); line-height: 1.75; color: var(--color-text); margin-top: var(--space-xs); }
+.hike-card-full__tip { font-size: var(--text-sm); color: var(--color-text-secondary); font-style: italic; line-height: 1.6; }
+.hike-card-full__tip-label { font-style: normal; font-weight: 500; color: var(--color-text); }
+
+/* Hike list teaser (on destination pages) */
+.hike-list-teaser {
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.hike-list-teaser__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: var(--space-md);
+}
+
+.hike-list-teaser__label {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+.hike-list-teaser__link {
+  font-size: var(--text-sm);
+  color: var(--color-accent);
+}
+
+.hike-list {
+  list-style: none;
+}
+
+.hike-list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-md);
+  padding-block: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+  flex-wrap: wrap;
+}
+
+.hike-list__item:last-child { border-bottom: none; }
+
+.hike-list__name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.hike-list__meta {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.hike-mini-map {
+  height: 200px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  margin-top: var(--space-md);
+}
