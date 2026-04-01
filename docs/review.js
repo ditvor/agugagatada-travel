@@ -13,7 +13,7 @@
 (function () {
   'use strict';
 
-  var FEEDBACK_EMAIL = ''; // e.g. 'igor@example.com'
+  var FEEDBACK_EMAIL = 'ikochmanpp+agugagatada@gmail.com';
 
   // ── State ────────────────────────────────────────────────────────────────────
 
@@ -48,6 +48,21 @@
   ].join(', ');
 
   // ── Init ─────────────────────────────────────────────────────────────────────
+
+  // ── Footer hint ──────────────────────────────────────────────────────────────
+
+  function injectFooterHint() {
+    var footer = document.querySelector('.site-footer .page-shell');
+    if (!footer) return;
+    var hint = document.createElement('p');
+    hint.className = 'site-footer__line site-footer__review-hint';
+    hint.innerHTML = 'Spotted something wrong? Press <kbd>Shift+F</kbd> to leave a note.';
+    footer.appendChild(hint);
+  }
+
+  injectFooterHint();
+
+  // ── Keyboard ─────────────────────────────────────────────────────────────────
 
   document.addEventListener('keydown', function (e) {
     if (e.shiftKey && e.key === 'F') {

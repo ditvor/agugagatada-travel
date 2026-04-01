@@ -433,6 +433,22 @@ img {
    Review / annotation mode
    ───────────────────────────────────────── */
 
+.site-footer__review-hint {
+  margin-top: var(--space-sm);
+  color: var(--color-text-secondary) !important;
+  opacity: 0.6;
+}
+
+.site-footer__review-hint kbd {
+  font-family: inherit;
+  font-size: 11px;
+  background: var(--color-border);
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 1px 5px;
+  color: var(--color-text-secondary);
+}
+
 body.review-active [data-reviewable] {
   cursor: crosshair;
 }
