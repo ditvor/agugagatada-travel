@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <title>Agugagatada — Journal builder</title>
+  <link rel="stylesheet" href="builder.css">
+</head>
+<body>
+
+  <header class="top-bar">
+    <div class="bar-inner">
+      <div class="bar-left">
+        <span class="app-name">Agugagatada</span>
+        <span class="sep">·</span>
+        <span class="app-sub">Journal builder</span>
+      </div>
+      <div class="bar-right">
+        <span id="filesize-meter" class="filesize">—</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <form id="builder-form" novalidate>
+
+      <section class="field-group">
+        <h2>Tell me about the trip</h2>
+        <label class="field">
+          <span class="field-label">Description <em>required — messy drafting is fine; the editor polishes</em></span>
+          <textarea name="description" required rows="8" maxlength="5000" placeholder="we hiked in bad tölz on saturday. wax figures were waiting for us. asiatish food for lunch, was ok. kid fell asleep in the car all the way home"></textarea>
+        </label>
+      </section>
+
+      <section class="field-group">
+        <h2>Track</h2>
+        <label class="field">
+          <span class="field-label">GPX file <em>required — location and date come from here</em></span>
+          <input type="file" name="gpx" accept=".gpx,application/gpx+xml,application/xml" required>
+          <span id="gpx-info" class="inline-info"></span>
+        </label>
+      </section>
+
+      <section class="field-group">
+        <h2>Photos</h2>
+        <label class="field">
+          <span class="field-label">Photos <em>required — 1 to 50, HEIC ok, max 20 MB each</em></span>
+          <input type="file" name="photos" accept="image/*,.heic,.heif" multiple required>
+          <span id="photos-info" class="inline-info"></span>
+        </label>
+      </section>
+
+      <section class="actions">
+        <button type="submit" id="generate-btn">Generate journal</button>
+        <span id="generate-hint" class="inline-info"></span>
+      </section>
+
+      <section id="status-panel" class="status" hidden>
+        <div class="status-row">
+          <span id="status-dot" class="dot"></span>
+          <span id="status-text">Starting…</span>
+        </div>
+        <div class="status-log" id="status-log"></div>
+        <div class="status-actions" id="download-actions" hidden>
+          <a id="download-link" class="btn-primary">Download journal.html</a>
+          <button type="button" id="preview-btn">Preview in new tab</button>
+        </div>
+        <div class="status-error" id="status-error" hidden></div>
+      </section>
+
+    </form>
+  </main>
+
+  <!-- Try to load the gitignored API key. Missing file is fine — llm.js surfaces a clear error. -->
+  <script src="builder/.key.js" onerror=""></script>
+
+  <!-- Template renderer + module namespace -->
+  <script src="journal-template.js"></script>
+  <script src="builder/prompts.js"></script>
+  <script src="builder/gpx.js"></script>
+  <script src="builder/exif.js"></script>
+  <script src="builder/heic.js"></script>
+  <script src="builder/image.js"></script>
+  <script src="builder/llm.js"></script>
+  <script src="builder.js"></script>
+
+</body>
+</html>
