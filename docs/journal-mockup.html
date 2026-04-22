@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A morning by the lake — Walchensee</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* --------- Design tokens --------- */
+    :root {
+      --bg: #FAF6F0;
+      --surface: #FFFFFF;
+      --ink: #1A1A1A;
+      --ink-soft: #3A3A3A;
+      --muted: #7A7A7A;
+      --rule: #E5DFD4;
+      --accent: #1B3A5C;
+      --warm: #B8623C;
+      --serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+      --sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --measure: 38rem;
+      --gutter: clamp(1.25rem, 4vw, 2.5rem);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 19px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    img { max-width: 100%; display: block; }
+
+    /* --------- Sticky mini-nav --------- */
+    .page-nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(250, 246, 240, 0.85);
+      backdrop-filter: saturate(140%) blur(10px);
+      -webkit-backdrop-filter: saturate(140%) blur(10px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.75rem var(--gutter);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--sans);
+      font-size: 0.875rem;
+    }
+    .nav-back {
+      color: var(--ink-soft);
+      text-decoration: none;
+      letter-spacing: 0.01em;
+    }
+    .nav-back:hover { color: var(--accent); }
+
+    .lang-switch {
+      display: inline-flex;
+      gap: 0.25rem;
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 3px;
+    }
+    .lang-switch button {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      background: transparent;
+      border: 0;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .lang-switch button.active {
+      background: var(--ink);
+      color: var(--bg);
+    }
+    .lang-switch button:not(.active):hover { color: var(--ink); }
+
+    .nav-share {
+      font-family: var(--sans);
+      font-size: 0.8125rem;
+      color: var(--ink-soft);
+      background: transparent;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 0.4rem 0.9rem;
+      cursor: pointer;
+    }
+    .nav-share:hover { border-color: var(--ink); }
+
+    /* --------- Hero --------- */
+    .hero {
+      position: relative;
+      height: clamp(60vh, 75vh, 720px);
+      width: 100%;
+      overflow: hidden;
+      background: linear-gradient(180deg, #2c4858 0%, #4d6b7c 35%, #8fa8b8 65%, #d4c4a8 100%);
+    }
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://picsum.photos/seed/walchensee-hero-9/2000/1100');
+      background-size: cover;
+      background-position: center;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.65) 100%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 0 var(--gutter) clamp(2rem, 5vw, 3.5rem);
+      color: #fff;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .hero-meta {
+      font-family: var(--sans);
+      font-size: 0.8125rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.92;
+      margin-bottom: 0.75rem;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(2.5rem, 6vw, 4.75rem);
+      line-height: 1.05;
+      margin: 0 0 0.85rem;
+      letter-spacing: -0.02em;
+      max-width: 16ch;
+    }
+    .hero-tagline {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+      line-height: 1.45;
+      max-width: 38ch;
+      opacity: 0.95;
+      margin: 0;
+    }
+
+    /* --------- Stat strip --------- */
+    .stat-strip {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.75rem var(--gutter);
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      justify-content: center;
+      border-bottom: 1px solid var(--rule);
+      font-family: var(--sans);
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+    }
+    .stat-value {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 1.35rem;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* --------- Prose container --------- */
+    .prose {
+      max-width: var(--measure);
+      margin: 0 auto;
+      padding: clamp(2.5rem, 6vw, 4rem) var(--gutter);
+    }
+    .prose p {
+      margin: 0 0 1.25rem;
+      color: var(--ink-soft);
+    }
+    .prose p:first-child::first-letter {
+      font-size: 3.6rem;
+      float: left;
+      font-weight: 600;
+      line-height: 0.85;
+      padding: 0.4rem 0.6rem 0 0;
+      color: var(--accent);
+      font-family: var(--serif);
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    /* --------- Section title --------- */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(2rem, 5vw, 3.5rem) var(--gutter);
+    }
+    .section--narrow {
+      max-width: var(--measure);
+    }
+    .section + .section { padding-top: 0; }
+
+    .section-eyebrow {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--warm);
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -0.015em;
+      margin: 0 0 0.5rem;
+      color: var(--ink);
+    }
+    .section-caption {
+      font-family: var(--sans);
+      font-size: 0.9375rem;
+      color: var(--muted);
+      margin: 0 0 1.75rem;
+    }
+
+    /* --------- Map --------- */
+    #map {
+      height: 480px;
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid var(--rule);
+      background: var(--surface);
+    }
+    .map-legend {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 0.75rem;
+      font-family: var(--sans);
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+    .legend-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin-right: 0.4rem;
+      vertical-align: middle;
+    }
+    .legend-dot--photo { background: var(--warm); }
+
+    /* --------- Photo journey --------- */
+    .chapter {
+      margin: 0 auto;
+      max-width: var(--measure);
+      padding-top: 2.5rem;
+    }
+    .chapter:first-of-type { padding-top: 0.5rem; }
+
+    .chapter-time {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--warm);
+      text-align: center;
+      margin: 0 0 1.5rem;
+      position: relative;
+    }
+    .chapter-time::before,
+    .chapter-time::after {
+      content: "";
+      display: inline-block;
+      width: 2.5rem;
+      height: 1px;
+      background: var(--rule);
+      vertical-align: middle;
+      margin: 0 0.85rem;
+    }
+
+    .photo-card {
+      margin: 0 0 2rem;
+    }
+    .photo-card .photo {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background-color: var(--rule);
+      background-size: cover;
+      background-position: center;
+      border-radius: 4px;
+    }
+    .photo-card .photo--tall { aspect-ratio: 3 / 4; }
+    .photo-card figcaption {
+      font-family: var(--sans);
+      font-style: italic;
+      font-size: 0.9375rem;
+      color: var(--muted);
+      margin-top: 0.65rem;
+      padding: 0 0.25rem;
+      line-height: 1.5;
+    }
+
+    .photo-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .photo-pair .photo-card { margin-bottom: 0; }
+
+    /* --------- About this place --------- */
+    .about-place {
+      background: var(--surface);
+      border-top: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      padding: clamp(2.5rem, 5vw, 3.5rem) var(--gutter);
+    }
+    .about-place .inner {
+      max-width: var(--measure);
+      margin: 0 auto;
+    }
+    .about-place p {
+      margin: 0 0 1.1rem;
+      color: var(--ink-soft);
+    }
+    .about-place p:last-child { margin-bottom: 0; }
+    .ai-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 1.25rem;
+    }
+    .ai-tag::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--warm);
+    }
+
+    /* --------- Family notes --------- */
+    .family-card {
+      max-width: var(--measure);
+      margin: 0 auto;
+      padding: 0 var(--gutter);
+    }
+    .family-card-inner {
+      background: var(--bg);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 1.5rem 1.75rem;
+    }
+    .family-card h3 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 1.25rem;
+      margin: 0 0 0.85rem;
+      letter-spacing: -0.01em;
+    }
+    .family-card ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.65rem;
+    }
+    .family-card li {
+      font-family: var(--sans);
+      font-size: 0.9375rem;
+      color: var(--ink-soft);
+      line-height: 1.55;
+      padding-left: 1.1rem;
+      position: relative;
+    }
+    .family-card li::before {
+      content: "·";
+      position: absolute;
+      left: 0;
+      color: var(--warm);
+      font-weight: 700;
+    }
+    .family-card strong {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* --------- Closing --------- */
+    .closing {
+      max-width: var(--measure);
+      margin: 0 auto;
+      padding: clamp(3rem, 6vw, 4.5rem) var(--gutter);
+      text-align: center;
+    }
+    .closing-photo {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      background-color: var(--rule);
+      background-size: cover;
+      background-position: center;
+      border-radius: 4px;
+      margin-bottom: 1.5rem;
+    }
+    .closing-line {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.35rem;
+      color: var(--ink);
+      line-height: 1.4;
+      margin: 0;
+    }
+
+    /* --------- Footer --------- */
+    .page-footer {
+      border-top: 1px solid var(--rule);
+      padding: 2rem var(--gutter);
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: center;
+      font-family: var(--sans);
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+    .page-footer .credit { margin: 0; }
+    .page-footer .credit strong { color: var(--ink); font-weight: 600; }
+
+    /* --------- Leaflet overrides --------- */
+    .leaflet-container {
+      font-family: var(--sans);
+      background: #f0e8d8;
+    }
+    .photo-marker {
+      background: var(--warm);
+      width: 16px !important;
+      height: 16px !important;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    /* --------- Language switching --------- */
+    [data-i18n] [lang]:not([data-active]) { display: none; }
+
+    /* --------- Responsive --------- */
+    @media (max-width: 640px) {
+      body { font-size: 17px; }
+      .photo-pair { grid-template-columns: 1fr; }
+      .nav-share { display: none; }
+      #map { height: 360px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ Sticky nav ============ -->
+  <header class="page-nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-back" data-i18n>
+        <span lang="en" data-active>← All trips</span>
+        <span lang="ru">← Все поездки</span>
+        <span lang="de">← Alle Ausflüge</span>
+      </a>
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button data-lang="en" class="active">EN</button>
+        <button data-lang="ru">RU</button>
+        <button data-lang="de">DE</button>
+      </div>
+      <button class="nav-share" data-i18n>
+        <span lang="en" data-active>Share</span>
+        <span lang="ru">Поделиться</span>
+        <span lang="de">Teilen</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ Hero ============ -->
+  <section class="hero">
+    <div class="hero-image"></div>
+    <div class="hero-content">
+      <div class="hero-meta" data-i18n>
+        <span lang="en" data-active>Walchensee, Bavaria · Saturday, 18 April 2026</span>
+        <span lang="ru">Озеро Вальхен, Бавария · Суббота, 18 апреля 2026</span>
+        <span lang="de">Walchensee, Bayern · Samstag, 18. April 2026</span>
+      </div>
+      <h1 class="hero-title" data-i18n>
+        <span lang="en" data-active>A morning by the lake</span>
+        <span lang="ru">Утро у озера</span>
+        <span lang="de">Ein Morgen am See</span>
+      </h1>
+      <p class="hero-tagline" data-i18n>
+        <span lang="en" data-active>The first warm Saturday of the year — three of us, the carrier, and a thermos.</span>
+        <span lang="ru">Первая тёплая суббота этого года — мы втроём, переноска и термос.</span>
+        <span lang="de">Der erste warme Samstag des Jahres — wir zu dritt, die Trage und eine Thermoskanne.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ Stat strip ============ -->
+  <section class="stat-strip">
+    <div class="stat">
+      <span class="stat-value">5.2 km</span>
+      <span class="stat-label" data-i18n>
+        <span lang="en" data-active>walked</span>
+        <span lang="ru">пройдено</span>
+        <span lang="de">gelaufen</span>
+      </span>
+    </div>
+    <div class="stat">
+      <span class="stat-value">2½ h</span>
+      <span class="stat-label" data-i18n>
+        <span lang="en" data-active>at a baby pace</span>
+        <span lang="ru">в детском темпе</span>
+        <span lang="de">im Babytempo</span>
+      </span>
+    </div>
+    <div class="stat">
+      <span class="stat-value" data-i18n>
+        <span lang="en" data-active>Carrier</span>
+        <span lang="ru">Переноска</span>
+        <span lang="de">Trage</span>
+      </span>
+      <span class="stat-label" data-i18n>
+        <span lang="en" data-active>no stroller</span>
+        <span lang="ru">без коляски</span>
+        <span lang="de">kein Kinderwagen</span>
+      </span>
+    </div>
+    <div class="stat">
+      <span class="stat-value" data-i18n>
+        <span lang="en" data-active>Three</span>
+        <span lang="ru">Втроём</span>
+        <span lang="de">Zu dritt</span>
+      </span>
+      <span class="stat-label" data-i18n>
+        <span lang="en" data-active>of us</span>
+        <span lang="ru">нас было</span>
+        <span lang="de">zusammen</span>
+      </span>
+    </div>
+  </section>
+
+  <!-- ============ Opening narrative ============ -->
+  <article class="prose">
+    <div data-i18n>
+      <div lang="en" data-active>
+        <p>We caught the 8:14 from München-Hauptbahnhof while the little one was still half-asleep against my shoulder. By the time we climbed off in Walchensee an hour later, the lake had appeared in that startling, almost-tropical turquoise you don't quite believe until you see it.</p>
+        <p>The plan was modest — walk the eastern shore as far as the boathouse, find somewhere with sun, drink the coffee, and turn back before anyone got hungry. The plan held. Almost.</p>
+      </div>
+      <div lang="ru">
+        <p>Мы сели на электричку в 8:14 с Мюнхенского вокзала, малышка ещё дремала у меня на плече. Через час, когда мы вышли в Вальхензее, перед нами открылось озеро — той самой поразительной, почти тропической бирюзы, в которую не веришь, пока не увидишь сам.</p>
+        <p>План был скромный: пройти вдоль восточного берега до лодочного домика, найти солнечное место, выпить кофе и повернуть назад, пока никто не проголодался. План почти удался.</p>
+      </div>
+      <div lang="de">
+        <p>Wir nahmen den 8:14 vom Münchner Hauptbahnhof, während die Kleine noch halb schlafend an meiner Schulter lag. Als wir eine Stunde später in Walchensee ausstiegen, erschien der See in jenem überraschenden, fast tropischen Türkis, das man nicht glaubt, bis man es selbst sieht.</p>
+        <p>Der Plan war bescheiden — am östlichen Ufer entlang bis zum Bootshaus, einen sonnigen Platz finden, den Kaffee trinken und umkehren, bevor jemand Hunger bekommt. Der Plan ging fast auf.</p>
+      </div>
+    </div>
+  </article>
+
+  <!-- ============ Map ============ -->
+  <section class="section">
+    <div class="section-eyebrow" data-i18n>
+      <span lang="en" data-active>The route</span>
+      <span lang="ru">Маршрут</span>
+      <span lang="de">Die Route</span>
+    </div>
+    <h2 class="section-title" data-i18n>
+      <span lang="en" data-active>Where we walked</span>
+      <span lang="ru">Где мы прошли</span>
+      <span lang="de">Wo wir gelaufen sind</span>
+    </h2>
+    <p class="section-caption" data-i18n>
+      <span lang="en" data-active>Tap a photo marker to jump to that moment.</span>
+      <span lang="ru">Нажмите на маркер, чтобы перейти к этому моменту.</span>
+      <span lang="de">Tippe auf ein Foto, um zu diesem Moment zu springen.</span>
+    </p>
+    <div id="map"></div>
+    <div class="map-legend">
+      <span><span class="legend-dot"></span><span data-i18n><span lang="en" data-active>Our track</span><span lang="ru">Наш путь</span><span lang="de">Unsere Strecke</span></span></span>
+      <span><span class="legend-dot legend-dot--photo"></span><span data-i18n><span lang="en" data-active>Photos</span><span lang="ru">Фото</span><span lang="de">Fotos</span></span></span>
+    </div>
+  </section>
+
+  <!-- ============ Photo journey ============ -->
+  <section class="section section--narrow">
+    <div class="section-eyebrow" data-i18n>
+      <span lang="en" data-active>The morning, in order</span>
+      <span lang="ru">Утро по порядку</span>
+      <span lang="de">Der Morgen, der Reihe nach</span>
+    </div>
+    <h2 class="section-title" data-i18n>
+      <span lang="en" data-active>What we saw</span>
+      <span lang="ru">Что мы увидели</span>
+      <span lang="de">Was wir gesehen haben</span>
+    </h2>
+  </section>
+
+  <div class="chapter">
+    <p class="chapter-time" data-i18n>
+      <span lang="en" data-active>Early morning</span>
+      <span lang="ru">Раннее утро</span>
+      <span lang="de">Früher Morgen</span>
+    </p>
+
+    <figure class="photo-card">
+      <div class="photo" style="background-image: url('https://picsum.photos/seed/walk-1/900/680')"></div>
+      <figcaption data-i18n>
+        <span lang="en" data-active>The lake first appears through the trees just past the Bahnhof. Even she was awake by this point.</span>
+        <span lang="ru">Озеро впервые появляется сквозь деревья сразу за вокзалом. Тут даже она проснулась.</span>
+        <span lang="de">Der See erscheint zum ersten Mal zwischen den Bäumen kurz hinter dem Bahnhof. Spätestens da war auch sie wach.</span>
+      </figcaption>
+    </figure>
+
+    <div class="photo-pair">
+      <figure class="photo-card">
+        <div class="photo photo--tall" style="background-image: url('https://picsum.photos/seed/walk-2/600/800')"></div>
+        <figcaption data-i18n>
+          <span lang="en" data-active>Coffee from the thermos.</span>
+          <span lang="ru">Кофе из термоса.</span>
+          <span lang="de">Kaffee aus der Thermoskanne.</span>
+        </figcaption>
+      </figure>
+      <figure class="photo-card">
+        <div class="photo photo--tall" style="background-image: url('https://picsum.photos/seed/walk-3/600/800')"></div>
+        <figcaption data-i18n>
+          <span lang="en" data-active>Two boats out already.</span>
+          <span lang="ru">Две лодки уже на воде.</span>
+          <span lang="de">Schon zwei Boote auf dem Wasser.</span>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+
+  <div class="chapter">
+    <p class="chapter-time" data-i18n>
+      <span lang="en" data-active>Midday</span>
+      <span lang="ru">Полдень</span>
+      <span lang="de">Mittag</span>
+    </p>
+
+    <figure class="photo-card">
+      <div class="photo" style="background-image: url('https://picsum.photos/seed/walk-4/900/680')"></div>
+      <figcaption data-i18n>
+        <span lang="en" data-active>The boathouse turnaround. We sat on the wooden jetty for half an hour and watched the wind move across the surface.</span>
+        <span lang="ru">Поворот у лодочного домика. Полчаса мы сидели на деревянных мостках и смотрели, как ветер скользит по воде.</span>
+        <span lang="de">Wendepunkt am Bootshaus. Wir saßen eine halbe Stunde auf dem Holzsteg und schauten dem Wind über die Wasseroberfläche zu.</span>
+      </figcaption>
+    </figure>
+
+    <figure class="photo-card">
+      <div class="photo" style="background-image: url('https://picsum.photos/seed/walk-5/900/680')"></div>
+      <figcaption data-i18n>
+        <span lang="en" data-active>Lunch was a Brezn and a half-frozen apple from the bakery in Kochel.</span>
+        <span lang="ru">Обед — брецель и подмороженное яблоко из булочной в Кохеле.</span>
+        <span lang="de">Mittagessen: eine Brezn und ein halbgefrorener Apfel aus der Bäckerei in Kochel.</span>
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- ============ About this place ============ -->
+  <section class="about-place">
+    <div class="inner">
+      <div class="section-eyebrow" data-i18n>
+        <span lang="en" data-active>About the place</span>
+        <span lang="ru">Об этом месте</span>
+        <span lang="de">Über diesen Ort</span>
+      </div>
+      <h2 class="section-title" data-i18n>
+        <span lang="en" data-active>Walchensee</span>
+        <span lang="ru">Вальхензее</span>
+        <span lang="de">Der Walchensee</span>
+      </h2>
+      <div data-i18n>
+        <div lang="en" data-active>
+          <p>One of the deepest and highest of Germany's alpine lakes, Walchensee sits at 800 metres in the foothills of the Bavarian Alps, about an hour south of Munich. The colour comes from the limestone that surrounds it — the same chalky white that gives the Caribbean its turquoise.</p>
+          <p>The painter Lovis Corinth spent his last summers here and made the lake unexpectedly famous for early-twentieth-century German art. The path along the eastern shore is gentle and walkable in any season.</p>
+        </div>
+        <div lang="ru">
+          <p>Вальхензее — одно из самых глубоких и высокогорных озёр Германии, расположенное на высоте 800 метров в предгорьях Баварских Альп, примерно в часе езды к югу от Мюнхена. Цвет воды — заслуга известняка, который окружает озеро: тот же мел, что придаёт Карибскому морю бирюзу.</p>
+          <p>Художник Ловис Коринт провёл здесь последние лета жизни и неожиданно прославил озеро в немецком искусстве начала XX века. Тропа по восточному берегу пологая и доступна в любое время года.</p>
+        </div>
+        <div lang="de">
+          <p>Der Walchensee ist einer der tiefsten und höchstgelegenen Alpenseen Deutschlands. Er liegt auf 800 Metern im Vorland der Bayerischen Alpen, etwa eine Stunde südlich von München. Die Farbe entsteht durch den umliegenden Kalkstein — dasselbe Weiß, das der Karibik ihr Türkis gibt.</p>
+          <p>Der Maler Lovis Corinth verbrachte hier seine letzten Sommer und machte den See in der deutschen Kunst des frühen 20. Jahrhunderts bekannt. Der Weg am Ostufer ist sanft und zu jeder Jahreszeit gut zu gehen.</p>
+        </div>
+      </div>
+      <span class="ai-tag" data-i18n>
+        <span lang="en" data-active>Background written with AI assist</span>
+        <span lang="ru">Справка подготовлена с помощью ИИ</span>
+        <span lang="de">Hintergrund mit KI-Unterstützung verfasst</span>
+      </span>
+    </div>
+  </section>
+
+  <!-- ============ Family notes ============ -->
+  <section class="section section--narrow">
+    <div class="family-card">
+      <div class="family-card-inner">
+        <h3 data-i18n>
+          <span lang="en" data-active>Family notes</span>
+          <span lang="ru">Заметки для семьи</span>
+          <span lang="de">Familienhinweise</span>
+        </h3>
+        <ul data-i18n>
+          <li lang="en" data-active><strong>Carrier essential</strong> — the path is gravel and roots in places, not stroller-friendly past the boathouse.</li>
+          <li lang="ru" data-active style="display:none"><strong>Переноска обязательна</strong> — тропа местами с гравием и корнями, после лодочного домика для коляски уже не годится.</li>
+          <li lang="de" data-active style="display:none"><strong>Trage zwingend</strong> — der Weg ist stellenweise mit Schotter und Wurzeln, hinter dem Bootshaus nichts mehr für Kinderwagen.</li>
+
+          <li lang="en" data-active><strong>Snacks:</strong> the kiosk by the parking lot opens at 10:00 — earlier than that, bring your own.</li>
+          <li lang="ru" style="display:none"><strong>Еда:</strong> киоск у парковки открывается в 10:00 — раньше берите своё.</li>
+          <li lang="de" style="display:none"><strong>Verpflegung:</strong> Der Kiosk am Parkplatz öffnet um 10:00 — vorher selbst mitbringen.</li>
+
+          <li lang="en" data-active><strong>Trains:</strong> RB6 from Munich Hbf to Kochel, then bus 9608 to Walchensee. Roughly hourly.</li>
+          <li lang="ru" style="display:none"><strong>Транспорт:</strong> RB6 с Мюнхенского вокзала до Кохеля, далее автобус 9608 до Вальхензее. Примерно раз в час.</li>
+          <li lang="de" style="display:none"><strong>Anreise:</strong> RB6 vom Münchner Hbf nach Kochel, dann Bus 9608 nach Walchensee. Etwa stündlich.</li>
+
+          <li lang="en" data-active><strong>Changing table:</strong> in the café next to the boat rental.</li>
+          <li lang="ru" style="display:none"><strong>Пеленальный столик:</strong> в кафе рядом с прокатом лодок.</li>
+          <li lang="de" style="display:none"><strong>Wickeltisch:</strong> im Café neben dem Bootsverleih.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Closing ============ -->
+  <section class="closing">
+    <div class="closing-photo" style="background-image: url('https://picsum.photos/seed/walk-final/1200/750')"></div>
+    <p class="closing-line" data-i18n>
+      <span lang="en" data-active>Asleep again before we reached Penzberg.</span>
+      <span lang="ru">Снова спала ещё до того, как мы доехали до Пенцберга.</span>
+      <span lang="de">Wieder eingeschlafen, bevor wir Penzberg erreichten.</span>
+    </p>
+  </section>
+
+  <!-- ============ Footer ============ -->
+  <footer class="page-footer">
+    <p class="credit" data-i18n>
+      <span lang="en" data-active>Made with <strong>Agugagatada</strong> · sample preview</span>
+      <span lang="ru">Сделано в <strong>Agugagatada</strong> · демо-страница</span>
+      <span lang="de">Erstellt mit <strong>Agugagatada</strong> · Vorschau</span>
+    </p>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button data-lang="en" class="active">English</button>
+      <button data-lang="ru">Русский</button>
+      <button data-lang="de">Deutsch</button>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ============ Map ============
+    const map = L.map('map', { scrollWheelZoom: false, zoomControl: true })
+      .setView([47.585, 11.335], 13);
+
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; OpenStreetMap &copy; CARTO',
+      subdomains: 'abcd',
+      maxZoom: 19
+    }).addTo(map);
+
+    // Fake GPX track around Walchensee east shore
+    const track = [
+      [47.598, 11.327],
+      [47.594, 11.331],
+      [47.589, 11.334],
+      [47.584, 11.336],
+      [47.579, 11.339],
+      [47.574, 11.342],
+      [47.570, 11.346],
+      [47.567, 11.351]
+    ];
+
+    L.polyline(track, {
+      color: '#1B3A5C',
+      weight: 4,
+      opacity: 0.85,
+      lineJoin: 'round'
+    }).addTo(map);
+
+    // Photo markers along the route
+    const photoStops = [
+      { coord: [47.598, 11.327], n: 1 },
+      { coord: [47.589, 11.334], n: 2 },
+      { coord: [47.579, 11.339], n: 3 },
+      { coord: [47.567, 11.351], n: 4 }
+    ];
+
+    photoStops.forEach(p => {
+      L.marker(p.coord, {
+        icon: L.divIcon({
+          className: 'photo-marker',
+          iconSize: [16, 16]
+        })
+      }).addTo(map);
+    });
+
+    map.fitBounds(L.latLngBounds(track), { padding: [40, 40] });
+
+    // ============ Language switching ============
+    const langButtons = document.querySelectorAll('.lang-switch button');
+    function setLang(lang) {
+      document.documentElement.lang = lang;
+      // Toggle visibility for elements wrapped in [data-i18n] containers
+      document.querySelectorAll('[data-i18n]').forEach(group => {
+        group.querySelectorAll('[lang]').forEach(el => {
+          if (el.getAttribute('lang') === lang) {
+            el.style.display = '';
+            el.setAttribute('data-active', '');
+          } else {
+            el.style.display = 'none';
+            el.removeAttribute('data-active');
+          }
+        });
+      });
+      // Update all switch buttons
+      document.querySelectorAll('.lang-switch button').forEach(b => {
+        b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+      });
+    }
+
+    langButtons.forEach(btn => {
+      btn.addEventListener('click', () => setLang(btn.getAttribute('data-lang')));
+    });
+
+    // Initialise to EN
+    setLang('en');
+  </script>
+</body>
+</html>
