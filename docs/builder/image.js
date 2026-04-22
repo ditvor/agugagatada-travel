@@ -1,15 +1,21 @@
 /**
- * Image pipeline — apply EXIF orientation rotation, downscale to 1600px max
- * edge, encode as JPEG q75, return base64 data URL.
+ * Image pipeline — decode once, apply EXIF orientation, produce TWO outputs:
  *
- * Canvas does NOT honour EXIF orientation automatically. We apply the
- * rotation/flip manually.
+ *   embed  — ≤1600 px max edge, JPEG q75, base64 data URL. Inlined into the
+ *            output HTML for the reader.
+ *   vision — ≤768 px max edge, JPEG q75, raw base64 string. Sent to Claude as
+ *            an image content block so captions can be written from what the
+ *            model actually sees.
+ *
+ * Canvas does NOT honour EXIF orientation automatically — rotations are applied
+ * manually before scaling.
  */
 (function (global) {
   'use strict';
 
   const NS = (global.Builder = global.Builder || {});
-  const MAX_EDGE = 1600;
+  const EMBED_MAX = 1600;
+  const VISION_MAX = 768;
   const JPEG_Q = 0.75;
 
   function loadImageFromBlob(blob) {
@@ -17,13 +23,12 @@
       const url = URL.createObjectURL(blob);
       const img = new Image();
       img.onload  = () => { URL.revokeObjectURL(url); resolve(img); };
-      img.onerror = (e) => { URL.revokeObjectURL(url); reject(new Error('Failed to decode image.')); };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Failed to decode image.')); };
       img.src = url;
     });
   }
 
-  // Map EXIF orientation (1-8) to (swapWH, drawCanvas) instructions.
-  function applyOrientation(ctx, canvas, img, orientation) {
+  function applyOrientation(ctx, img, orientation) {
     const w = img.naturalWidth;
     const h = img.naturalHeight;
     switch (orientation) {
@@ -34,7 +39,7 @@
       case 6: ctx.transform(0, 1, -1, 0, h, 0); break;
       case 7: ctx.transform(0, -1, -1, 0, h, w); break;
       case 8: ctx.transform(0, -1, 1, 0, 0, w); break;
-      default: break; // 1 or null = no-op
+      default: break;
     }
     ctx.drawImage(img, 0, 0);
   }
@@ -43,43 +48,63 @@
     return (orientation >= 5 && orientation <= 8) ? [h, w] : [w, h];
   }
 
-  function fitScale(w, h, max) {
-    const edge = Math.max(w, h);
-    return edge > max ? max / edge : 1;
+  function scaleTo(srcCanvas, maxEdge) {
+    const sw = srcCanvas.width;
+    const sh = srcCanvas.height;
+    const edge = Math.max(sw, sh);
+    const scale = edge > maxEdge ? maxEdge / edge : 1;
+    const w = Math.round(sw * scale);
+    const h = Math.round(sh * scale);
+    const out = document.createElement('canvas');
+    out.width = w;
+    out.height = h;
+    const ctx = out.getContext('2d');
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.drawImage(srcCanvas, 0, 0, w, h);
+    return out;
   }
 
-  /**
-   * Downscale + rotate → base64 JPEG data URL.
-   * Returns { dataUrl, width, height, orientation: 'landscape'|'portrait' }.
-   */
+  /** Strip the "data:image/...;base64," prefix from a data URL. */
+  function stripDataUrlPrefix(dataUrl) {
+    const i = dataUrl.indexOf(',');
+    return i >= 0 ? dataUrl.slice(i + 1) : dataUrl;
+  }
+
   async function process(blob, exifOrientation) {
     const img = await loadImageFromBlob(blob);
 
-    // Step 1: rotate into a canvas at full size
+    // Decode + rotate once into an upright full-size canvas.
     const [uprightW, uprightH] = dimsAfterOrientation(img.naturalWidth, img.naturalHeight, exifOrientation);
-    const rotCanvas = document.createElement('canvas');
-    rotCanvas.width = uprightW;
-    rotCanvas.height = uprightH;
-    const rotCtx = rotCanvas.getContext('2d');
-    applyOrientation(rotCtx, rotCanvas, img, exifOrientation);
+    const upright = document.createElement('canvas');
+    upright.width = uprightW;
+    upright.height = uprightH;
+    applyOrientation(upright.getContext('2d'), img, exifOrientation);
 
-    // Step 2: downscale the upright canvas
-    const scale = fitScale(uprightW, uprightH, MAX_EDGE);
-    const outW = Math.round(uprightW * scale);
-    const outH = Math.round(uprightH * scale);
+    // Derive the two outputs from the upright canvas.
+    const embedCanvas = scaleTo(upright, EMBED_MAX);
+    const embedDataUrl = embedCanvas.toDataURL('image/jpeg', JPEG_Q);
 
-    const outCanvas = document.createElement('canvas');
-    outCanvas.width = outW;
-    outCanvas.height = outH;
-    const outCtx = outCanvas.getContext('2d');
-    outCtx.imageSmoothingEnabled = true;
-    outCtx.imageSmoothingQuality = 'high';
-    outCtx.drawImage(rotCanvas, 0, 0, outW, outH);
+    const visionCanvas = scaleTo(upright, VISION_MAX);
+    const visionDataUrl = visionCanvas.toDataURL('image/jpeg', JPEG_Q);
 
-    const dataUrl = outCanvas.toDataURL('image/jpeg', JPEG_Q);
-    const orientation = outW >= outH ? 'landscape' : 'portrait';
-    return { dataUrl, width: outW, height: outH, orientation };
+    const orientation = embedCanvas.width >= embedCanvas.height ? 'landscape' : 'portrait';
+
+    return {
+      embed: {
+        dataUrl: embedDataUrl,
+        width: embedCanvas.width,
+        height: embedCanvas.height,
+        orientation
+      },
+      vision: {
+        base64: stripDataUrlPrefix(visionDataUrl),
+        mediaType: 'image/jpeg',
+        width: visionCanvas.width,
+        height: visionCanvas.height
+      }
+    };
   }
 
-  NS.Image = { process, MAX_EDGE, JPEG_Q };
+  NS.Image = { process, EMBED_MAX, VISION_MAX, JPEG_Q };
 })(window);

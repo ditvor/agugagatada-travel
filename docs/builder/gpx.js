@@ -1,6 +1,17 @@
 /**
  * Minimal GPX parser — extracts trackpoints, distance, duration, bbox.
- * Decimates to keep the output file size reasonable.
+ *
+ * Returns:
+ *   points:       decimated (≤200 points) [[lat,lon], …] for map rendering
+ *   raw:          full-resolution [{lat, lon, ts|null}, …] for photo-coord
+ *                 interpolation by timestamp
+ *   distance_km:  haversine sum of the full track
+ *   duration_min: last ts - first ts in minutes (null if no timestamps)
+ *   bbox:         [[south, west], [north, east]]
+ *   start:        { coord: [lat,lon], ts: ISO|null }
+ *   end:          { coord: [lat,lon], ts: ISO|null }
+ *   trackpoint_count: original count
+ *   has_timestamps: boolean
  */
 (function (global) {
   'use strict';
@@ -41,7 +52,11 @@
       const lat = parseFloat(pt.getAttribute('lat'));
       const lon = parseFloat(pt.getAttribute('lon'));
       const timeEl = pt.getElementsByTagName('time')[0];
-      const ts = timeEl ? new Date(timeEl.textContent).toISOString() : null;
+      let ts = null;
+      if (timeEl) {
+        const d = new Date(timeEl.textContent);
+        if (!Number.isNaN(d.getTime())) ts = d.toISOString();
+      }
       return { lat, lon, ts };
     }).filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lon));
 
@@ -52,12 +67,11 @@
       distKm += haversineKm(raw[i-1].lat, raw[i-1].lon, raw[i].lat, raw[i].lon);
     }
 
-    let durationMin = null;
-    const firstTs = raw.find(p => p.ts)?.ts;
-    const lastTs  = [...raw].reverse().find(p => p.ts)?.ts;
-    if (firstTs && lastTs && firstTs !== lastTs) {
-      durationMin = Math.round((new Date(lastTs) - new Date(firstTs)) / 60000);
-    }
+    const firstTs = raw.find(p => p.ts)?.ts || null;
+    const lastTs  = [...raw].reverse().find(p => p.ts)?.ts || null;
+    const durationMin = (firstTs && lastTs && firstTs !== lastTs)
+      ? Math.round((new Date(lastTs) - new Date(firstTs)) / 60000)
+      : null;
 
     const points = decimate(raw.map(p => [p.lat, p.lon]), 200);
     const lats = raw.map(p => p.lat);
@@ -66,12 +80,41 @@
 
     return {
       points,
-      distance_km: Math.round(distKm * 10) / 10,
-      duration_min: durationMin,
+      raw,
+      distance_km:      Math.round(distKm * 10) / 10,
+      duration_min:     durationMin,
       bbox,
-      trackpoint_count: raw.length
+      start:            { coord: [raw[0].lat, raw[0].lon],       ts: raw[0].ts },
+      end:              { coord: [raw[raw.length-1].lat, raw[raw.length-1].lon], ts: raw[raw.length-1].ts },
+      trackpoint_count: raw.length,
+      has_timestamps:   Boolean(firstTs)
     };
   }
 
-  NS.Gpx = { parse };
+  /**
+   * Given a photo timestamp (ISO string), find the closest-in-time GPX point
+   * and return its [lat, lon]. Returns null if the track has no timestamps or
+   * the photo falls too far outside the track's time window.
+   *
+   * "Too far" = > 30 minutes from the nearest point; we refuse to interpolate
+   * beyond that to avoid placing a museum photo on an unrelated hike segment.
+   */
+  function interpolateCoord(photoTsIso, parsedTrack, maxDriftMinutes = 30) {
+    if (!parsedTrack.has_timestamps || !photoTsIso) return null;
+    const photoMs = new Date(photoTsIso).getTime();
+    if (Number.isNaN(photoMs)) return null;
+
+    let bestPt = null;
+    let bestDiff = Infinity;
+    for (const pt of parsedTrack.raw) {
+      if (!pt.ts) continue;
+      const diff = Math.abs(new Date(pt.ts).getTime() - photoMs);
+      if (diff < bestDiff) { bestDiff = diff; bestPt = pt; }
+    }
+    if (!bestPt) return null;
+    if (bestDiff > maxDriftMinutes * 60000) return null;
+    return [bestPt.lat, bestPt.lon];
+  }
+
+  NS.Gpx = { parse, interpolateCoord };
 })(window);

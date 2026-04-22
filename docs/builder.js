@@ -1,7 +1,9 @@
 /**
  * Journal builder — orchestrator.
- * Wires form submission through: photo pipeline → GPX parse → Claude call →
- * renderJournal → Blob download.
+ * Three user-facing inputs: description, GPX, photos.
+ * Everything else (location, date, title, tagline, party, family notes,
+ * source language, per-photo captions, per-photo chapters) is derived
+ * from those three inputs by one Claude call with photo vision.
  */
 (function () {
   'use strict';
@@ -9,7 +11,6 @@
   const $ = (sel) => document.querySelector(sel);
   const form        = $('#builder-form');
   const generateBtn = $('#generate-btn');
-  const hint        = $('#generate-hint');
   const gpxInfo     = $('#gpx-info');
   const photosInfo  = $('#photos-info');
   const meter       = $('#filesize-meter');
@@ -28,11 +29,8 @@
   const HARD_CAP_HTML = 15 * 1024 * 1024;
   const SOFT_CAP_HTML = 8 * 1024 * 1024;
 
-  let processedPhotos = null;   // [{ id, src, ... }]
-  let parsedTrack = null;
   let currentGpxFile = null;
   let currentPhotoFiles = [];
-  let lastHtml = null;
   let lastBlobUrl = null;
   let lastFilename = null;
 
@@ -43,7 +41,6 @@
     currentGpxFile = file || null;
     gpxInfo.className = 'inline-info';
     gpxInfo.textContent = file ? `${file.name} (${formatSize(file.size)})` : '';
-    parsedTrack = null;
   });
 
   form.elements.photos.addEventListener('change', (e) => {
@@ -62,7 +59,6 @@
         ? `${files.length} selected — ${bad.length} over 20 MB will fail.`
         : `${files.length} selected · ${formatSize(total)} raw`;
     }
-    processedPhotos = null;
   });
 
   // ── Submit ────────────────────────────────────────────────────────────────
@@ -78,24 +74,51 @@
       const values = readForm();
       validateForm(values);
 
-      setStatus('running', 'Processing photos…');
-      processedPhotos = await processPhotos(values.photoFiles);
-      logOk(`Processed ${processedPhotos.length} photo${processedPhotos.length === 1 ? '' : 's'}.`);
-
       setStatus('running', 'Parsing GPX…');
-      parsedTrack = await window.Builder.Gpx.parse(values.gpxFile);
-      logOk(`Track: ${parsedTrack.distance_km} km, ${parsedTrack.duration_min ?? '—'} min, ${parsedTrack.trackpoint_count} points → ${parsedTrack.points.length} after decimation.`);
+      const track = await window.Builder.Gpx.parse(values.gpxFile);
+      logOk(`Track: ${track.distance_km} km, ${track.duration_min ?? '—'} min, ${track.trackpoint_count} points → ${track.points.length} after decimation. ${track.has_timestamps ? 'Has timestamps.' : 'No timestamps.'}`);
 
-      setStatus('running', 'Calling Claude (may take 20–60s)…');
-      const llmInput = buildLlmInput(values, processedPhotos, parsedTrack);
+      setStatus('running', 'Processing photos…');
+      const processed = await processPhotos(values.photoFiles);
+      logOk(`Processed ${processed.length} photo${processed.length === 1 ? '' : 's'}.`);
+
+      // Interpolate GPS coords from GPX for photos without their own.
+      const interpolated = interpolateMissingCoords(processed, track);
+      if (interpolated > 0) {
+        logOk(`Recovered ${interpolated} photo coord${interpolated === 1 ? '' : 's'} from GPX by timestamp.`);
+      }
+
+      // Sort photos by timestamp (fall back to upload order).
+      processed.sort(comparePhotoTime);
+
+      // Derive date: GPX first timestamp > first photo timestamp > today.
+      const derivedDate = deriveDate(track, processed);
+      logOk(`Date: ${derivedDate}.`);
+
+      setStatus('running', `Calling Claude with ${processed.length} photo vision thumbnails (may take 30–90s)…`);
+      const llmInput = {
+        description: values.description,
+        track: {
+          date: derivedDate,
+          start_coord: track.start.coord,
+          distance_km: track.distance_km,
+          duration_min: track.duration_min
+        },
+        photos: processed.map(p => ({
+          id: p.id,
+          timestamp: p.timestamp,
+          coord: p.coord,
+          coord_source: p.coord_source,
+          vision: p.vision
+        }))
+      };
       const llmResult = await window.Builder.Llm.generate(llmInput);
       const usage = llmResult.usage || {};
       logOk(`Claude OK · in ${usage.input_tokens ?? '?'} / out ${usage.output_tokens ?? '?'} tokens · model ${llmResult.model || window.Builder.Llm.MODEL}`);
 
       setStatus('running', 'Writing journal…');
-      const journalData = mergeJournalData(values, processedPhotos, parsedTrack, llmResult.journal);
+      const journalData = mergeJournalData(values, processed, track, derivedDate, llmResult.journal);
       const html = window.renderJournal(journalData);
-      lastHtml = html;
 
       const bytes = new Blob([html]).size;
       if (bytes > HARD_CAP_HTML) {
@@ -109,7 +132,8 @@
       const blob = new Blob([html], { type: 'text/html' });
       if (lastBlobUrl) URL.revokeObjectURL(lastBlobUrl);
       lastBlobUrl = URL.createObjectURL(blob);
-      lastFilename = `journal-${slugify(values.title || 'trip')}-${values.date}.html`;
+      const titleSlug = llmResult.journal.title && (llmResult.journal.title.en || '');
+      lastFilename = `journal-${slugify(titleSlug || 'trip')}-${derivedDate}.html`;
       downloadLink.href = lastBlobUrl;
       downloadLink.download = lastFilename;
       downloadLink.textContent = `Download ${lastFilename} (${formatSize(bytes)})`;
@@ -134,28 +158,14 @@
   function readForm() {
     const fd = new FormData(form);
     return {
-      title:       (fd.get('title') || '').toString().trim(),
-      tagline:     (fd.get('tagline') || '').toString().trim(),
-      location:    (fd.get('location') || '').toString().trim(),
-      date:        (fd.get('date') || '').toString().trim(),
-      source_lang: (fd.get('source_lang') || 'en').toString(),
-      who_came:    (fd.get('who_came') || '').toString().trim(),
-      carrier:     fd.get('carrier') === 'on',
-      stroller:    fd.get('stroller') === 'on',
-      story_raw:        (fd.get('story_raw') || '').toString().trim(),
-      closing_raw:      (fd.get('closing_raw') || '').toString().trim(),
-      family_notes_raw: (fd.get('family_notes_raw') || '').toString().trim(),
-      gpxFile:    currentGpxFile,
-      photoFiles: currentPhotoFiles
+      description: (fd.get('description') || '').toString().trim(),
+      gpxFile:     currentGpxFile,
+      photoFiles:  currentPhotoFiles
     };
   }
 
   function validateForm(v) {
-    if (!v.title) throw new Error('Title is required.');
-    if (!v.location) throw new Error('Location is required.');
-    if (!v.date) throw new Error('Date is required.');
-    if (!v.who_came) throw new Error('"Who came" is required.');
-    if (v.story_raw.length < 30) throw new Error('Story opening is too short (≥30 chars).');
+    if (v.description.length < 20) throw new Error('Description is too short (≥20 chars). A few sentences is enough.');
     if (!v.gpxFile) throw new Error('GPX file is required.');
     if (v.photoFiles.length === 0) throw new Error('At least one photo is required.');
     if (v.photoFiles.length > MAX_PHOTOS) throw new Error(`Too many photos (max ${MAX_PHOTOS}).`);
@@ -178,13 +188,6 @@
       }
     }
     if (out.length === 0) throw new Error('No photos survived processing.');
-    // Sort by EXIF timestamp (fallback to upload order).
-    out.sort((a, b) => {
-      if (a.timestamp && b.timestamp) return a.timestamp.localeCompare(b.timestamp);
-      if (a.timestamp) return -1;
-      if (b.timestamp) return 1;
-      return a.uploadIndex - b.uploadIndex;
-    });
     return out;
   }
 
@@ -198,73 +201,84 @@
     return {
       id: `p${String(uploadIndex + 1).padStart(2, '0')}`,
       filename: file.name,
-      src: image.dataUrl,
-      width: image.width,
-      height: image.height,
-      orientation: image.orientation,
+      src: image.embed.dataUrl,
+      width: image.embed.width,
+      height: image.embed.height,
+      orientation: image.embed.orientation,
+      vision: image.vision,                 // { base64, mediaType, width, height }
       timestamp: exif.timestamp,
       coord: exif.coord,
+      coord_source: exif.coord ? 'exif' : null,
       uploadIndex
     };
   }
 
-  // ── LLM input + merge ────────────────────────────────────────────────────
-
-  function buildLlmInput(v, photos, track) {
-    return {
-      trip: {
-        title: v.title,
-        tagline: v.tagline || null,
-        location: v.location,
-        date: v.date,
-        source_lang: v.source_lang
-      },
-      family: {
-        who_came: v.who_came,
-        carrier: v.carrier,
-        stroller: v.stroller
-      },
-      story_raw: v.story_raw,
-      closing_raw: v.closing_raw || null,
-      family_notes_raw: v.family_notes_raw
-        ? v.family_notes_raw.split('\n').map(s => s.trim()).filter(Boolean)
-        : [],
-      photos: photos.map(p => ({
-        id: p.id,
-        filename: p.filename,
-        timestamp: p.timestamp,
-        coord: p.coord
-      })),
-      track: {
-        distance_km: track.distance_km,
-        duration_min: track.duration_min
+  function interpolateMissingCoords(photos, track) {
+    let recovered = 0;
+    for (const p of photos) {
+      if (p.coord || !p.timestamp) continue;
+      const c = window.Builder.Gpx.interpolateCoord(p.timestamp, track);
+      if (c) {
+        p.coord = c;
+        p.coord_source = 'gpx-interpolated';
+        recovered++;
       }
-    };
+    }
+    return recovered;
   }
 
-  function mergeJournalData(v, photos, track, llm) {
-    // Map LLM photo entries by id for merging chapter + caption back onto the full photo objects.
+  function comparePhotoTime(a, b) {
+    if (a.timestamp && b.timestamp) return a.timestamp.localeCompare(b.timestamp);
+    if (a.timestamp) return -1;
+    if (b.timestamp) return 1;
+    return a.uploadIndex - b.uploadIndex;
+  }
+
+  // ── Derivation helpers ───────────────────────────────────────────────────
+
+  function deriveDate(track, photos) {
+    if (track.start.ts)    return track.start.ts.slice(0, 10);
+    const firstPhotoTs = photos.find(p => p.timestamp)?.timestamp;
+    if (firstPhotoTs)      return firstPhotoTs.slice(0, 10);
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  // ── Merge LLM output + processed data into renderJournal's data shape ────
+
+  function mergeJournalData(values, photos, track, date, llm) {
     const byId = Object.fromEntries((llm.photos || []).map(p => [p.id, p]));
     const mergedPhotos = photos.map(p => {
       const l = byId[p.id] || {};
       return {
-        ...p,
+        id: p.id,
+        src: p.src,
+        width: p.width,
+        height: p.height,
+        orientation: p.orientation,
+        timestamp: p.timestamp,
+        coord: p.coord,
         chapter: l.chapter || inferChapter(p.timestamp, p.uploadIndex, photos.length),
         caption: l.caption || { en: '', ru: '', de: '' }
       };
     });
+    const srcLang = (llm.source_lang === 'ru' || llm.source_lang === 'de') ? llm.source_lang : 'en';
+    const locationTitle = llm.location_title || { en: '', ru: '', de: '' };
     return {
       trip: {
         title:          llm.title,
         tagline:        llm.tagline,
-        location:       v.location,
-        location_title: llm.location_title,
-        date:           v.date,
-        source_lang:    v.source_lang,
+        location:       locationTitle[srcLang] || locationTitle.en || '',
+        location_title: locationTitle,
+        date,
+        source_lang:    srcLang,
         party:          llm.party,
         party_label:    llm.party_label
       },
-      family: { who_came: v.who_came, carrier: v.carrier, stroller: v.stroller },
+      family: {
+        who_came: '',
+        carrier:  llm.family ? Boolean(llm.family.carrier)  : true,
+        stroller: llm.family ? Boolean(llm.family.stroller) : false
+      },
       story: {
         opening: llm.opening,
         closing: llm.closing
@@ -288,7 +302,6 @@
       if (h < 17) return 'afternoon';
       return 'evening';
     }
-    // No timestamp: spread across chapters by position.
     const q = idx / Math.max(1, total - 1);
     if (q < 0.33) return 'early';
     if (q < 0.66) return 'midday';
@@ -324,14 +337,9 @@
   }
 
   function slugify(s) {
-    return s.toLowerCase()
+    return (s || '').toLowerCase()
       .normalize('NFKD').replace(/[̀-ͯ]/g, '')
       .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
       .slice(0, 40) || 'trip';
-  }
-
-  // Default the date to today.
-  if (!form.elements.date.value) {
-    form.elements.date.value = new Date().toISOString().slice(0, 10);
   }
 })();

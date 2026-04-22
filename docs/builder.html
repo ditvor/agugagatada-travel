@@ -26,70 +26,24 @@
     <form id="builder-form" novalidate>
 
       <section class="field-group">
-        <h2>Trip</h2>
+        <h2>Tell me about the trip</h2>
         <label class="field">
-          <span class="field-label">Title <em>required</em></span>
-          <input type="text" name="title" required maxlength="80" placeholder="A morning by the lake">
-        </label>
-        <label class="field">
-          <span class="field-label">Tagline <em>optional — the LLM will fill this in if you leave it blank</em></span>
-          <input type="text" name="tagline" maxlength="200">
-        </label>
-        <div class="field-row">
-          <label class="field">
-            <span class="field-label">Location <em>required</em></span>
-            <input type="text" name="location" required maxlength="80" placeholder="Bad Tölz, Bavaria">
-          </label>
-          <label class="field">
-            <span class="field-label">Date <em>required</em></span>
-            <input type="date" name="date" required>
-          </label>
-          <label class="field">
-            <span class="field-label">Language you wrote in</span>
-            <select name="source_lang">
-              <option value="en" selected>English</option>
-              <option value="ru">Русский</option>
-              <option value="de">Deutsch</option>
-            </select>
-          </label>
-        </div>
-      </section>
-
-      <section class="field-group">
-        <h2>Family</h2>
-        <label class="field">
-          <span class="field-label">Who came <em>required — e.g. "three of us + Oma"</em></span>
-          <input type="text" name="who_came" required maxlength="120" placeholder="three of us">
-        </label>
-        <div class="field-inline">
-          <label class="check"><input type="checkbox" name="carrier" checked> Carrier</label>
-          <label class="check"><input type="checkbox" name="stroller"> Stroller</label>
-        </div>
-      </section>
-
-      <section class="field-group">
-        <h2>Story</h2>
-        <label class="field">
-          <span class="field-label">Opening <em>required — messy drafting is fine, the LLM polishes</em></span>
-          <textarea name="story_raw" required rows="7" maxlength="5000" placeholder="we hiked in bad tölz on saturday. wax figures were waiting for us. asiatish food for lunch, was ok. kid fell asleep in the car all the way home"></textarea>
-        </label>
-        <label class="field">
-          <span class="field-label">Closing line <em>optional — one sentence that ends the journal</em></span>
-          <textarea name="closing_raw" rows="2" maxlength="300"></textarea>
-        </label>
-        <label class="field">
-          <span class="field-label">Family-note hints <em>optional — one per line. LLM polishes into bullets.</em></span>
-          <textarea name="family_notes_raw" rows="4" maxlength="1000" placeholder="pushchair fine until market steps&#10;changing table in the town hall&#10;bus from Munich roughly hourly"></textarea>
+          <span class="field-label">Description <em>required — messy drafting is fine; the editor polishes</em></span>
+          <textarea name="description" required rows="8" maxlength="5000" placeholder="we hiked in bad tölz on saturday. wax figures were waiting for us. asiatish food for lunch, was ok. kid fell asleep in the car all the way home"></textarea>
         </label>
       </section>
 
       <section class="field-group">
-        <h2>Files</h2>
+        <h2>Track</h2>
         <label class="field">
-          <span class="field-label">GPX track <em>required</em></span>
+          <span class="field-label">GPX file <em>required — location and date come from here</em></span>
           <input type="file" name="gpx" accept=".gpx,application/gpx+xml,application/xml" required>
           <span id="gpx-info" class="inline-info"></span>
         </label>
+      </section>
+
+      <section class="field-group">
+        <h2>Photos</h2>
         <label class="field">
           <span class="field-label">Photos <em>required — 1 to 50, HEIC ok, max 20 MB each</em></span>
           <input type="file" name="photos" accept="image/*,.heic,.heif" multiple required>
