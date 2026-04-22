@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal template — side-by-side test</title>
+  <style>
+    :root {
+      --rule: #E5DFD4;
+      --ink: #1A1A1A;
+      --muted: #7A7A7A;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: #f5f2ea;
+    }
+    header {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--rule);
+      background: #fff;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    header h1 { margin: 0; font-size: 15px; font-weight: 600; }
+    header p { margin: 0; font-size: 13px; color: var(--muted); }
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-left: auto;
+    }
+    .controls button {
+      font: inherit;
+      padding: 6px 12px;
+      border: 1px solid var(--rule);
+      background: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .controls button.active {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+    .panes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      height: calc(100vh - 53px);
+    }
+    .pane {
+      position: relative;
+      border-left: 1px solid var(--rule);
+      background: #fff;
+      overflow: hidden;
+    }
+    .pane:first-child { border-left: 0; }
+    .pane-label {
+      position: absolute;
+      top: 8px;
+      left: 12px;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.82);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #fff;
+    }
+    .fixture-select {
+      font: inherit;
+      padding: 6px 10px;
+      border: 1px solid var(--rule);
+      background: #fff;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Journal template — side-by-side test</h1>
+  <p>Left: committed mockup baseline. Right: generated from <code>renderJournal(fixture)</code>.</p>
+  <div class="controls">
+    <label style="font-size: 13px; color: var(--muted);">Fixture:
+      <select class="fixture-select" id="fixture">
+        <option value="walchensee">Walchensee (matches baseline)</option>
+        <option value="noPhotos">No photos, no track</option>
+        <option value="portraits">Portrait pairs</option>
+        <option value="noGps">Photos with no GPS</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<div class="panes">
+  <div class="pane">
+    <div class="pane-label">Baseline: journal-mockup.html</div>
+    <iframe id="baseline" src="../docs/journal-mockup.html"></iframe>
+  </div>
+  <div class="pane">
+    <div class="pane-label">Generated: renderJournal(fixture)</div>
+    <iframe id="generated"></iframe>
+  </div>
+</div>
+
+<script src="../docs/journal-template.js"></script>
+<script>
+  // ──────── Fixtures ────────
+
+  const walchenseeTrack = [
+    [47.598, 11.327], [47.594, 11.331], [47.589, 11.334], [47.584, 11.336],
+    [47.579, 11.339], [47.574, 11.342], [47.570, 11.346], [47.567, 11.351]
+  ];
+
+  const FIXTURES = {
+    walchensee: {
+      trip: {
+        title: {
+          en: 'A morning by the lake',
+          ru: 'Утро у озера',
+          de: 'Ein Morgen am See'
+        },
+        tagline: {
+          en: 'The first warm Saturday of the year — three of us, the carrier, and a thermos.',
+          ru: 'Первая тёплая суббота этого года — мы втроём, переноска и термос.',
+          de: 'Der erste warme Samstag des Jahres — wir zu dritt, die Trage und eine Thermoskanne.'
+        },
+        location: 'Walchensee, Bavaria',
+        date: '2026-04-18',
+        source_lang: 'en',
+        party: { en: 'Three', ru: 'Втроём', de: 'Zu dritt' },
+        party_label: { en: 'of us', ru: 'нас было', de: 'zusammen' },
+        hero_src: 'https://picsum.photos/seed/walchensee-hero-9/2000/1100',
+        closing_src: 'https://picsum.photos/seed/walk-final/1200/750'
+      },
+      family: { who_came: 'three of us', carrier: true, stroller: false },
+      story: {
+        opening: {
+          en: "We caught the 8:14 from München-Hauptbahnhof while the little one was still half-asleep against my shoulder. By the time we climbed off in Walchensee an hour later, the lake had appeared in that startling, almost-tropical turquoise you don't quite believe until you see it.\n\nThe plan was modest — walk the eastern shore as far as the boathouse, find somewhere with sun, drink the coffee, and turn back before anyone got hungry. The plan held. Almost.",
+          ru: "Мы сели на электричку в 8:14 с Мюнхенского вокзала, малышка ещё дремала у меня на плече. Через час, когда мы вышли в Вальхензее, перед нами открылось озеро — той самой поразительной, почти тропической бирюзы, в которую не веришь, пока не увидишь сам.\n\nПлан был скромный: пройти вдоль восточного берега до лодочного домика, найти солнечное место, выпить кофе и повернуть назад, пока никто не проголодался. План почти удался.",
+          de: "Wir nahmen den 8:14 vom Münchner Hauptbahnhof, während die Kleine noch halb schlafend an meiner Schulter lag. Als wir eine Stunde später in Walchensee ausstiegen, erschien der See in jenem überraschenden, fast tropischen Türkis, das man nicht glaubt, bis man es selbst sieht.\n\nDer Plan war bescheiden — am östlichen Ufer entlang bis zum Bootshaus, einen sonnigen Platz finden, den Kaffee trinken und umkehren, bevor jemand Hunger bekommt. Der Plan ging fast auf."
+        },
+        closing: {
+          en: 'Asleep again before we reached Penzberg.',
+          ru: 'Снова спала ещё до того, как мы доехали до Пенцберга.',
+          de: 'Wieder eingeschlafen, bevor wir Penzberg erreichten.'
+        }
+      },
+      about_place: {
+        en: "One of the deepest and highest of Germany's alpine lakes, Walchensee sits at 800 metres in the foothills of the Bavarian Alps, about an hour south of Munich. The colour comes from the limestone that surrounds it — the same chalky white that gives the Caribbean its turquoise.\n\nThe painter Lovis Corinth spent his last summers here and made the lake unexpectedly famous for early-twentieth-century German art. The path along the eastern shore is gentle and walkable in any season.",
+        ru: "Вальхензее — одно из самых глубоких и высокогорных озёр Германии, расположенное на высоте 800 метров в предгорьях Баварских Альп, примерно в часе езды к югу от Мюнхена. Цвет воды — заслуга известняка, который окружает озеро: тот же мел, что придаёт Карибскому морю бирюзу.\n\nХудожник Ловис Коринт провёл здесь последние лета жизни и неожиданно прославил озеро в немецком искусстве начала XX века. Тропа по восточному берегу пологая и доступна в любое время года.",
+        de: "Der Walchensee ist einer der tiefsten und höchstgelegenen Alpenseen Deutschlands. Er liegt auf 800 Metern im Vorland der Bayerischen Alpen, etwa eine Stunde südlich von München. Die Farbe entsteht durch den umliegenden Kalkstein — dasselbe Weiß, das der Karibik ihr Türkis gibt.\n\nDer Maler Lovis Corinth verbrachte hier seine letzten Sommer und machte den See in der deutschen Kunst des frühen 20. Jahrhunderts bekannt. Der Weg am Ostufer ist sanft und zu jeder Jahreszeit gut zu gehen."
+      },
+      family_notes: {
+        en: [
+          '**Carrier essential** — the path is gravel and roots in places, not stroller-friendly past the boathouse.',
+          '**Snacks:** the kiosk by the parking lot opens at 10:00 — earlier than that, bring your own.',
+          '**Trains:** RB6 from Munich Hbf to Kochel, then bus 9608 to Walchensee. Roughly hourly.',
+          '**Changing table:** in the café next to the boat rental.'
+        ],
+        ru: [
+          '**Переноска обязательна** — тропа местами с гравием и корнями, после лодочного домика для коляски уже не годится.',
+          '**Еда:** киоск у парковки открывается в 10:00 — раньше берите своё.',
+          '**Транспорт:** RB6 с Мюнхенского вокзала до Кохеля, далее автобус 9608 до Вальхензее. Примерно раз в час.',
+          '**Пеленальный столик:** в кафе рядом с прокатом лодок.'
+        ],
+        de: [
+          '**Trage zwingend** — der Weg ist stellenweise mit Schotter und Wurzeln, hinter dem Bootshaus nichts mehr für Kinderwagen.',
+          '**Verpflegung:** Der Kiosk am Parkplatz öffnet um 10:00 — vorher selbst mitbringen.',
+          '**Anreise:** RB6 vom Münchner Hbf nach Kochel, dann Bus 9608 nach Walchensee. Etwa stündlich.',
+          '**Wickeltisch:** im Café neben dem Bootsverleih.'
+        ]
+      },
+      track: { points: walchenseeTrack, distance_km: 5.2, duration_min: 150 },
+      photos: [
+        {
+          id: 'p01', src: 'https://picsum.photos/seed/walk-1/900/680',
+          orientation: 'landscape', coord: [47.598, 11.327], chapter: 'early',
+          caption: {
+            en: 'The lake first appears through the trees just past the Bahnhof. Even she was awake by this point.',
+            ru: 'Озеро впервые появляется сквозь деревья сразу за вокзалом. Тут даже она проснулась.',
+            de: 'Der See erscheint zum ersten Mal zwischen den Bäumen kurz hinter dem Bahnhof. Spätestens da war auch sie wach.'
+          }
+        },
+        {
+          id: 'p02', src: 'https://picsum.photos/seed/walk-2/600/800',
+          orientation: 'portrait', coord: [47.589, 11.334], chapter: 'early',
+          caption: {
+            en: 'Coffee from the thermos.',
+            ru: 'Кофе из термоса.',
+            de: 'Kaffee aus der Thermoskanne.'
+          }
+        },
+        {
+          id: 'p03', src: 'https://picsum.photos/seed/walk-3/600/800',
+          orientation: 'portrait', coord: null, chapter: 'early',
+          caption: {
+            en: 'Two boats out already.',
+            ru: 'Две лодки уже на воде.',
+            de: 'Schon zwei Boote auf dem Wasser.'
+          }
+        },
+        {
+          id: 'p04', src: 'https://picsum.photos/seed/walk-4/900/680',
+          orientation: 'landscape', coord: [47.579, 11.339], chapter: 'midday',
+          caption: {
+            en: 'The boathouse turnaround. We sat on the wooden jetty for half an hour and watched the wind move across the surface.',
+            ru: 'Поворот у лодочного домика. Полчаса мы сидели на деревянных мостках и смотрели, как ветер скользит по воде.',
+            de: 'Wendepunkt am Bootshaus. Wir saßen eine halbe Stunde auf dem Holzsteg und schauten dem Wind über die Wasseroberfläche zu.'
+          }
+        },
+        {
+          id: 'p05', src: 'https://picsum.photos/seed/walk-5/900/680',
+          orientation: 'landscape', coord: [47.567, 11.351], chapter: 'midday',
+          caption: {
+            en: 'Lunch was a Brezn and a half-frozen apple from the bakery in Kochel.',
+            ru: 'Обед — брецель и подмороженное яблоко из булочной в Кохеле.',
+            de: 'Mittagessen: eine Brezn und ein halbgefrorener Apfel aus der Bäckerei in Kochel.'
+          }
+        }
+      ]
+    },
+
+    noPhotos: {
+      trip: {
+        title:   { en: 'Rainy afternoon',        ru: 'Дождливый день',           de: 'Regnerischer Nachmittag' },
+        tagline: { en: 'Just a walk in the rain.', ru: 'Просто прогулка под дождём.', de: 'Nur ein Spaziergang im Regen.' },
+        location: 'Englischer Garten, Munich',
+        date: '2026-04-05',
+        source_lang: 'en'
+      },
+      family: { who_came: 'three of us', carrier: false, stroller: true },
+      story: {
+        opening: {
+          en: 'It rained all day. We walked anyway. The kid thought the puddles were the point.',
+          ru: 'Дождь шёл весь день. Мы всё равно пошли гулять. Ребёнок решил, что лужи — это самое главное.',
+          de: 'Es regnete den ganzen Tag. Wir gingen trotzdem spazieren. Für das Kind waren die Pfützen der eigentliche Grund.'
+        },
+        closing: {
+          en: 'Home for hot chocolate.',
+          ru: 'Домой, пить какао.',
+          de: 'Nach Hause, heiße Schokolade.'
+        }
+      },
+      about_place: {
+        en: 'The Englischer Garten is one of the largest urban parks in the world.',
+        ru: 'Английский сад — один из крупнейших городских парков в мире.',
+        de: 'Der Englische Garten ist einer der größten Stadtparks der Welt.'
+      },
+      family_notes: { en: [], ru: [], de: [] },
+      track: { points: [], distance_km: 3.1, duration_min: 75 },
+      photos: []
+    },
+
+    portraits: {
+      trip: {
+        title:   { en: 'Portrait test',   ru: 'Портреты',   de: 'Porträts' },
+        tagline: { en: 'Two pairs of portraits.', ru: 'Две пары портретов.', de: 'Zwei Porträt-Paare.' },
+        location: 'Test location',
+        date: '2026-04-10',
+        source_lang: 'en'
+      },
+      family: { who_came: 'two of us', carrier: true, stroller: false },
+      story: {
+        opening: { en: 'Testing the portrait pair layout.', ru: 'Тест вёрстки портретных пар.', de: 'Test der Porträt-Paar-Anordnung.' },
+        closing: { en: 'End.', ru: 'Конец.', de: 'Ende.' }
+      },
+      about_place: null,
+      family_notes: { en: [], ru: [], de: [] },
+      track: { points: walchenseeTrack, distance_km: 4.0, duration_min: 90 },
+      photos: [
+        { id: 'a', src: 'https://picsum.photos/seed/por-a/600/800', orientation: 'portrait', coord: [47.598, 11.327], chapter: 'early', caption: { en: 'A', ru: 'A', de: 'A' } },
+        { id: 'b', src: 'https://picsum.photos/seed/por-b/600/800', orientation: 'portrait', coord: [47.589, 11.334], chapter: 'early', caption: { en: 'B', ru: 'B', de: 'B' } },
+        { id: 'c', src: 'https://picsum.photos/seed/por-c/600/800', orientation: 'portrait', coord: [47.579, 11.339], chapter: 'midday', caption: { en: 'C', ru: 'C', de: 'C' } },
+        { id: 'd', src: 'https://picsum.photos/seed/por-d/600/800', orientation: 'portrait', coord: [47.567, 11.351], chapter: 'midday', caption: { en: 'D', ru: 'D', de: 'D' } }
+      ]
+    },
+
+    noGps: {
+      trip: {
+        title:   { en: 'Indoor day',         ru: 'День в помещении',   de: 'Tag drinnen' },
+        tagline: { en: 'Photos without GPS.', ru: 'Фото без GPS.',     de: 'Fotos ohne GPS.' },
+        location: 'Deutsches Museum, Munich',
+        date: '2026-04-12',
+        source_lang: 'en'
+      },
+      family: { who_came: 'three of us', carrier: true, stroller: false },
+      story: {
+        opening: { en: 'A museum day. No GPS coordinates on any photo; the map should hide markers gracefully.', ru: 'День в музее. У фото нет GPS — карта просто не покажет маркеры.', de: 'Museumstag. Keine GPS-Daten auf den Fotos — die Karte zeigt dann keine Marker.' },
+        closing: { en: 'Exhausted.', ru: 'Устали.', de: 'Erschöpft.' }
+      },
+      about_place: null,
+      family_notes: { en: [], ru: [], de: [] },
+      track: { points: [], distance_km: 1.5, duration_min: 180 },
+      photos: [
+        { id: 'm1', src: 'https://picsum.photos/seed/mus-1/900/680', orientation: 'landscape', coord: null, chapter: 'midday', caption: { en: 'One.', ru: 'Один.', de: 'Eins.' } },
+        { id: 'm2', src: 'https://picsum.photos/seed/mus-2/900/680', orientation: 'landscape', coord: null, chapter: 'afternoon', caption: { en: 'Two.', ru: 'Два.', de: 'Zwei.' } }
+      ]
+    }
+  };
+
+  // ──────── Render ────────
+
+  function renderFixture(key) {
+    const data = FIXTURES[key];
+    if (!data) return;
+    const html = renderJournal(JSON.parse(JSON.stringify(data))); // deep-clone to avoid renderJournal's source_lang mutation affecting the fixture
+    const frame = document.getElementById('generated');
+    frame.srcdoc = html;
+  }
+
+  const select = document.getElementById('fixture');
+  select.addEventListener('change', () => renderFixture(select.value));
+  renderFixture('walchensee');
+</script>
+
+</body>
+</html>
