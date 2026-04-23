@@ -13,7 +13,7 @@
 
   const NS = (global.Builder = global.Builder || {});
 
-  const PROMPT_VERSION = 'v2';
+  const PROMPT_VERSION = 'v3';
 
   const SYSTEM_PROMPT = `You are the editor of a family travel journal. You receive:
   • A short description the user wrote about the trip (may be rough, with typos).
@@ -43,9 +43,9 @@ RULES
 
 9. TAGLINE. One italic-sounding sentence under 150 chars.
 
-10. FAMILY NOTES. 3–5 practical bullets. Format each as "**Topic** — body." Things a grandmother would want: pushchair-friendly or not, food/kiosk, public transport, changing tables. Infer from the trip shape (forest trail → carrier essential; town → usually pushchair-friendly). If the description explicitly says something useful, prefer that over inference.
+10. TRACK STORY. One short paragraph (2–4 sentences) that sits under the map. Describe the shape of the walk — where it starts, what you pass, the character of the terrain, where it ends — as a reader-pleasure, not a route description. Conversational. Past tense. No turn-by-turn, no kilometre counts (the stat strip already has those). Example: "We started from the Bahnhof, followed the eastern shore through pine and gravel, reached the old boathouse at the halfway mark, and looped back the same way."
 
-11. ABOUT PLACE. 1–2 paragraphs of warm, encyclopedic prose about the location. Facts you are confident of only. If unsure, keep it brief.
+11. ABOUT PLACE. A short, warm story about what gives this place its feel — why people come here, one or two interesting details (a famous painter who summered here, why the water is that colour, the thing the town is known for). Think of a mom reading the journal at home, curious about where her family went. Not Wikipedia, not a guidebook. Skip practical info. 1–2 short paragraphs. If you don't know the place with confidence, keep it to one honest paragraph about the region and its mood — don't invent specifics.
 
 12. PARTY. Short word/phrase for the group size ("Three" / "Втроём" / "Zu dritt"). PARTY_LABEL is a short suffix ("of us" / "нас было" / "zusammen"). Infer the count from the description; if absent, default to "Family" / "Семья" / "Familie" with label "on the walk" / "в походе" / "unterwegs".
 
@@ -70,26 +70,13 @@ RULES
     };
   }
 
-  function i18nArray(desc) {
-    return {
-      type: 'object',
-      description: desc,
-      required: ['en', 'ru', 'de'],
-      properties: {
-        en: { type: 'array', items: { type: 'string' } },
-        ru: { type: 'array', items: { type: 'string' } },
-        de: { type: 'array', items: { type: 'string' } }
-      }
-    };
-  }
-
   const TOOL_SCHEMA = {
     type: 'object',
     required: [
       'source_lang', 'title', 'tagline',
       'location_title', 'party', 'party_label', 'family',
       'opening', 'closing',
-      'family_notes', 'about_place',
+      'track_story', 'about_place',
       'photos'
     ],
     properties: {
@@ -110,8 +97,8 @@ RULES
       },
       opening:        i18nString('Polished opening narrative, 1-3 paragraphs. Paragraph breaks with \\n\\n.'),
       closing:        i18nString('One italic-sounding closing sentence.'),
-      family_notes:   i18nArray('3-5 practical bullets. Each "**Topic** — body.". Do not exceed 5.'),
-      about_place:    i18nString('1-2 paragraphs about the location. Paragraph breaks with \\n\\n.'),
+      track_story:    i18nString('Short paragraph (2-4 sentences) describing the shape of the walk, rendered under the map. Past tense, conversational. No kilometres, no turn-by-turn.'),
+      about_place:    i18nString('Short warm story about the place — why people come here, a distinctive detail or two. Not encyclopedic. 1-2 short paragraphs. Paragraph breaks with \\n\\n.'),
       photos: {
         type: 'array',
         description: 'Echo back every input photo (same ids, same order) with a chapter assignment and a trilingual caption written from what is visible in the attached image.',

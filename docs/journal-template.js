@@ -10,7 +10,7 @@
  *   const blob = new Blob([html], { type: 'text/html' });
  *   // ...trigger download
  *
- * Data shape: see MVP_EXECUTION.md §4 and BUILDER_PLAN.md §4.
+ * Data shape: see the FIXTURE in docs/journal-preview.html for a full example.
  */
 
 (function (global) {
@@ -265,31 +265,27 @@
     }
 
     /* --------- Map --------- */
+    .map-strip {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(1.5rem, 4vw, 2.5rem) var(--gutter) clamp(2rem, 5vw, 3rem);
+    }
     #map {
-      height: 480px;
+      height: 420px;
       width: 100%;
       border-radius: 6px;
       border: 1px solid var(--rule);
       background: var(--surface);
     }
-    .map-legend {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 0.75rem;
+    .map-caption {
+      max-width: var(--measure);
+      margin: 1rem auto 0;
       font-family: var(--sans);
-      font-size: 0.8125rem;
+      font-size: 0.9375rem;
+      line-height: 1.55;
       color: var(--muted);
+      text-align: center;
     }
-    .legend-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      margin-right: 0.4rem;
-      vertical-align: middle;
-    }
-    .legend-dot--photo { background: var(--warm); }
 
     /* --------- Photo journey --------- */
     .chapter {
@@ -366,70 +362,6 @@
       color: var(--ink-soft);
     }
     .about-place p:last-child { margin-bottom: 0; }
-    .ai-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-family: var(--sans);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-top: 1.25rem;
-    }
-    .ai-tag::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--warm);
-    }
-
-    /* --------- Family notes --------- */
-    .family-card {
-      max-width: var(--measure);
-      margin: 0 auto;
-      padding: 0 var(--gutter);
-    }
-    .family-card-inner {
-      background: var(--bg);
-      border: 1px solid var(--rule);
-      border-radius: 6px;
-      padding: 1.5rem 1.75rem;
-    }
-    .family-card h3 {
-      font-family: var(--serif);
-      font-weight: 500;
-      font-size: 1.25rem;
-      margin: 0 0 0.85rem;
-      letter-spacing: -0.01em;
-    }
-    .family-card ul {
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 0.65rem;
-    }
-    .family-card li {
-      font-family: var(--sans);
-      font-size: 0.9375rem;
-      color: var(--ink-soft);
-      line-height: 1.55;
-      padding-left: 1.1rem;
-      position: relative;
-    }
-    .family-card li::before {
-      content: "·";
-      position: absolute;
-      left: 0;
-      color: var(--warm);
-      font-weight: 700;
-    }
-    .family-card strong {
-      font-weight: 600;
-      color: var(--ink);
-    }
 
     /* --------- Closing --------- */
     .closing {
@@ -511,11 +443,6 @@
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&#39;');
-  }
-
-  // Minimal markdown-bold: **text** → <strong>text</strong>, HTML-safe otherwise.
-  function mdBold(s) {
-    return esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
   }
 
   function pickLang(obj, lang) {
@@ -686,9 +613,10 @@
   function renderHero(data) {
     const src = data.trip.source_lang;
     const heroSrc = data.trip.hero_src || (data.photos[0] && data.photos[0].src) || '';
+    const heroPos = data.trip.hero_position || 'center';
     const meta = (lang) => `${data.trip.location} · ${fmtDate(data.trip.date, lang)}`;
     return `  <section class="hero">
-    <div class="hero-image" style="background-image: url('${esc(heroSrc)}')"></div>
+    <div class="hero-image" style="background-image: url('${esc(heroSrc)}'); background-position: ${esc(heroPos)};"></div>
     <div class="hero-content">
       <div class="hero-meta" data-i18n>${i18nCompute(meta, src)}</div>
       <h1 class="hero-title" data-i18n>${i18n(data.trip.title, src)}</h1>
@@ -753,25 +681,13 @@
 
   function renderMapSection(data) {
     const src = data.trip.source_lang;
-    const eyebrow = { en: 'The route',       ru: 'Маршрут',        de: 'Die Route' };
-    const title   = { en: 'Where we walked', ru: 'Где мы прошли',  de: 'Wo wir gelaufen sind' };
-    const caption = {
-      en: 'Tap a photo marker to jump to that moment.',
-      ru: 'Нажмите на маркер, чтобы перейти к этому моменту.',
-      de: 'Tippe auf ein Foto, um zu diesem Moment zu springen.'
-    };
-    const trackLabel  = { en: 'Our track', ru: 'Наш путь', de: 'Unsere Strecke' };
-    const photosLabel = { en: 'Photos',    ru: 'Фото',     de: 'Fotos' };
-    return `  <section class="section">
-    <div class="section-eyebrow" data-i18n>${i18n(eyebrow, src)}</div>
-    <h2 class="section-title" data-i18n>${i18n(title, src)}</h2>
-    <p class="section-caption" data-i18n>${i18n(caption, src)}</p>
+    const story = data.story && data.story.track_story;
+    const captionHtml = (story && (story.en || story.ru || story.de))
+      ? `    <p class="map-caption" data-i18n>${i18n(story, src)}</p>\n`
+      : '';
+    return `  <section class="map-strip">
     <div id="map"></div>
-    <div class="map-legend">
-      <span><span class="legend-dot"></span><span data-i18n>${i18n(trackLabel, src)}</span></span>
-      <span><span class="legend-dot legend-dot--photo"></span><span data-i18n>${i18n(photosLabel, src)}</span></span>
-    </div>
-  </section>`;
+${captionHtml}  </section>`;
   }
 
   function renderPhotoCard(photo, src, forceTall) {
@@ -817,14 +733,9 @@ ${chaptersHtml}`;
   function renderAboutPlace(data) {
     if (!data.about_place) return '';
     const src = data.trip.source_lang;
-    const eyebrow = { en: 'About the place', ru: 'Об этом месте', de: 'Über diesen Ort' };
+    const eyebrow = { en: 'A little about the place', ru: 'Немного о месте', de: 'Ein wenig über den Ort' };
     const locTitle = data.trip.location_title || {
       en: data.trip.location, ru: data.trip.location, de: data.trip.location
-    };
-    const aiTag = {
-      en: 'Background written with AI assist',
-      ru: 'Справка подготовлена с помощью ИИ',
-      de: 'Hintergrund mit KI-Unterstützung verfasst'
     };
     return `  <section class="about-place">
     <div class="inner">
@@ -832,40 +743,6 @@ ${chaptersHtml}`;
       <h2 class="section-title" data-i18n>${i18n(locTitle, src)}</h2>
       <div data-i18n>
         ${renderProseBlock(data.about_place, src)}
-      </div>
-      <span class="ai-tag" data-i18n>${i18n(aiTag, src)}</span>
-    </div>
-  </section>`;
-  }
-
-  function renderFamilyNotes(data) {
-    const src = data.trip.source_lang;
-    const notes = data.family_notes || { en: [], ru: [], de: [] };
-    const maxLen = Math.max(
-      (notes.en || []).length,
-      (notes.ru || []).length,
-      (notes.de || []).length
-    );
-    if (maxLen === 0) return '';
-
-    const title = { en: 'Family notes', ru: 'Заметки для семьи', de: 'Familienhinweise' };
-    const rows = [];
-    for (let i = 0; i < maxLen; i++) {
-      for (const lang of LANGS) {
-        const raw = (notes[lang] && notes[lang][i]) || '';
-        const html = mdBold(raw); // supports **topic** → <strong>topic</strong>
-        const active = lang === src ? ' data-active' : '';
-        const hide = lang === src ? '' : ' style="display:none"';
-        rows.push(`<li lang="${lang}"${active}${hide}>${html}</li>`);
-      }
-    }
-    return `  <section class="section section--narrow">
-    <div class="family-card">
-      <div class="family-card-inner">
-        <h3 data-i18n>${i18n(title, src)}</h3>
-        <ul data-i18n>
-          ${rows.join('\n          ')}
-        </ul>
       </div>
     </div>
   </section>`;
@@ -983,13 +860,11 @@ ${renderStatStrip(data)}
 
 ${renderOpening(data)}
 
-${renderMapSection(data)}
-
 ${renderPhotoJourney(data)}
 
-${renderAboutPlace(data)}
+${renderMapSection(data)}
 
-${renderFamilyNotes(data)}
+${renderAboutPlace(data)}
 
 ${renderClosing(data)}
 

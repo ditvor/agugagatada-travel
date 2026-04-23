@@ -91,6 +91,13 @@
       // Sort photos by timestamp (fall back to upload order).
       processed.sort(comparePhotoTime);
 
+      // Final fallback: photos still without coords get sampled evenly along the track,
+      // so every photo can appear as a pin on the map even without EXIF timestamps.
+      const sampled = sampleMissingCoords(processed, track);
+      if (sampled > 0) {
+        logOk(`Placed ${sampled} photo pin${sampled === 1 ? '' : 's'} by evenly sampling the track.`);
+      }
+
       // Derive date: GPX first timestamp > first photo timestamp > today.
       const derivedDate = deriveDate(track, processed);
       logOk(`Date: ${derivedDate}.`);
@@ -227,6 +234,25 @@
     return recovered;
   }
 
+  // Evenly distribute any still-missing photo coords along the GPX track,
+  // using the photo's ordinal position among the whole set. Honest enough
+  // for a journal: pins mark "roughly where along the walk we were."
+  function sampleMissingCoords(photos, track) {
+    const raw = (track && track.raw) || [];
+    if (raw.length === 0) return 0;
+    let placed = 0;
+    const lastIdx = raw.length - 1;
+    const denom = Math.max(1, photos.length - 1);
+    photos.forEach((p, i) => {
+      if (p.coord) return;
+      const pick = raw[Math.round(i * lastIdx / denom)];
+      p.coord = [pick.lat, pick.lon];
+      p.coord_source = 'gpx-sampled';
+      placed++;
+    });
+    return placed;
+  }
+
   function comparePhotoTime(a, b) {
     if (a.timestamp && b.timestamp) return a.timestamp.localeCompare(b.timestamp);
     if (a.timestamp) return -1;
@@ -280,11 +306,11 @@
         stroller: llm.family ? Boolean(llm.family.stroller) : false
       },
       story: {
-        opening: llm.opening,
-        closing: llm.closing
+        opening:     llm.opening,
+        closing:     llm.closing,
+        track_story: llm.track_story
       },
       about_place:  llm.about_place,
-      family_notes: llm.family_notes,
       track: {
         points:       track.points,
         distance_km:  track.distance_km,
