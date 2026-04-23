@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Journal preview — fixture</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <style>
+    html, body { margin: 0; height: 100%; background: #111; }
+    body { font-family: -apple-system, system-ui, sans-serif; color: #fff; }
+    .bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 8px 16px;
+      background: #1A1A1A;
+      border-bottom: 1px solid #2a2a2a;
+      font-size: 12.5px;
+    }
+    .bar strong { letter-spacing: 0.04em; }
+    .bar .sep { color: #555; }
+    .bar .note { color: #999; }
+    .bar a, .bar button {
+      color: #fff;
+      background: transparent;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 4px 10px;
+      text-decoration: none;
+      font: inherit;
+      cursor: pointer;
+    }
+    .bar a:hover, .bar button:hover { border-color: #666; }
+    .bar .push { margin-left: auto; }
+    iframe {
+      display: block;
+      width: 100%;
+      height: calc(100vh - 37px);
+      border: 0;
+      background: #FAF6F0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bar">
+    <strong>Preview</strong>
+    <span class="sep">·</span>
+    <span class="note">fixture data — no LLM, no uploads. Use the EN/RU/DE switcher inside the page.</span>
+    <span class="push"></span>
+    <a href="journal-preview.html">reload</a>
+    <a id="new-tab" href="#" target="_blank" rel="noopener">open in new tab</a>
+  </div>
+
+  <iframe id="frame" title="Journal preview"></iframe>
+
+  <script src="journal-template.js"></script>
+  <script>
+    // ── Inline fixture ────────────────────────────────────────────────────
+    // Exercises every section: hero, stat strip, opening prose, four photo
+    // chapters (portrait + landscape + a pair), map with track + pins,
+    // track_story caption, reframed about-place, closing line + photo.
+    // Photos are picsum seed URLs so nothing real needs to ship.
+
+    const FIXTURE = {
+      trip: {
+        title: {
+          en: 'A morning by the lake',
+          ru: 'Утро у озера',
+          de: 'Ein Morgen am See'
+        },
+        tagline: {
+          en: 'The first warm Saturday of the year — three of us, the carrier, and a thermos.',
+          ru: 'Первая тёплая суббота этого года — мы втроём, переноска и термос.',
+          de: 'Der erste warme Samstag des Jahres — wir zu dritt, die Trage und eine Thermoskanne.'
+        },
+        location: 'Walchensee',
+        location_title: { en: 'Walchensee', ru: 'Вальхензее', de: 'Walchensee' },
+        date: '2026-04-18',
+        source_lang: 'en',
+        party: { en: 'Three', ru: 'Втроём', de: 'Zu dritt' },
+        party_label: { en: 'of us', ru: 'нас было', de: 'zusammen' },
+        hero_src: 'https://picsum.photos/seed/walchensee-hero/2000/1100'
+      },
+      family: { carrier: true, stroller: false },
+      story: {
+        opening: {
+          en: "We caught the 8:14 from München-Hauptbahnhof while the little one was still half-asleep against my shoulder. By the time we climbed off in Walchensee an hour later, the lake had appeared in that startling, almost-tropical turquoise you don't quite believe until you see it.\n\nThe plan was modest — walk the eastern shore as far as the boathouse, find somewhere with sun, drink the coffee, and turn back before anyone got hungry. The plan held. Almost.",
+          ru: 'Мы сели на электричку в 8:14 с Мюнхенского вокзала, малышка ещё дремала у меня на плече. Через час, когда мы вышли в Вальхензее, перед нами открылось озеро — той самой поразительной, почти тропической бирюзы, в которую не веришь, пока не увидишь сам.\n\nПлан был скромный: пройти вдоль восточного берега до лодочного домика, найти солнечное место, выпить кофе и повернуть назад, пока никто не проголодался. План почти удался.',
+          de: 'Wir nahmen den 8:14 vom Münchner Hauptbahnhof, während die Kleine noch halb schlafend an meiner Schulter lag. Als wir eine Stunde später in Walchensee ausstiegen, erschien der See in jenem überraschenden, fast tropischen Türkis, das man nicht glaubt, bis man es selbst sieht.\n\nDer Plan war bescheiden — am östlichen Ufer entlang bis zum Bootshaus, einen sonnigen Platz finden, den Kaffee trinken und umkehren, bevor jemand Hunger bekommt. Der Plan ging fast auf.'
+        },
+        closing: {
+          en: 'Asleep again before we reached Penzberg.',
+          ru: 'Снова спала ещё до того, как мы доехали до Пенцберга.',
+          de: 'Wieder eingeschlafen, bevor wir Penzberg erreichten.'
+        },
+        track_story: {
+          en: 'We started from the Bahnhof, followed the eastern shore through pine and gravel, reached the old boathouse at the halfway mark, and looped back the same way — a flat, sheltered walk that never quite lets the lake out of sight.',
+          ru: 'Мы вышли от вокзала, пошли по восточному берегу сквозь сосны и гравий к старому лодочному домику и вернулись тем же путём — ровная, закрытая от ветра тропа, с которой озеро почти не пропадает из виду.',
+          de: 'Wir starteten am Bahnhof, folgten dem Ostufer durch Kiefern und Schotter bis zum alten Bootshaus und kehrten auf demselben Weg zurück — ein flacher, windgeschützter Weg, bei dem der See fast immer in Sichtweite bleibt.'
+        }
+      },
+      about_place: {
+        en: 'Walchensee sits at 800 metres in the foothills of the Bavarian Alps, about an hour south of Munich. The colour comes from the limestone that surrounds it — the same chalky white that gives the Caribbean its turquoise.\n\nThe painter Lovis Corinth spent his last summers here and quietly made the lake a small fixture of early-twentieth-century German art.',
+        ru: 'Вальхензее лежит на высоте 800 метров в предгорьях Баварских Альп, примерно в часе езды к югу от Мюнхена. Цвет воды — заслуга известняка вокруг: тот же мел, что придаёт Карибскому морю бирюзу.\n\nХудожник Ловис Коринт провёл здесь последние лета жизни и негромко сделал это озеро маленькой приметой немецкого искусства начала XX века.',
+        de: 'Der Walchensee liegt auf 800 Metern im Vorland der Bayerischen Alpen, etwa eine Stunde südlich von München. Die Farbe entsteht durch den umliegenden Kalkstein — dasselbe Weiß, das der Karibik ihr Türkis gibt.\n\nDer Maler Lovis Corinth verbrachte hier seine letzten Sommer und machte den See leise zu einer kleinen Konstante der deutschen Kunst des frühen 20. Jahrhunderts.'
+      },
+      track: {
+        points: [
+          [47.598, 11.327],
+          [47.594, 11.331],
+          [47.589, 11.334],
+          [47.584, 11.336],
+          [47.579, 11.339],
+          [47.574, 11.342],
+          [47.570, 11.346],
+          [47.567, 11.351]
+        ],
+        distance_km: 5.2,
+        duration_min: 150
+      },
+      photos: [
+        {
+          id: 'p1',
+          src: 'https://picsum.photos/seed/walk-1/900/680',
+          width: 900, height: 680, orientation: 'landscape',
+          timestamp: null, coord: [47.598, 11.327],
+          chapter: 'early',
+          caption: {
+            en: 'The lake first appears through the trees just past the Bahnhof.',
+            ru: 'Озеро впервые показывается сквозь деревья сразу за вокзалом.',
+            de: 'Der See erscheint zum ersten Mal zwischen den Bäumen hinter dem Bahnhof.'
+          }
+        },
+        {
+          id: 'p2',
+          src: 'https://picsum.photos/seed/walk-2/600/800',
+          width: 600, height: 800, orientation: 'portrait',
+          timestamp: null, coord: [47.594, 11.331],
+          chapter: 'early',
+          caption: {
+            en: 'Coffee from the thermos. Her first real stretch of the morning.',
+            ru: 'Кофе из термоса. Первое настоящее потягивание за утро.',
+            de: 'Kaffee aus der Thermoskanne. Ihr erstes richtiges Strecken an diesem Morgen.'
+          }
+        },
+        {
+          id: 'p3',
+          src: 'https://picsum.photos/seed/walk-3/600/800',
+          width: 600, height: 800, orientation: 'portrait',
+          timestamp: null, coord: [47.589, 11.334],
+          chapter: 'early',
+          caption: {
+            en: 'Two boats out already.',
+            ru: 'Две лодки уже на воде.',
+            de: 'Schon zwei Boote auf dem Wasser.'
+          }
+        },
+        {
+          id: 'p4',
+          src: 'https://picsum.photos/seed/walk-4/900/680',
+          width: 900, height: 680, orientation: 'landscape',
+          timestamp: null, coord: [47.584, 11.336],
+          chapter: 'midday',
+          caption: {
+            en: 'The boathouse turnaround. Half an hour on the jetty, watching nothing move.',
+            ru: 'Поворот у лодочного домика. Полчаса на мостках, смотрим, как ничего не движется.',
+            de: 'Wendepunkt am Bootshaus. Eine halbe Stunde am Steg, während sich nichts regt.'
+          }
+        },
+        {
+          id: 'p5',
+          src: 'https://picsum.photos/seed/walk-5/900/680',
+          width: 900, height: 680, orientation: 'landscape',
+          timestamp: null, coord: [47.579, 11.339],
+          chapter: 'midday',
+          caption: {
+            en: 'Lunch was a Brezn and a half-frozen apple from the bakery in Kochel.',
+            ru: 'Обед — брецель и подмороженное яблоко из булочной в Кохеле.',
+            de: 'Mittagessen: eine Brezn und ein halbgefrorener Apfel aus der Bäckerei in Kochel.'
+          }
+        },
+        {
+          id: 'p6',
+          src: 'https://picsum.photos/seed/walk-6/900/680',
+          width: 900, height: 680, orientation: 'landscape',
+          timestamp: null, coord: [47.574, 11.342],
+          chapter: 'afternoon',
+          caption: {
+            en: 'She found the only puddle within three kilometres.',
+            ru: 'Она нашла единственную лужу в радиусе трёх километров.',
+            de: 'Sie fand die einzige Pfütze im Umkreis von drei Kilometern.'
+          }
+        },
+        {
+          id: 'p7',
+          src: 'https://picsum.photos/seed/walk-7/600/800',
+          width: 600, height: 800, orientation: 'portrait',
+          timestamp: null, coord: [47.570, 11.346],
+          chapter: 'afternoon',
+          caption: {
+            en: 'Back through the pines, a little slower now.',
+            ru: 'Обратно через сосны, уже чуть медленнее.',
+            de: 'Zurück durch die Kiefern, jetzt etwas langsamer.'
+          }
+        },
+        {
+          id: 'p8',
+          src: 'https://picsum.photos/seed/walk-final/1200/750',
+          width: 1200, height: 750, orientation: 'landscape',
+          timestamp: null, coord: [47.567, 11.351],
+          chapter: 'evening',
+          caption: {
+            en: 'The last light on the lake before the train.',
+            ru: 'Последний свет на озере перед поездом.',
+            de: 'Das letzte Licht auf dem See vor dem Zug.'
+          }
+        }
+      ]
+    };
+
+    // ── Render ────────────────────────────────────────────────────────────
+    const html = renderJournal(FIXTURE);
+    document.getElementById('frame').srcdoc = html;
+
+    const blob = new Blob([html], { type: 'text/html' });
+    document.getElementById('new-tab').href = URL.createObjectURL(blob);
+  </script>
+
+</body>
+</html>
