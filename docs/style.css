@@ -312,6 +312,9 @@ img {
 
 .route-section { padding-bottom: var(--space-2xl); }
 #map { height: 560px; border: 1px solid var(--color-border); border-radius: var(--radius); }
+
+/* OSM tiles are colourful — mute them to match the editorial palette */
+.leaflet-tile-pane { filter: grayscale(1) brightness(1.06) contrast(0.92); }
 .stops-col { padding-top: var(--space-xs); }
 
 

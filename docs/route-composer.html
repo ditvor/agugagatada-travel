@@ -528,8 +528,8 @@ let currentVariant = 'history'
 // MAP SETUP
 // ─────────────────────────────────────────────
 const map = L.map('map', { zoomControl: true, scrollWheelZoom: false })
-L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-  attribution: '© OpenStreetMap © CARTO', maxZoom: 18
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', maxZoom: 18
 }).addTo(map)
 
 // Munich marker
